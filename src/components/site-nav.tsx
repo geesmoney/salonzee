@@ -20,6 +20,7 @@ export function SiteNav() {
         {user && !isPlatformAdmin && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
       </div>
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         {user ? (
           <button
             onClick={async () => {
