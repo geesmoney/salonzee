@@ -78,11 +78,32 @@ function RegisterSalonPage() {
   return (
     <div className="min-h-dvh bg-background">
       <SiteNav />
-      <section className="max-w-2xl mx-auto px-6 py-16">
-        <h1 className="font-serif text-5xl md:text-6xl mb-3">Register Your Salon</h1>
-        <p className="text-foreground/60 mb-10">
-          Submit your salon for review. Once approved, you'll appear in our directory.
-        </p>
+      <section className="max-w-5xl mx-auto px-6 py-16 grid lg:grid-cols-[1fr_1.2fr] gap-12 items-start">
+        <aside className="lg:sticky lg:top-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">For salon owners</p>
+          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight">
+            List your salon. Fill more chairs.
+          </h1>
+          <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
+            Join Ghana's growing directory of trusted salons. Approval takes one business day. No setup fees, no contracts.
+          </p>
+          <ul className="space-y-3 text-sm">
+            {[
+              "Public profile in the Salonzee directory",
+              "Real-time online booking with no double-bookings",
+              "Automated SMS confirmations and 24h reminders",
+              "Simple dashboard for services, hours, and bookings",
+              "Free until you're earning",
+            ].map((b) => (
+              <li key={b} className="flex items-start gap-2.5 text-foreground/80">
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+        <div>
+          <h2 className="sr-only">Register your salon</h2>
 
         <form onSubmit={submit} className="space-y-5 bg-card p-8 rounded-3xl ring-1 ring-foreground/5">
           <Field label="Salon name">
