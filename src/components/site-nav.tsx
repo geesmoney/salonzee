@@ -17,7 +17,9 @@ export function SiteNav() {
         <NavLink to="/register-salon">For business</NavLink>
         {!user && <NavLink to="/login">Sign in</NavLink>}
         {user && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
+        {user && <NavLink to="/salon/support">Support</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/support">Inbox</NavLink>}
       </div>
       <div className="flex items-center gap-2">
         <ThemeToggle />
