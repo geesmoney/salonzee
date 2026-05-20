@@ -52,35 +52,35 @@ function Index() {
       <SiteNav />
 
       {/* Hero */}
-      <section className="px-6 md:px-10 pt-12 md:pt-20 pb-20 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-12 items-center">
+      <section className="px-5 sm:px-6 md:px-10 pt-8 sm:pt-12 md:pt-20 pb-14 sm:pb-20 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 sm:gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 bg-secondary text-primary px-4 py-1.5 rounded-full text-xs font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-secondary text-primary px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               Now booking across Ghana
             </div>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.05]">
+            <h1 className="font-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05]">
               Your next salon visit, <span className="text-primary">booked in seconds.</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mb-8">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-xl mb-7">
               Discover trusted hair, braid, barber and nail salons in Accra, Kumasi and beyond. Pick a time, confirm by SMS — no calls, no waiting.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 to="/salons"
-                className="bg-primary text-primary-foreground px-7 py-3.5 rounded-full text-base font-semibold shadow-sm hover:shadow-md transition-shadow text-center"
+                className="bg-primary text-primary-foreground px-7 py-4 sm:py-3.5 rounded-full text-base font-semibold shadow-sm hover:shadow-md transition-shadow text-center"
               >
                 Find a salon
               </Link>
               <Link
                 to="/register-salon"
-                className="bg-card border border-border px-7 py-3.5 rounded-full text-base font-semibold hover:bg-muted transition-colors text-center"
+                className="bg-card border border-border px-7 py-4 sm:py-3.5 rounded-full text-base font-semibold hover:bg-muted transition-colors text-center"
               >
                 List your salon
               </Link>
             </div>
 
-            <div className="mt-10 flex items-center gap-8 text-sm text-muted-foreground">
+            <div className="mt-8 sm:mt-10 flex items-center gap-6 sm:gap-8 text-sm text-muted-foreground">
               <Stat n="Vetted" label="Salons" />
               <span className="w-px h-10 bg-border" />
               <Stat n="< 30s" label="To book" />
@@ -99,7 +99,7 @@ function Index() {
                 height={1280}
               />
             </div>
-            <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-2xl shadow-lg p-4 flex items-center gap-3 max-w-[240px]">
+            <div className="hidden sm:flex absolute -bottom-6 -left-6 bg-card border border-border rounded-2xl shadow-lg p-4 items-center gap-3 max-w-[240px]">
               <div className="h-10 w-10 rounded-full bg-secondary grid place-items-center text-primary">
                 <CalendarCheck className="h-5 w-5" />
               </div>
@@ -108,7 +108,7 @@ function Index() {
                 <p className="text-sm font-semibold leading-tight">Silk press — 2:30 PM, East Legon</p>
               </div>
             </div>
-            <div className="absolute -top-5 -right-3 bg-card border border-border rounded-full shadow-md px-4 py-2 flex items-center gap-2">
+            <div className="hidden sm:flex absolute -top-5 -right-3 bg-card border border-border rounded-full shadow-md px-4 py-2 items-center gap-2">
               <Star className="h-4 w-4 text-orange fill-orange" />
               <span className="text-sm font-semibold">4.9 average rating</span>
             </div>
