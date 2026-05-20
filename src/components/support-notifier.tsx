@@ -109,6 +109,27 @@ export function SupportNotifier() {
           qc.invalidateQueries({ queryKey: ["support-tickets", "admin"] });
         },
       );
+
+      // Admins: notify on new messages from owners/customers on existing tickets.
+      channel.on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "support_messages" },
+        (payload) => {
+          const msg = payload.new as Message;
+          if (msg.sender_type === "admin") return; // skip admin's own/peer replies
+          if (msg.sender_user_id === user.id) return;
+          playReplySound();
+          toast.message("New support message", {
+            description: msg.body.slice(0, 100),
+            action: {
+              label: "Open",
+              onClick: () => navigate({ to: "/admin/support" }),
+            },
+          });
+          qc.invalidateQueries({ queryKey: ["support-tickets", "admin"] });
+          qc.invalidateQueries({ queryKey: ["support-messages", msg.ticket_id] });
+        },
+      );
     }
 
     // Owner / ticket-opener: notify on new admin replies.
