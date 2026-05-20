@@ -73,6 +73,7 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration 
         booking_date: dateKey,
         start_time: time,
         end_time: endTime,
+        price_ghs_snapshot: selectedService.price_ghs,
       });
       if (error) throw error;
     },
