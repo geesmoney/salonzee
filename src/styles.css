@@ -32,46 +32,53 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Salonzee brand */
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
-  --color-brown: var(--brown);
-  --color-cream: var(--cream);
-  --color-clay: var(--clay);
+  /* Salonzee brand — Google-clean palette (legacy token names preserved) */
+  --color-teal: var(--teal);
+  --color-teal-soft: var(--teal-soft);
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-orange: var(--orange);
+  /* legacy aliases kept so existing class names keep working */
+  --color-gold: var(--teal);
+  --color-gold-soft: var(--teal-soft);
+  --color-brown: var(--ink);
+  --color-cream: var(--surface);
+  --color-clay: var(--orange);
 
-  --font-serif: "Cormorant Garamond", "Times New Roman", serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", "Roboto", system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-serif: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 1rem;
 
-  /* Brand palette (oklch translations of #D4AF37 gold, #2D241E brown, #FDFBF7 cream, #C05E3F clay) */
-  --gold: oklch(0.76 0.13 85);
-  --gold-soft: oklch(0.93 0.05 85);
-  --brown: oklch(0.21 0.02 50);
-  --cream: oklch(0.99 0.01 80);
-  --clay: oklch(0.58 0.15 35);
+  /* Brand palette from logo */
+  --ink: oklch(0.21 0.04 250);            /* deep navy #0F1A2E */
+  --teal: oklch(0.72 0.16 165);           /* signature teal #1FBC7B */
+  --teal-soft: oklch(0.95 0.04 165);      /* tinted surface */
+  --orange: oklch(0.75 0.17 55);          /* accent orange dot */
+  --surface: oklch(0.99 0.003 250);       /* near-white */
 
-  --background: var(--cream);
-  --foreground: var(--brown);
+  --background: oklch(1 0 0);
+  --foreground: var(--ink);
   --card: oklch(1 0 0);
-  --card-foreground: var(--brown);
+  --card-foreground: var(--ink);
   --popover: oklch(1 0 0);
-  --popover-foreground: var(--brown);
-  --primary: var(--brown);
-  --primary-foreground: var(--cream);
-  --secondary: var(--gold-soft);
-  --secondary-foreground: var(--brown);
-  --muted: oklch(0.95 0.01 70);
-  --muted-foreground: oklch(0.45 0.02 50);
-  --accent: var(--gold);
-  --accent-foreground: var(--brown);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.21 0.02 50 / 0.08);
-  --input: oklch(0.21 0.02 50 / 0.1);
-  --ring: var(--gold);
+  --popover-foreground: var(--ink);
+  --primary: var(--teal);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: var(--teal-soft);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.97 0.005 250);
+  --muted-foreground: oklch(0.5 0.02 250);
+  --accent: var(--teal);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.21 0.04 250 / 0.08);
+  --input: oklch(0.21 0.04 250 / 0.12);
+  --ring: var(--teal);
 }
 
 @layer base {
@@ -82,11 +89,14 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  h1, h2, h3, h4 {
-    font-family: var(--font-serif);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
   }
 }

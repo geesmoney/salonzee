@@ -1,48 +1,55 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
+import logo from "@/assets/salonzee-logo.png";
 
 export function SiteNav() {
   const { user, isPlatformAdmin, signOut } = useAuth();
   const router = useRouter();
 
   return (
-    <nav className="flex items-center justify-between px-6 md:px-10 py-5 border-b border-foreground/5 bg-background/80 backdrop-blur-sm sticky top-0 z-40">
-      <Link to="/" className="font-serif text-2xl font-bold tracking-tight text-foreground">
-        SALONZEE
+    <nav className="flex items-center justify-between px-6 md:px-10 py-3 border-b border-border bg-background/90 backdrop-blur sticky top-0 z-40">
+      <Link to="/" className="flex items-center gap-2">
+        <img src={logo} alt="Salonzee" className="h-8 w-auto" />
       </Link>
-      <div className="hidden md:flex gap-8 text-xs font-medium uppercase tracking-[0.18em]">
-        <Link to="/salons" className="hover:text-accent transition-colors">Discover</Link>
-        <Link to="/register-salon" className="hover:text-accent transition-colors">For Business</Link>
-        {!user && (
-          <Link to="/login" className="hover:text-accent transition-colors">Login</Link>
-        )}
-        {user && isPlatformAdmin && (
-          <Link to="/admin/pending" className="hover:text-accent transition-colors">Admin</Link>
-        )}
-        {user && !isPlatformAdmin && (
-          <Link to="/salon/dashboard" className="hover:text-accent transition-colors">Dashboard</Link>
-        )}
+      <div className="hidden md:flex gap-1 text-sm font-medium">
+        <NavLink to="/salons">Discover</NavLink>
+        <NavLink to="/register-salon">For business</NavLink>
+        {!user && <NavLink to="/login">Sign in</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
+        {user && !isPlatformAdmin && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {user ? (
           <button
             onClick={async () => {
               await signOut();
               router.navigate({ to: "/" });
             }}
-            className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/60 hover:text-foreground"
+            className="text-sm font-medium text-foreground/70 hover:text-foreground px-4 py-2 rounded-full hover:bg-muted transition-colors"
           >
             Sign out
           </button>
         ) : (
           <Link
             to="/salons"
-            className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-clay transition-colors"
+            className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
           >
-            Book Now
+            Book now
           </Link>
         )}
       </div>
     </nav>
+  );
+}
+
+function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
+  return (
+    <Link
+      to={to}
+      className="px-4 py-2 rounded-full text-foreground/70 hover:text-foreground hover:bg-muted transition-colors"
+      activeProps={{ className: "px-4 py-2 rounded-full text-foreground bg-muted" }}
+    >
+      {children}
+    </Link>
   );
 }
