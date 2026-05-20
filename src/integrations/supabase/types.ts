@@ -246,6 +246,101 @@ export type Database = {
           },
         ]
       }
+      support_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          sender_type: Database["public"]["Enums"]["support_sender_type"]
+          sender_user_id: string | null
+          ticket_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          sender_type: Database["public"]["Enums"]["support_sender_type"]
+          sender_user_id?: string | null
+          ticket_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          sender_type?: Database["public"]["Enums"]["support_sender_type"]
+          sender_user_id?: string | null
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          booking_id: string | null
+          category: Database["public"]["Enums"]["support_ticket_category"]
+          created_at: string
+          customer_name: string | null
+          customer_phone: string | null
+          id: string
+          last_message_at: string
+          opened_by_user_id: string | null
+          salon_id: string | null
+          status: Database["public"]["Enums"]["support_ticket_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id?: string | null
+          category?: Database["public"]["Enums"]["support_ticket_category"]
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          id?: string
+          last_message_at?: string
+          opened_by_user_id?: string | null
+          salon_id?: string | null
+          status?: Database["public"]["Enums"]["support_ticket_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string | null
+          category?: Database["public"]["Enums"]["support_ticket_category"]
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          id?: string
+          last_message_at?: string
+          opened_by_user_id?: string | null
+          salon_id?: string | null
+          status?: Database["public"]["Enums"]["support_ticket_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_salon_id_fkey"
+            columns: ["salon_id"]
+            isOneToOne: false
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -291,6 +386,14 @@ export type Database = {
       salon_status: "pending" | "active" | "suspended"
       salon_type: "male" | "female" | "unisex"
       sms_status: "queued" | "sent" | "failed" | "stubbed"
+      support_sender_type: "owner" | "customer" | "admin"
+      support_ticket_category:
+        | "general"
+        | "billing"
+        | "booking_issue"
+        | "technical"
+        | "other"
+      support_ticket_status: "open" | "pending" | "resolved" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -429,6 +532,15 @@ export const Constants = {
       salon_status: ["pending", "active", "suspended"],
       salon_type: ["male", "female", "unisex"],
       sms_status: ["queued", "sent", "failed", "stubbed"],
+      support_sender_type: ["owner", "customer", "admin"],
+      support_ticket_category: [
+        "general",
+        "billing",
+        "booking_issue",
+        "technical",
+        "other",
+      ],
+      support_ticket_status: ["open", "pending", "resolved", "closed"],
     },
   },
 } as const
