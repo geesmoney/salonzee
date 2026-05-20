@@ -14,7 +14,7 @@ export function SiteNav() {
       </Link>
       <div className="hidden md:flex gap-1 text-sm font-medium">
         <NavLink to="/salons">Discover</NavLink>
-        <NavLink to="/register-salon">For business</NavLink>
+        {!user && <NavLink to="/register-salon">For business</NavLink>}
         {!user && <NavLink to="/login">Sign in</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
         {user && !isPlatformAdmin && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
