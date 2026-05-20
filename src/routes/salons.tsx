@@ -38,7 +38,7 @@ function SalonsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteNav />
       <section className="px-6 md:px-10 py-16 max-w-7xl mx-auto">
         <h1 className="font-serif text-5xl md:text-6xl mb-3">Discover Salons</h1>

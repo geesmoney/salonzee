@@ -76,7 +76,7 @@ function RegisterSalonPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteNav />
       <section className="max-w-2xl mx-auto px-6 py-16">
         <h1 className="font-serif text-5xl md:text-6xl mb-3">Register Your Salon</h1>
