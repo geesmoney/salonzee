@@ -104,6 +104,38 @@ export type Database = {
         }
         Relationships: []
       }
+      salon_images: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          position: number
+          salon_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          position?: number
+          salon_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          position?: number
+          salon_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salon_images_salon_id_fkey"
+            columns: ["salon_id"]
+            isOneToOne: false
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       salons: {
         Row: {
           created_at: string
