@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/use-auth";
@@ -21,10 +22,38 @@ function AdminSupportPage() {
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | Status>("open");
+  const qc = useQueryClient();
 
   useEffect(() => {
     if (!loading && (!user || !isPlatformAdmin)) navigate({ to: "/" });
   }, [user, isPlatformAdmin, loading, navigate]);
+
+  useEffect(() => {
+    if (!user || !isPlatformAdmin) return;
+    const channel = supabase
+      .channel("admin-support-tickets")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "support_tickets" },
+        (payload) => {
+          const t = payload.new as Ticket;
+          toast.success("New support ticket", {
+            description: t.subject,
+            action: { label: "Open", onClick: () => setActiveId(t.id) },
+          });
+          qc.invalidateQueries({ queryKey: ["support-tickets", "admin"] });
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "support_messages" },
+        () => qc.invalidateQueries({ queryKey: ["support-tickets", "admin"] }),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, isPlatformAdmin, qc]);
 
   const { data: tickets = [] } = useQuery({
     queryKey: ["support-tickets", "admin"],
