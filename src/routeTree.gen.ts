@@ -9,38 +9,155 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SalonsRouteImport } from './routes/salons'
+import { Route as RegisterSalonRouteImport } from './routes/register-salon'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
+import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
+import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 
+const SalonsRoute = SalonsRouteImport.update({
+  id: '/salons',
+  path: '/salons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterSalonRoute = RegisterSalonRouteImport.update({
+  id: '/register-salon',
+  path: '/register-salon',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
+  id: '/$salonId',
+  path: '/$salonId',
+  getParentRoute: () => SalonsRoute,
+} as any)
+const AuthenticatedSalonDashboardRoute =
+  AuthenticatedSalonDashboardRouteImport.update({
+    id: '/salon/dashboard',
+    path: '/salon/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminPendingRoute =
+  AuthenticatedAdminPendingRouteImport.update({
+    id: '/admin/pending',
+    path: '/admin/pending',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register-salon': typeof RegisterSalonRoute
+  '/salons': typeof SalonsRouteWithChildren
+  '/salons/$salonId': typeof SalonsSalonIdRoute
+  '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register-salon': typeof RegisterSalonRoute
+  '/salons': typeof SalonsRouteWithChildren
+  '/salons/$salonId': typeof SalonsSalonIdRoute
+  '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register-salon': typeof RegisterSalonRoute
+  '/salons': typeof SalonsRouteWithChildren
+  '/salons/$salonId': typeof SalonsSalonIdRoute
+  '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register-salon'
+    | '/salons'
+    | '/salons/$salonId'
+    | '/admin/pending'
+    | '/salon/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/register-salon'
+    | '/salons'
+    | '/salons/$salonId'
+    | '/admin/pending'
+    | '/salon/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/register-salon'
+    | '/salons'
+    | '/salons/$salonId'
+    | '/_authenticated/admin/pending'
+    | '/_authenticated/salon/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  RegisterSalonRoute: typeof RegisterSalonRoute
+  SalonsRoute: typeof SalonsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/salons': {
+      id: '/salons'
+      path: '/salons'
+      fullPath: '/salons'
+      preLoaderRoute: typeof SalonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register-salon': {
+      id: '/register-salon'
+      path: '/register-salon'
+      fullPath: '/register-salon'
+      preLoaderRoute: typeof RegisterSalonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +165,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/salons/$salonId': {
+      id: '/salons/$salonId'
+      path: '/$salonId'
+      fullPath: '/salons/$salonId'
+      preLoaderRoute: typeof SalonsSalonIdRouteImport
+      parentRoute: typeof SalonsRoute
+    }
+    '/_authenticated/salon/dashboard': {
+      id: '/_authenticated/salon/dashboard'
+      path: '/salon/dashboard'
+      fullPath: '/salon/dashboard'
+      preLoaderRoute: typeof AuthenticatedSalonDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/pending': {
+      id: '/_authenticated/admin/pending'
+      path: '/admin/pending'
+      fullPath: '/admin/pending'
+      preLoaderRoute: typeof AuthenticatedAdminPendingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
+  AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
+  AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
+interface SalonsRouteChildren {
+  SalonsSalonIdRoute: typeof SalonsSalonIdRoute
+}
+
+const SalonsRouteChildren: SalonsRouteChildren = {
+  SalonsSalonIdRoute: SalonsSalonIdRoute,
+}
+
+const SalonsRouteWithChildren =
+  SalonsRoute._addFileChildren(SalonsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LoginRoute: LoginRoute,
+  RegisterSalonRoute: RegisterSalonRoute,
+  SalonsRoute: SalonsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
