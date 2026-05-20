@@ -105,7 +105,7 @@ function RegisterSalonPage() {
         <div>
           <h2 className="sr-only">Register your salon</h2>
 
-        <form onSubmit={submit} className="space-y-5 bg-card p-8 rounded-3xl ring-1 ring-foreground/5">
+        <form onSubmit={submit} className="space-y-5 bg-card p-8 rounded-3xl border border-border shadow-sm">
           <Field label="Salon name">
             <input required value={form.salonName} onChange={(e) => up("salonName", e.target.value)} className="input" />
           </Field>
