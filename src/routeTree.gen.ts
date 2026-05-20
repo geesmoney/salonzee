@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SalonsRouteImport } from './routes/salons'
+import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -25,6 +26,11 @@ import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authent
 const SalonsRoute = SalonsRouteImport.update({
   id: '/salons',
   path: '/salons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIssueRoute = ReportIssueRouteImport.update({
+  id: '/report-issue',
+  path: '/report-issue',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterSalonRoute = RegisterSalonRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/$slug': typeof SlugRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
+  '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/$slug': typeof SlugRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
+  '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
+  '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/login'
     | '/register-salon'
+    | '/report-issue'
     | '/salons'
     | '/salons/$salonId'
     | '/admin/pending'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/login'
     | '/register-salon'
+    | '/report-issue'
     | '/salons'
     | '/salons/$salonId'
     | '/admin/pending'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/register-salon'
+    | '/report-issue'
     | '/salons'
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterSalonRoute: typeof RegisterSalonRoute
+  ReportIssueRoute: typeof ReportIssueRoute
   SalonsRoute: typeof SalonsRouteWithChildren
 }
 
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/salons'
       fullPath: '/salons'
       preLoaderRoute: typeof SalonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report-issue': {
+      id: '/report-issue'
+      path: '/report-issue'
+      fullPath: '/report-issue'
+      preLoaderRoute: typeof ReportIssueRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register-salon': {
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterSalonRoute: RegisterSalonRoute,
+  ReportIssueRoute: ReportIssueRoute,
   SalonsRoute: SalonsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
