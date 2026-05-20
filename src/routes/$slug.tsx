@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { BookingWidget } from "@/components/booking-widget";
+import { SalonGallery } from "@/components/salon-gallery";
 import { formatGhs, SALON_TYPE_LABELS } from "@/lib/ghana";
 import type { OperatingHours } from "@/lib/slots";
 
@@ -89,17 +90,7 @@ function SalonBySlug() {
               )}
             </div>
 
-            {salon.profile_photo_url && (
-              <div className="mb-10 aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-foreground/5">
-                <img
-                  src={salon.profile_photo_url}
-                  alt={salon.name}
-                  className="w-full h-full object-cover"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              </div>
-            )}
+            <SalonGallery salonId={salon.id} salonName={salon.name} fallbackUrl={salon.profile_photo_url} />
 
             <div className="space-y-4">
               <h2 className="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-foreground/40">Services</h2>
