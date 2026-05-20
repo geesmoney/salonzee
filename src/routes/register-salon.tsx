@@ -180,7 +180,7 @@ function RegisterSalonPage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/50 mb-2">{label}</span>
+      <span className="block text-xs font-semibold text-foreground/80 mb-1.5">{label}</span>
       {children}
     </label>
   );
