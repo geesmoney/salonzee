@@ -9,13 +9,16 @@ type Salon = {
   salon_type: string;
   profile_photo_url: string | null;
   description: string | null;
+  slug?: string | null;
 };
 
 export function SalonCard({ salon }: { salon: Salon }) {
+  const linkProps = salon.slug
+    ? { to: "/$slug" as const, params: { slug: salon.slug } }
+    : { to: "/salons/$salonId" as const, params: { salonId: salon.id } };
   return (
     <Link
-      to="/salons/$salonId"
-      params={{ salonId: salon.id }}
+      {...linkProps}
       className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-2xl"
     >
       <div className="w-full aspect-[4/5] bg-secondary rounded-2xl mb-4 overflow-hidden ring-1 ring-border group-hover:shadow-lg transition-shadow relative">
