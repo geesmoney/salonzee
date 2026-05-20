@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type BookingStatus = Database["public"]["Enums"]["booking_status"];
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
@@ -57,7 +60,7 @@ function SalonDashboard() {
   });
 
   const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+    mutationFn: async ({ id, status }: { id: string; status: BookingStatus }) => {
       const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
       if (error) throw error;
     },
@@ -111,7 +114,7 @@ function SalonDashboard() {
     <div className="min-h-screen bg-background">
       <SiteNav />
       <section className="max-w-7xl mx-auto px-6 md:px-10 py-12">
-        <div className="flex items-baseline justify-between mb-8">
+        <div className="flex items-baseline justify-between mb-8 gap-4 flex-wrap">
           <div>
             <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">Dashboard</p>
             <h1 className="font-serif text-5xl">{salon.name}</h1>
@@ -119,6 +122,9 @@ function SalonDashboard() {
               Status: <span className={`font-bold ${salon.status === "active" ? "text-green-700" : "text-clay"}`}>{salon.status}</span>
             </p>
           </div>
+          <a href="/salon/settings" className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 py-2 rounded-lg hover:bg-secondary">
+            Settings
+          </a>
         </div>
 
         {/* Stat cards */}
