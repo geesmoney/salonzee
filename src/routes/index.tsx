@@ -10,6 +10,7 @@ import heroImg from "@/assets/hero-salon.jpg";
 import featBarber from "@/assets/feature-barber.jpg";
 import featBraids from "@/assets/feature-braids.jpg";
 import featNails from "@/assets/feature-nails.jpg";
+import logo from "@/assets/salonzee-logo.png";
 
 const featuredSalonsQuery = queryOptions({
   queryKey: ["featured-salons"],
