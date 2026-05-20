@@ -140,56 +140,66 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration 
 
           {/* Times */}
           <div className="mb-6">
-            <label className="text-[10px] uppercase tracking-widest font-bold text-foreground/40 mb-2 block">
+            <label className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground mb-2 block">
               Time
             </label>
             {slots.length === 0 ? (
-              <p className="text-sm text-foreground/50 italic py-4">No available slots on this date.</p>
+              <p className="text-sm text-muted-foreground italic py-4">No available slots on this date.</p>
             ) : (
-              <div className="grid grid-cols-3 gap-2">
-                {slots.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setTime(s)}
-                    className={`py-2 rounded-lg text-xs transition-colors ${
-                      time === s
-                        ? "bg-accent text-white font-bold"
-                        : "bg-background border border-foreground/10 hover:border-accent"
-                    }`}
-                  >
-                    {formatTimeLabel(s)}
-                  </button>
-                ))}
+              <div role="radiogroup" aria-label="Available time slots" className="grid grid-cols-3 gap-2">
+                {slots.map((s) => {
+                  const selected = time === s;
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={() => setTime(s)}
+                      className={`py-2 rounded-lg text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                        selected
+                          ? "bg-primary text-primary-foreground font-bold"
+                          : "bg-background border border-border hover:border-primary"
+                      }`}
+                    >
+                      {formatTimeLabel(s)}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
 
           {/* Contact */}
           <div className="space-y-3 mb-6">
+            <label htmlFor="booking-name" className="sr-only">Full name</label>
             <input
+              id="booking-name"
               type="text"
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-background px-4 py-3 rounded-xl outline-none text-sm border border-foreground/10 focus:border-accent"
+              className="w-full bg-background px-4 py-3 rounded-xl outline-none text-sm border border-border focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
             />
+            <label htmlFor="booking-phone" className="sr-only">Phone number</label>
             <input
+              id="booking-phone"
               type="tel"
               placeholder="Phone (e.g. 0241234567)"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full bg-background px-4 py-3 rounded-xl outline-none text-sm border border-foreground/10 focus:border-accent"
+              className="w-full bg-background px-4 py-3 rounded-xl outline-none text-sm border border-border focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
             />
           </div>
 
           <button
             disabled={createBooking.isPending}
             onClick={() => createBooking.mutate()}
-            className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold uppercase text-xs tracking-[0.2em] hover:bg-clay transition-colors disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold uppercase text-xs tracking-[0.2em] hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {createBooking.isPending ? "Booking..." : "Confirm Booking"}
           </button>
-          <p className="text-center text-[10px] text-foreground/40 mt-4">
+          <p className="text-center text-[10px] text-muted-foreground mt-4">
             No payment required until your visit.
           </p>
         </>
