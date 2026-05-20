@@ -24,9 +24,10 @@ type Props = {
   services: Service[];
   operatingHours: OperatingHours;
   slotDuration: number;
+  variant?: "card" | "plain";
 };
 
-export function BookingWidget({ salonId, services, operatingHours, slotDuration }: Props) {
+export function BookingWidget({ salonId, services, operatingHours, slotDuration, variant = "card" }: Props) {
   const qc = useQueryClient();
   const dates = nextNDates(14);
   const [serviceId, setServiceId] = useState<string>(services[0]?.id ?? "");
@@ -87,9 +88,14 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration 
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const wrapperClass =
+    variant === "card"
+      ? "bg-card p-6 sm:p-8 rounded-3xl shadow-xl ring-1 ring-foreground/5 sticky top-24"
+      : "p-1";
+
   return (
-    <div className="bg-card p-8 rounded-3xl shadow-xl ring-1 ring-foreground/5 sticky top-24">
-      <h3 className="font-serif text-2xl mb-6">Secure Your Spot</h3>
+    <div className={wrapperClass}>
+      {variant === "card" && <h3 className="font-serif text-2xl mb-6">Secure Your Spot</h3>}
 
       {services.length === 0 ? (
         <p className="text-sm text-foreground/50">This salon hasn't published services yet.</p>

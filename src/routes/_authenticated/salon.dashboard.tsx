@@ -127,50 +127,53 @@ function SalonDashboard() {
   return (
     <div className="min-h-dvh bg-background">
       <SiteNav />
-      <section className="max-w-7xl mx-auto px-6 md:px-10 py-12">
-        <div className="flex items-baseline justify-between mb-8 gap-4 flex-wrap">
-          <div>
+      <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-10 py-8 sm:py-12">
+        <div className="flex items-start sm:items-baseline justify-between mb-6 sm:mb-8 gap-4 flex-wrap">
+          <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">Dashboard</p>
-            <h1 className="font-serif text-5xl">{salon.name}</h1>
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl truncate">{salon.name}</h1>
             <p className="text-sm text-foreground/60 mt-1">
               Status: <span className={`font-bold ${salon.status === "active" ? "text-green-700" : "text-clay"}`}>{salon.status}</span>
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {publicUrl && salon.status === "active" && (
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(publicUrl);
                   toast.success("Link copied");
                 }}
-                className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 py-2 rounded-lg hover:bg-secondary"
+                className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 h-11 inline-flex items-center rounded-lg hover:bg-secondary"
               >
-                Copy public link
+                Copy link
               </button>
             )}
-            <a href="/salon/settings" className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 py-2 rounded-lg hover:bg-secondary">
+            <a href="/salon/settings" className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 h-11 inline-flex items-center rounded-lg hover:bg-secondary">
               Settings
             </a>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 border-b border-foreground/10 mb-8">
-          {(["overview", "bookings", "services"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] -mb-px border-b-2 ${
-                tab === t ? "border-accent text-foreground" : "border-transparent text-foreground/40 hover:text-foreground"
-              }`}
-            >
-              {t}
-              {t === "bookings" && stats.pendingCount > 0 && (
-                <span className="ml-2 bg-clay text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full">{stats.pendingCount}</span>
-              )}
-            </button>
-          ))}
+        {/* Tabs — horizontally scrollable on small screens */}
+        <div className="-mx-5 sm:mx-0 px-5 sm:px-0 mb-6 sm:mb-8 overflow-x-auto scrollbar-none border-b border-foreground/10">
+          <div className="flex gap-1 min-w-max">
+            {(["overview", "bookings", "services"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`shrink-0 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] -mb-px border-b-2 ${
+                  tab === t ? "border-accent text-foreground" : "border-transparent text-foreground/40 hover:text-foreground"
+                }`}
+              >
+                {t}
+                {t === "bookings" && stats.pendingCount > 0 && (
+                  <span className="ml-2 bg-clay text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full">{stats.pendingCount}</span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
+
 
         {tab === "overview" && (
           <Overview stats={stats} bookings={bookings} salonSlug={salon.slug} publicUrl={publicUrl} />

@@ -60,75 +60,82 @@ function SalonsPage() {
       <SiteNav />
 
       {/* Page header */}
-      <header className="px-6 md:px-10 pt-14 pb-10 max-w-7xl mx-auto">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">The Directory</p>
-        <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-3 max-w-3xl">
+      <header className="px-5 sm:px-6 md:px-10 pt-8 sm:pt-14 pb-6 sm:pb-10 max-w-7xl mx-auto">
+        <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-2 sm:mb-3">The Directory</p>
+        <h1 className="font-display text-[2rem] sm:text-4xl md:text-6xl font-bold tracking-tight mb-3 max-w-3xl leading-[1.05]">
           Hand-picked salons across Ghana.
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl">
-          Already know the salon you want? Search by name. Or browse vetted partners by city, neighbourhood, and service.
+        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl">
+          Already know the salon you want? Search by name. Or browse vetted partners by city and service.
         </p>
       </header>
 
-      <section className="px-6 md:px-10 pb-24 max-w-7xl mx-auto">
-        {/* Filter bar */}
-        <div className="bg-card border border-border rounded-2xl p-4 md:p-5 flex flex-wrap gap-3 items-center mb-10 shadow-sm">
-          <div className="flex flex-col gap-1 flex-[2] min-w-[240px]">
-            <label htmlFor="search" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Search</label>
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-              <input
-                id="search"
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by salon name or neighbourhood"
-                className="w-full bg-background border border-border h-10 pl-9 pr-3 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-              />
+      <section className="px-5 sm:px-6 md:px-10 pb-24 max-w-7xl mx-auto">
+        {/* Filter bar — sticky on mobile */}
+        <div className="sticky top-[64px] md:static z-20 -mx-5 sm:mx-0 px-5 sm:px-0 py-3 sm:py-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:bg-transparent md:backdrop-blur-none mb-6 md:mb-10">
+          <div className="bg-card border border-border rounded-2xl p-3 sm:p-5 flex flex-wrap gap-2 sm:gap-3 items-center shadow-sm">
+            <div className="flex flex-col gap-1 flex-[2] min-w-full sm:min-w-[240px]">
+              <label htmlFor="search" className="sr-only sm:not-sr-only text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Search</label>
+              <div className="relative">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input
+                  id="search"
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search salon or area"
+                  className="w-full bg-background border border-border h-12 sm:h-10 pl-9 pr-3 rounded-xl text-base sm:text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
-            <label htmlFor="city" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">City</label>
-            <select
-              id="city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className="bg-background border border-border h-10 px-3 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-            >
-              <option value="">All cities</option>
-              {GHANA_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
-            <label htmlFor="type" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Salon type</label>
-            <select
-              id="type"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="bg-background border border-border h-10 px-3 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-            >
-              <option value="">All types</option>
-              {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </div>
-          {hasFilters && (
-            <button
-              onClick={() => { setCity(""); setType(""); setSearch(""); }}
-              className="self-end h-10 px-4 rounded-full text-sm font-semibold text-primary hover:bg-secondary transition-colors"
-            >
-              Clear filters
-            </button>
-          )}
-          <div className="self-end ml-auto text-sm text-muted-foreground">
-            {isFetching ? "Updating…" : `${salons.length} ${salons.length === 1 ? "salon" : "salons"}`}
+            <div className="flex gap-2 w-full sm:w-auto sm:flex-1">
+              <div className="flex flex-col gap-1 flex-1 sm:min-w-[160px]">
+                <label htmlFor="city" className="sr-only sm:not-sr-only text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">City</label>
+                <select
+                  id="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="bg-background border border-border h-12 sm:h-10 px-3 rounded-xl text-base sm:text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="">All cities</option>
+                  {GHANA_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1 flex-1 sm:min-w-[160px]">
+                <label htmlFor="type" className="sr-only sm:not-sr-only text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Type</label>
+                <select
+                  id="type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="bg-background border border-border h-12 sm:h-10 px-3 rounded-xl text-base sm:text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="">All types</option>
+                  {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="flex items-center justify-between w-full sm:w-auto sm:ml-auto gap-3">
+              {hasFilters && (
+                <button
+                  onClick={() => { setCity(""); setType(""); setSearch(""); }}
+                  className="h-10 px-4 rounded-full text-sm font-semibold text-primary hover:bg-secondary transition-colors"
+                >
+                  Clear
+                </button>
+              )}
+              <div className="text-xs sm:text-sm text-muted-foreground">
+                {isFetching ? "Updating…" : `${salons.length} ${salons.length === 1 ? "salon" : "salons"}`}
+              </div>
+            </div>
           </div>
         </div>
 
+
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="aspect-[4/5] bg-muted rounded-2xl mb-4" />
@@ -138,23 +145,25 @@ function SalonsPage() {
             ))}
           </div>
         ) : salons.length === 0 ? (
-          <div className="py-20 text-center bg-card border border-border rounded-2xl">
-            <p className="font-display text-2xl font-semibold mb-2">No salons match those filters yet.</p>
+          <div className="py-16 sm:py-20 text-center bg-card border border-border rounded-2xl px-6">
+            <p className="font-display text-xl sm:text-2xl font-semibold mb-2">No salons match those filters yet.</p>
             <p className="text-muted-foreground mb-6">Try clearing the filters or check back as more partners join.</p>
             <button
               onClick={() => { setCity(""); setType(""); setSearch(""); }}
-              className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-semibold"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-full text-sm font-semibold"
             >
               Show all salons
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {salons.map((s) => <SalonCard key={s.id} salon={s} />)}
           </div>
         )}
       </section>
-      <SiteFooter />
+      <div className="hidden md:block">
+        <SiteFooter />
+      </div>
     </div>
   );
 }
