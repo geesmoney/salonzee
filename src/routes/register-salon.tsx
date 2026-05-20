@@ -104,68 +104,68 @@ function RegisterSalonPage() {
         </aside>
         <div>
           <h2 className="sr-only">Register your salon</h2>
-
-        <form onSubmit={submit} className="space-y-5 bg-card p-8 rounded-3xl border border-border shadow-sm">
-          <Field label="Salon name">
-            <input required value={form.salonName} onChange={(e) => up("salonName", e.target.value)} className="input" />
-          </Field>
-          <Field label="Owner's full name">
-            <input required value={form.ownerName} onChange={(e) => up("ownerName", e.target.value)} className="input" />
-          </Field>
-          {!user && (
-            <>
-              <Field label="Email (for login)">
+          <form onSubmit={submit} className="space-y-5 bg-card p-8 rounded-3xl border border-border shadow-sm">
+            <Field label="Salon name">
+              <input required value={form.salonName} onChange={(e) => up("salonName", e.target.value)} className="input" />
+            </Field>
+            <Field label="Owner's full name">
+              <input required value={form.ownerName} onChange={(e) => up("ownerName", e.target.value)} className="input" />
+            </Field>
+            {!user && (
+              <>
+                <Field label="Email (for login)">
+                  <input required type="email" value={form.email} onChange={(e) => up("email", e.target.value)} className="input" />
+                </Field>
+                <Field label="Password (min 6 chars)">
+                  <input required type="password" minLength={6} value={form.password} onChange={(e) => up("password", e.target.value)} className="input" />
+                </Field>
+              </>
+            )}
+            {user && (
+              <Field label="Contact email">
                 <input required type="email" value={form.email} onChange={(e) => up("email", e.target.value)} className="input" />
               </Field>
-              <Field label="Password (min 6 chars)">
-                <input required type="password" minLength={6} value={form.password} onChange={(e) => up("password", e.target.value)} className="input" />
-              </Field>
-            </>
-          )}
-          {user && (
-            <Field label="Contact email">
-              <input required type="email" value={form.email} onChange={(e) => up("email", e.target.value)} className="input" />
+            )}
+            <Field label="Phone (Ghana format e.g. 0241234567)">
+              <input required type="tel" value={form.phone} onChange={(e) => up("phone", e.target.value)} className="input" />
             </Field>
-          )}
-          <Field label="Phone (Ghana format e.g. 0241234567)">
-            <input required type="tel" value={form.phone} onChange={(e) => up("phone", e.target.value)} className="input" />
-          </Field>
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="City">
-              <select value={form.city} onChange={(e) => up("city", e.target.value)} className="input">
-                {GHANA_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="City">
+                <select value={form.city} onChange={(e) => up("city", e.target.value)} className="input">
+                  {GHANA_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </Field>
+              <Field label="Area / neighbourhood">
+                <input required value={form.area} onChange={(e) => up("area", e.target.value)} className="input" placeholder="e.g. East Legon" />
+              </Field>
+            </div>
+            <Field label="Salon type">
+              <select value={form.salonType} onChange={(e) => up("salonType", e.target.value as "male" | "female" | "unisex")} className="input">
+                {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </Field>
-            <Field label="Area / neighbourhood">
-              <input required value={form.area} onChange={(e) => up("area", e.target.value)} className="input" placeholder="e.g. East Legon" />
+            <Field label="Short description">
+              <textarea
+                rows={3}
+                value={form.description}
+                onChange={(e) => up("description", e.target.value)}
+                className="input"
+                placeholder="What makes your salon special?"
+              />
             </Field>
-          </div>
-          <Field label="Salon type">
-            <select value={form.salonType} onChange={(e) => up("salonType", e.target.value as "male" | "female" | "unisex")} className="input">
-              {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </Field>
-          <Field label="Short description">
-            <textarea
-              rows={3}
-              value={form.description}
-              onChange={(e) => up("description", e.target.value)}
-              className="input"
-              placeholder="What makes your salon special?"
-            />
-          </Field>
 
-          <button
-            disabled={loading}
-            className="w-full bg-primary text-primary-foreground py-4 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            {loading ? "Submitting…" : "Submit for review"}
-          </button>
-          <p className="text-xs text-muted-foreground text-center mt-3">
-            By submitting you agree to a quick verification call from our team.
-          </p>
-        </form>
+            <button
+              disabled={loading}
+              className="w-full bg-primary text-primary-foreground py-4 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              {loading ? "Submitting…" : "Submit for review"}
+            </button>
+            <p className="text-xs text-muted-foreground text-center mt-3">
+              By submitting you agree to a quick verification call from our team.
+            </p>
+          </form>
         </div>
+
       </section>
       <SiteFooter />
       <style>{`
