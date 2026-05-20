@@ -1,5 +1,6 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 import logo from "@/assets/salonzee-logo.png";
 
 export function SiteNav() {
@@ -19,6 +20,7 @@ export function SiteNav() {
         {user && !isPlatformAdmin && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
       </div>
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         {user ? (
           <button
             onClick={async () => {
