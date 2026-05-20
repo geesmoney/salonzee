@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
+import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 
@@ -47,6 +48,12 @@ const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
   path: '/$salonId',
   getParentRoute: () => SalonsRoute,
 } as any)
+const AuthenticatedSalonSettingsRoute =
+  AuthenticatedSalonSettingsRouteImport.update({
+    id: '/salon/settings',
+    path: '/salon/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSalonDashboardRoute =
   AuthenticatedSalonDashboardRouteImport.update({
     id: '/salon/dashboard',
@@ -68,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
+  '/salon/settings': typeof AuthenticatedSalonSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesByTo {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
+  '/salon/settings': typeof AuthenticatedSalonSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +97,7 @@ export interface FileRoutesById {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
+  '/_authenticated/salon/settings': typeof AuthenticatedSalonSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/admin/pending'
     | '/salon/dashboard'
+    | '/salon/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/admin/pending'
     | '/salon/dashboard'
+    | '/salon/settings'
   id:
     | '__root__'
     | '/'
@@ -118,6 +130,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
     | '/_authenticated/salon/dashboard'
+    | '/_authenticated/salon/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalonsSalonIdRouteImport
       parentRoute: typeof SalonsRoute
     }
+    '/_authenticated/salon/settings': {
+      id: '/_authenticated/salon/settings'
+      path: '/salon/settings'
+      fullPath: '/salon/settings'
+      preLoaderRoute: typeof AuthenticatedSalonSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/salon/dashboard': {
       id: '/_authenticated/salon/dashboard'
       path: '/salon/dashboard'
@@ -192,11 +212,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
+  AuthenticatedSalonSettingsRoute: typeof AuthenticatedSalonSettingsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
+  AuthenticatedSalonSettingsRoute: AuthenticatedSalonSettingsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -224,3 +246,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
