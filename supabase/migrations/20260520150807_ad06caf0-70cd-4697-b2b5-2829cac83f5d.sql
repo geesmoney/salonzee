@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.queue_24h_reminders() FROM PUBLIC, anon, authenticated, service_role;
