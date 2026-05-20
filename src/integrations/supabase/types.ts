@@ -23,6 +23,7 @@ export type Database = {
           end_time: string
           id: string
           notes: string | null
+          price_ghs_snapshot: number
           reminder_sent_at: string | null
           salon_id: string
           service_id: string | null
@@ -38,6 +39,7 @@ export type Database = {
           end_time: string
           id?: string
           notes?: string | null
+          price_ghs_snapshot?: number
           reminder_sent_at?: string | null
           salon_id: string
           service_id?: string | null
@@ -53,6 +55,7 @@ export type Database = {
           end_time?: string
           id?: string
           notes?: string | null
+          price_ghs_snapshot?: number
           reminder_sent_at?: string | null
           salon_id?: string
           service_id?: string | null
