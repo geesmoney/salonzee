@@ -39,7 +39,7 @@ function SalonPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <SiteNav />
         <div className="px-6 py-20 max-w-7xl mx-auto"><p>Loading...</p></div>
       </div>
@@ -49,7 +49,7 @@ function SalonPage() {
   const { salon, services } = data;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteNav />
       <section className="px-6 md:px-10 py-16 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">

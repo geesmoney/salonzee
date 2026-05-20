@@ -52,7 +52,7 @@ function AdminPage() {
   if (loading || !isPlatformAdmin) return <div className="p-10">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteNav />
       <section className="max-w-6xl mx-auto px-6 md:px-10 py-12">
         <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">Platform Admin</p>

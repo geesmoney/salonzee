@@ -93,7 +93,7 @@ function SalonDashboard() {
 
   if (!salon) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <SiteNav />
         <div className="max-w-2xl mx-auto px-6 py-20 text-center">
           <h1 className="font-serif text-4xl mb-4">No salon yet</h1>
@@ -111,7 +111,7 @@ function SalonDashboard() {
   const pendingCount = bookings.filter((b) => b.status === "pending").length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteNav />
       <section className="max-w-7xl mx-auto px-6 md:px-10 py-12">
         <div className="flex items-baseline justify-between mb-8 gap-4 flex-wrap">

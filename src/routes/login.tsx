@@ -41,7 +41,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteNav />
       <div className="max-w-md mx-auto px-6 py-20">
         <h1 className="font-serif text-5xl mb-2">{mode === "signin" ? "Welcome back" : "Create account"}</h1>
