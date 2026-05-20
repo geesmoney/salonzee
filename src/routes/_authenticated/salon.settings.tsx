@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -36,11 +36,12 @@ function SalonSettings() {
     if (!loading && !user) navigate({ to: "/login" });
   }, [user, loading, navigate]);
 
-  const { data: salon } = useQuery({
-    queryKey: ["my-salon", user?.id],
+  const { data: salon, isLoading: salonLoading, error: salonError } = useQuery({
+    queryKey: ["my-salon-settings", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase.from("salons").select("*").eq("user_id", user!.id).maybeSingle();
+      const { data, error } = await supabase.from("salons").select("*").eq("user_id", user!.id).maybeSingle();
+      if (error) throw error;
       return data;
     },
   });
@@ -85,12 +86,40 @@ function SalonSettings() {
     },
     onSuccess: () => {
       toast.success("Settings saved");
-      qc.invalidateQueries({ queryKey: ["my-salon", user?.id] });
+      qc.invalidateQueries({ queryKey: ["my-salon-settings", user?.id] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (loading || !salon) return <div className="p-10">Loading...</div>;
+  if (loading || salonLoading) return <SettingsShell><SettingsSkeleton /></SettingsShell>;
+
+  if (salonError) {
+    return (
+      <SettingsShell>
+        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+          <h1 className="font-serif text-4xl mb-3">Settings couldn't load</h1>
+          <p className="text-sm text-foreground/60 mb-6">{salonError.message}</p>
+          <button onClick={() => qc.invalidateQueries({ queryKey: ["my-salon-settings", user?.id] })} className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-[0.2em]">
+            Try again
+          </button>
+        </div>
+      </SettingsShell>
+    );
+  }
+
+  if (!salon) {
+    return (
+      <SettingsShell>
+        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+          <h1 className="font-serif text-4xl mb-3">No salon found</h1>
+          <p className="text-sm text-foreground/60 mb-6">Register your salon first, then come back here to manage its photos and details.</p>
+          <Link to="/register-salon" className="inline-flex bg-primary text-primary-foreground px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-[0.2em]">
+            Register Salon
+          </Link>
+        </div>
+      </SettingsShell>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-background">
