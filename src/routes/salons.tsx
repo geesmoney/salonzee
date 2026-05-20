@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
@@ -7,32 +7,18 @@ import { SiteFooter } from "@/components/site-footer";
 import { SalonCard } from "@/components/salon-card";
 import { GHANA_CITIES, SALON_TYPE_LABELS } from "@/lib/ghana";
 
-export const Route = createFileRoute("/salons")({
-  head: () => ({
-    meta: [
-      { title: "Discover salons — Salonzee" },
-      { name: "description", content: "Browse and filter salons across Ghana. Hair, braids, barbering, nails, and beauty." },
-    ],
-  }),
-  component: SalonsPage,
-});
-
-function SalonsPage() {
-  const [city, setCity] = useState<string>("");
-  const [type, setType] = useState<string>("");
-  const [search, setSearch] = useState<string>("");
-
-  const { data: salons = [], isLoading } = useQuery({
-    queryKey: ["salons", city, type, search],
+const salonsListQuery = (filters: { city: string; type: string; search: string }) =>
+  queryOptions({
+    queryKey: ["salons", filters.city, filters.type, filters.search],
     queryFn: async () => {
       let q = supabase
         .from("salons")
         .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description")
         .eq("status", "active")
         .order("name");
-      if (city) q = q.eq("location_city", city);
-      if (type) q = q.eq("salon_type", type as "male" | "female" | "unisex");
-      const term = search.trim().replace(/[%,()]/g, "");
+      if (filters.city) q = q.eq("location_city", filters.city);
+      if (filters.type) q = q.eq("salon_type", filters.type as "male" | "female" | "unisex");
+      const term = filters.search.trim().replace(/[%,()]/g, "");
       if (term) {
         const like = `%${term}%`;
         q = q.or(`name.ilike.${like},location_area.ilike.${like}`);
@@ -41,7 +27,31 @@ function SalonsPage() {
       if (error) throw error;
       return data;
     },
+    staleTime: 60_000,
   });
+
+export const Route = createFileRoute("/salons")({
+  head: () => ({
+    meta: [
+      { title: "Discover salons — Salonzee" },
+      { name: "description", content: "Browse and filter salons across Ghana. Hair, braids, barbering, nails, and beauty." },
+    ],
+  }),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(salonsListQuery({ city: "", type: "", search: "" })),
+  component: SalonsPage,
+});
+
+function SalonsPage() {
+  const [city, setCity] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+
+  const { data: salons = [], isLoading, isFetching } = useQuery({
+    ...salonsListQuery({ city, type, search }),
+    placeholderData: (prev) => prev,
+  });
+
 
   const hasFilters = Boolean(city || type || search.trim());
 
