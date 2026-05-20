@@ -1,15 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Scissors, Sparkles, Brush, CalendarCheck, Star, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SalonCard } from "@/components/salon-card";
-import logo from "@/assets/salonzee-logo.png";
 import heroImg from "@/assets/hero-salon.jpg";
 import featBarber from "@/assets/feature-barber.jpg";
 import featBraids from "@/assets/feature-braids.jpg";
 import featNails from "@/assets/feature-nails.jpg";
+
+const featuredSalonsQuery = queryOptions({
+  queryKey: ["featured-salons"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("salons")
+      .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description")
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .limit(6);
+    if (error) throw error;
+    return data;
+  },
+  staleTime: 5 * 60_000,
+});
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,24 +33,17 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Salonzee — Book Ghana's best salons in seconds" },
       { property: "og:description", content: "Browse vetted salons, pick a time, get an SMS confirmation. Free for customers." },
     ],
+    links: [
+      { rel: "preload", as: "image", href: heroImg, fetchpriority: "high" },
+    ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(featuredSalonsQuery),
   component: Index,
 });
 
 function Index() {
-  const { data: salons = [] } = useQuery({
-    queryKey: ["featured-salons"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("salons")
-        .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description")
-        .eq("status", "active")
-        .order("created_at", { ascending: false })
-        .limit(6);
-      if (error) throw error;
-      return data;
-    },
-  });
+  const { data: salons = [] } = useSuspenseQuery(featuredSalonsQuery);
+
 
   return (
     <div className="min-h-dvh bg-background">
