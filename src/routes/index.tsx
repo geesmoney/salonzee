@@ -254,6 +254,7 @@ function Index() {
       </section>
 
       <SiteFooter />
+      <BookingPulse salons={salons} />
     </div>
   );
 }
