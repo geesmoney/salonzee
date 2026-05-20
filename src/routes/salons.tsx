@@ -20,9 +20,10 @@ export const Route = createFileRoute("/salons")({
 function SalonsPage() {
   const [city, setCity] = useState<string>("");
   const [type, setType] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
 
   const { data: salons = [], isLoading } = useQuery({
-    queryKey: ["salons", city, type],
+    queryKey: ["salons", city, type, search],
     queryFn: async () => {
       let q = supabase
         .from("salons")
@@ -31,11 +32,18 @@ function SalonsPage() {
         .order("name");
       if (city) q = q.eq("location_city", city);
       if (type) q = q.eq("salon_type", type as "male" | "female" | "unisex");
+      const term = search.trim().replace(/[%,()]/g, "");
+      if (term) {
+        const like = `%${term}%`;
+        q = q.or(`name.ilike.${like},location_area.ilike.${like}`);
+      }
       const { data, error } = await q;
       if (error) throw error;
       return data;
     },
   });
+
+  const hasFilters = Boolean(city || type || search.trim());
 
   return (
     <div className="min-h-dvh bg-background">
@@ -48,13 +56,30 @@ function SalonsPage() {
           Hand-picked salons across Ghana.
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl">
-          Browse vetted partners by city, neighbourhood, and service. Filter to your style, then book in a few taps.
+          Already know the salon you want? Search by name. Or browse vetted partners by city, neighbourhood, and service.
         </p>
       </header>
 
       <section className="px-6 md:px-10 pb-24 max-w-7xl mx-auto">
         {/* Filter bar */}
         <div className="bg-card border border-border rounded-2xl p-4 md:p-5 flex flex-wrap gap-3 items-center mb-10 shadow-sm">
+          <div className="flex flex-col gap-1 flex-[2] min-w-[240px]">
+            <label htmlFor="search" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Search</label>
+            <div className="relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                id="search"
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by salon name or neighbourhood"
+                className="w-full bg-background border border-border h-10 pl-9 pr-3 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+          </div>
           <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
             <label htmlFor="city" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">City</label>
             <select
@@ -79,9 +104,9 @@ function SalonsPage() {
               {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
-          {(city || type) && (
+          {hasFilters && (
             <button
-              onClick={() => { setCity(""); setType(""); }}
+              onClick={() => { setCity(""); setType(""); setSearch(""); }}
               className="self-end h-10 px-4 rounded-full text-sm font-semibold text-primary hover:bg-secondary transition-colors"
             >
               Clear filters
