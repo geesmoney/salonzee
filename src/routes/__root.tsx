@@ -121,6 +121,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
+          <SupportNotifier />
           <main id="main" className="min-h-dvh">
             <Outlet />
           </main>
