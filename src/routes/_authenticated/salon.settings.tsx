@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -36,11 +36,12 @@ function SalonSettings() {
     if (!loading && !user) navigate({ to: "/login" });
   }, [user, loading, navigate]);
 
-  const { data: salon } = useQuery({
-    queryKey: ["my-salon", user?.id],
+  const { data: salon, isLoading: salonLoading, error: salonError } = useQuery({
+    queryKey: ["my-salon-settings", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase.from("salons").select("*").eq("user_id", user!.id).maybeSingle();
+      const { data, error } = await supabase.from("salons").select("*").eq("user_id", user!.id).maybeSingle();
+      if (error) throw error;
       return data;
     },
   });
@@ -85,12 +86,40 @@ function SalonSettings() {
     },
     onSuccess: () => {
       toast.success("Settings saved");
-      qc.invalidateQueries({ queryKey: ["my-salon", user?.id] });
+      qc.invalidateQueries({ queryKey: ["my-salon-settings", user?.id] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (loading || !salon) return <div className="p-10">Loading...</div>;
+  if (loading || salonLoading) return <SettingsShell><SettingsSkeleton /></SettingsShell>;
+
+  if (salonError) {
+    return (
+      <SettingsShell>
+        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+          <h1 className="font-serif text-4xl mb-3">Settings couldn't load</h1>
+          <p className="text-sm text-foreground/60 mb-6">{salonError.message}</p>
+          <button onClick={() => qc.invalidateQueries({ queryKey: ["my-salon-settings", user?.id] })} className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-[0.2em]">
+            Try again
+          </button>
+        </div>
+      </SettingsShell>
+    );
+  }
+
+  if (!salon) {
+    return (
+      <SettingsShell>
+        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+          <h1 className="font-serif text-4xl mb-3">No salon found</h1>
+          <p className="text-sm text-foreground/60 mb-6">Register your salon first, then come back here to manage its photos and details.</p>
+          <Link to="/register-salon" className="inline-flex bg-primary text-primary-foreground px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-[0.2em]">
+            Register Salon
+          </Link>
+        </div>
+      </SettingsShell>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-background">
@@ -193,5 +222,35 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <label className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-2 block">{label}</label>
       {children}
     </div>
+  );
+}
+
+function SettingsShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-dvh bg-background">
+      <SiteNav />
+      {children}
+      <SiteFooter />
+    </div>
+  );
+}
+
+function SettingsSkeleton() {
+  return (
+    <section className="max-w-3xl mx-auto px-6 md:px-10 py-12 space-y-6" aria-label="Loading salon settings">
+      <div className="h-3 w-24 rounded-full bg-muted animate-pulse" />
+      <div className="h-12 w-64 max-w-full rounded-lg bg-muted animate-pulse" />
+      <div className="space-y-4">
+        <div className="h-12 rounded-lg bg-muted animate-pulse" />
+        <div className="h-28 rounded-lg bg-muted animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+        </div>
+        <div className="h-40 rounded-xl bg-muted animate-pulse" />
+      </div>
+    </section>
   );
 }

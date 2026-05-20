@@ -24,10 +24,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+    const loadingFallback = window.setTimeout(() => {
+      if (!cancelled) setLoading(false);
+    }, 2500);
+
     // Listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, sess) => {
+      window.clearTimeout(loadingFallback);
       setSession(sess);
       setUser(sess?.user ?? null);
+      setLoading(false);
       if (sess?.user) {
         // Defer role fetch to avoid deadlock
         setTimeout(() => fetchRoles(sess.user.id), 0);
@@ -36,15 +43,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    // Then existing session
-    supabase.auth.getSession().then(({ data: { session: sess } }) => {
-      setSession(sess);
-      setUser(sess?.user ?? null);
-      if (sess?.user) fetchRoles(sess.user.id);
-      setLoading(false);
-    });
+    // Then existing session. Never let auth hydration hold the whole app spinner forever.
+    supabase.auth.getSession()
+      .then(({ data: { session: sess } }) => {
+        setSession(sess);
+        setUser(sess?.user ?? null);
+        if (sess?.user) fetchRoles(sess.user.id);
+      })
+      .catch(() => {
+        setSession(null);
+        setUser(null);
+        setRoles([]);
+      })
+      .finally(() => {
+        window.clearTimeout(loadingFallback);
+        if (!cancelled) setLoading(false);
+      });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(loadingFallback);
+      subscription.unsubscribe();
+    };
   }, []);
 
   async function fetchRoles(userId: string) {
