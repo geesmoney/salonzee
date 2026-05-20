@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type BookingStatus = Database["public"]["Enums"]["booking_status"];
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
