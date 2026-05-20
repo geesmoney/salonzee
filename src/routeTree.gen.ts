@@ -10,19 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SalonsRouteImport } from './routes/salons'
+import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
+import { Route as AuthenticatedSalonSupportRouteImport } from './routes/_authenticated/salon.support'
 import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
+import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 
 const SalonsRoute = SalonsRouteImport.update({
   id: '/salons',
   path: '/salons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIssueRoute = ReportIssueRouteImport.update({
+  id: '/report-issue',
+  path: '/report-issue',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterSalonRoute = RegisterSalonRouteImport.update({
@@ -54,6 +62,12 @@ const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
   path: '/$salonId',
   getParentRoute: () => SalonsRoute,
 } as any)
+const AuthenticatedSalonSupportRoute =
+  AuthenticatedSalonSupportRouteImport.update({
+    id: '/salon/support',
+    path: '/salon/support',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSalonSettingsRoute =
   AuthenticatedSalonSettingsRouteImport.update({
     id: '/salon/settings',
@@ -64,6 +78,12 @@ const AuthenticatedSalonDashboardRoute =
   AuthenticatedSalonDashboardRouteImport.update({
     id: '/salon/dashboard',
     path: '/salon/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSupportRoute =
+  AuthenticatedAdminSupportRouteImport.update({
+    id: '/admin/support',
+    path: '/admin/support',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminPendingRoute =
@@ -78,22 +98,28 @@ export interface FileRoutesByFullPath {
   '/$slug': typeof SlugRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
+  '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
+  '/salon/support': typeof AuthenticatedSalonSupportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
+  '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
+  '/salon/support': typeof AuthenticatedSalonSupportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,11 +128,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
+  '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/_authenticated/salon/settings': typeof AuthenticatedSalonSettingsRoute
+  '/_authenticated/salon/support': typeof AuthenticatedSalonSupportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -115,22 +144,28 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/login'
     | '/register-salon'
+    | '/report-issue'
     | '/salons'
     | '/salons/$salonId'
     | '/admin/pending'
+    | '/admin/support'
     | '/salon/dashboard'
     | '/salon/settings'
+    | '/salon/support'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/$slug'
     | '/login'
     | '/register-salon'
+    | '/report-issue'
     | '/salons'
     | '/salons/$salonId'
     | '/admin/pending'
+    | '/admin/support'
     | '/salon/dashboard'
     | '/salon/settings'
+    | '/salon/support'
   id:
     | '__root__'
     | '/'
@@ -138,11 +173,14 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/register-salon'
+    | '/report-issue'
     | '/salons'
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
+    | '/_authenticated/admin/support'
     | '/_authenticated/salon/dashboard'
     | '/_authenticated/salon/settings'
+    | '/_authenticated/salon/support'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,6 +189,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterSalonRoute: typeof RegisterSalonRoute
+  ReportIssueRoute: typeof ReportIssueRoute
   SalonsRoute: typeof SalonsRouteWithChildren
 }
 
@@ -161,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/salons'
       fullPath: '/salons'
       preLoaderRoute: typeof SalonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report-issue': {
+      id: '/report-issue'
+      path: '/report-issue'
+      fullPath: '/report-issue'
+      preLoaderRoute: typeof ReportIssueRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register-salon': {
@@ -205,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalonsSalonIdRouteImport
       parentRoute: typeof SalonsRoute
     }
+    '/_authenticated/salon/support': {
+      id: '/_authenticated/salon/support'
+      path: '/salon/support'
+      fullPath: '/salon/support'
+      preLoaderRoute: typeof AuthenticatedSalonSupportRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/salon/settings': {
       id: '/_authenticated/salon/settings'
       path: '/salon/settings'
@@ -219,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSalonDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/support': {
+      id: '/_authenticated/admin/support'
+      path: '/admin/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/pending': {
       id: '/_authenticated/admin/pending'
       path: '/admin/pending'
@@ -231,14 +291,18 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
+  AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
   AuthenticatedSalonSettingsRoute: typeof AuthenticatedSalonSettingsRoute
+  AuthenticatedSalonSupportRoute: typeof AuthenticatedSalonSupportRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
+  AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
   AuthenticatedSalonSettingsRoute: AuthenticatedSalonSettingsRoute,
+  AuthenticatedSalonSupportRoute: AuthenticatedSalonSupportRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -262,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterSalonRoute: RegisterSalonRoute,
+  ReportIssueRoute: ReportIssueRoute,
   SalonsRoute: SalonsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
