@@ -69,7 +69,8 @@ export const Route = createFileRoute("/$slug")({
 
 function SalonBySlug() {
   const { slug } = Route.useParams();
-  const { data } = useSuspenseQuery(salonBySlugQuery(slug));
+  const { data } = useQuery(salonBySlugQuery(slug));
+  if (!data) return null;
   const { salon, services } = data;
 
   return (
