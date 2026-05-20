@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SalonCard } from "@/components/salon-card";
+import { BookingPulse } from "@/components/booking-pulse";
 import heroImg from "@/assets/hero-salon.jpg";
 import featBarber from "@/assets/feature-barber.jpg";
 import featBraids from "@/assets/feature-braids.jpg";
