@@ -132,7 +132,7 @@ function SalonsPage() {
             <p className="font-display text-2xl font-semibold mb-2">No salons match those filters yet.</p>
             <p className="text-muted-foreground mb-6">Try clearing the filters or check back as more partners join.</p>
             <button
-              onClick={() => { setCity(""); setType(""); }}
+              onClick={() => { setCity(""); setType(""); setSearch(""); }}
               className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-semibold"
             >
               Show all salons
