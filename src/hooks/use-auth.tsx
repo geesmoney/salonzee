@@ -24,10 +24,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+    const loadingFallback = window.setTimeout(() => {
+      if (!cancelled) setLoading(false);
+    }, 2500);
+
     // Listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, sess) => {
+      window.clearTimeout(loadingFallback);
       setSession(sess);
       setUser(sess?.user ?? null);
+      setLoading(false);
       if (sess?.user) {
         // Defer role fetch to avoid deadlock
         setTimeout(() => fetchRoles(sess.user.id), 0);
@@ -48,9 +55,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setRoles([]);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        window.clearTimeout(loadingFallback);
+        if (!cancelled) setLoading(false);
+      });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(loadingFallback);
+      subscription.unsubscribe();
+    };
   }, []);
 
   async function fetchRoles(userId: string) {
