@@ -42,7 +42,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { data: salons = [] } = useSuspenseQuery(featuredSalonsQuery);
+  const { data: salons = [] } = useQuery(featuredSalonsQuery);
 
 
   return (
