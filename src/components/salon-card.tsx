@@ -23,7 +23,15 @@ export function SalonCard({ salon }: { salon: Salon }) {
     >
       <div className="w-full aspect-[4/5] bg-secondary rounded-2xl mb-4 overflow-hidden ring-1 ring-border group-hover:shadow-lg transition-shadow relative">
         {salon.profile_photo_url ? (
-          <img src={salon.profile_photo_url} alt={salon.name} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" loading="lazy" />
+          <img
+            src={salon.profile_photo_url}
+            alt={salon.name}
+            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+            loading="lazy"
+            decoding="async"
+            width={800}
+            height={1000}
+          />
         ) : (
           <div className="w-full h-full grid place-items-center text-sm font-display font-semibold text-primary px-6 text-center">
             {salon.name}
