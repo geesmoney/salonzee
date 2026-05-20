@@ -29,37 +29,46 @@ function SalonDashboard() {
     if (!loading && !user) navigate({ to: "/login" });
   }, [user, loading, navigate]);
 
-  const { data: salon } = useQuery({
-    queryKey: ["my-salon", user?.id],
+  const { data, isLoading } = useQuery({
+    queryKey: ["salon-dashboard", user?.id],
     enabled: !!user,
+    staleTime: 30_000,
     queryFn: async () => {
-      const { data } = await supabase.from("salons").select("*").eq("user_id", user!.id).maybeSingle();
-      return data;
+      const { data: salon } = await supabase
+        .from("salons")
+        .select("*")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      if (!salon) return { salon: null, bookings: [], services: [] };
+
+      // Parallel fetch — no waterfall
+      const [bookingsRes, servicesRes] = await Promise.all([
+        supabase
+          .from("bookings")
+          .select("*, services(name)")
+          .eq("salon_id", salon.id)
+          .order("booking_date", { ascending: true })
+          .order("start_time", { ascending: true }),
+        supabase
+          .from("services")
+          .select("*")
+          .eq("salon_id", salon.id)
+          .order("created_at"),
+      ]);
+      return {
+        salon,
+        bookings: bookingsRes.data ?? [],
+        services: servicesRes.data ?? [],
+      };
     },
   });
 
-  const { data: bookings = [] } = useQuery({
-    queryKey: ["my-bookings", salon?.id],
-    enabled: !!salon,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("bookings")
-        .select("*, services(name)")
-        .eq("salon_id", salon!.id)
-        .order("booking_date", { ascending: true })
-        .order("start_time", { ascending: true });
-      return data ?? [];
-    },
-  });
+  const salon = data?.salon ?? null;
+  const bookings = data?.bookings ?? [];
+  const services = data?.services ?? [];
 
-  const { data: services = [] } = useQuery({
-    queryKey: ["my-services", salon?.id],
-    enabled: !!salon,
-    queryFn: async () => {
-      const { data } = await supabase.from("services").select("*").eq("salon_id", salon!.id).order("created_at");
-      return data ?? [];
-    },
-  });
+  const invalidateDashboard = () =>
+    qc.invalidateQueries({ queryKey: ["salon-dashboard", user?.id] });
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: BookingStatus }) => {
@@ -68,7 +77,7 @@ function SalonDashboard() {
     },
     onSuccess: () => {
       toast.success("Updated");
-      qc.invalidateQueries({ queryKey: ["my-bookings", salon?.id] });
+      invalidateDashboard();
     },
   });
 
@@ -79,7 +88,7 @@ function SalonDashboard() {
     },
     onSuccess: () => {
       toast.success("Service added");
-      qc.invalidateQueries({ queryKey: ["my-services", salon?.id] });
+      invalidateDashboard();
     },
   });
 
@@ -88,12 +97,13 @@ function SalonDashboard() {
       const { error } = await supabase.from("services").update({ active }).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["my-services", salon?.id] }),
+    onSuccess: () => invalidateDashboard(),
   });
 
   const stats = useMemo(() => computeStats(bookings, services), [bookings, services]);
 
-  if (loading) return <div className="p-10">Loading...</div>;
+  if (loading || isLoading) return <DashboardSkeleton />;
+
 
   if (!salon) {
     return (
@@ -552,4 +562,36 @@ function daysAgo(d: Date, n: number) {
   const x = new Date(d);
   x.setDate(x.getDate() - n);
   return x;
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="min-h-dvh bg-background">
+      <SiteNav />
+      <section className="max-w-7xl mx-auto px-6 md:px-10 py-12 animate-pulse">
+        <div className="mb-8">
+          <div className="h-3 w-20 bg-muted rounded mb-3" />
+          <div className="h-12 w-72 bg-muted rounded mb-2" />
+          <div className="h-4 w-40 bg-muted rounded" />
+        </div>
+        <div className="flex gap-2 border-b border-foreground/10 mb-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-10 w-24 bg-muted rounded-t" />
+          ))}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-card border border-border rounded-2xl p-5">
+              <div className="h-3 w-16 bg-muted rounded mb-3" />
+              <div className="h-8 w-24 bg-muted rounded" />
+            </div>
+          ))}
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-card border border-border rounded-2xl p-6 h-64" />
+          <div className="bg-card border border-border rounded-2xl p-6 h-64" />
+        </div>
+      </section>
+    </div>
+  );
 }
