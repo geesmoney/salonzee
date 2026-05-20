@@ -157,16 +157,21 @@ function RegisterSalonPage() {
 
           <button
             disabled={loading}
-            className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold uppercase text-xs tracking-[0.2em] hover:bg-clay disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground py-4 rounded-full font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            {loading ? "Submitting..." : "Submit for Review"}
+            {loading ? "Submitting…" : "Submit for review"}
           </button>
+          <p className="text-xs text-muted-foreground text-center mt-3">
+            By submitting you agree to a quick verification call from our team.
+          </p>
         </form>
+        </div>
       </section>
       <SiteFooter />
       <style>{`
-        .input { width: 100%; background: var(--background); border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent); padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.875rem; outline: none; }
-        .input:focus { border-color: var(--accent); }
+        .input { width: 100%; background: var(--background); border: 1px solid var(--border); padding: 0.625rem 1rem; height: 2.75rem; border-radius: 0.75rem; font-size: 0.875rem; outline: none; transition: border-color .15s, box-shadow .15s; }
+        .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 20%, transparent); }
+        textarea.input { height: auto; min-height: 5.5rem; padding-top: 0.75rem; }
       `}</style>
     </div>
   );
