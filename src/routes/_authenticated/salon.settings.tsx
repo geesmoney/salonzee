@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { SalonImageManager } from "@/components/salon-image-manager";
 
 export const Route = createFileRoute("/_authenticated/salon/settings")({
   head: () => ({ meta: [{ title: "Salon Settings — Salonzee" }] }),
@@ -128,9 +129,13 @@ function SalonSettings() {
             </Field>
           </div>
 
-          <Field label="Profile photo URL">
+          <Field label="Cover photo URL (optional, shown if no gallery)">
             <input className={inputCls} value={profilePhoto} onChange={(e) => setProfilePhoto(e.target.value)} placeholder="https://..." />
           </Field>
+
+          <div className="border border-foreground/10 rounded-xl p-4">
+            <SalonImageManager salonId={salon.id} />
+          </div>
 
           <div>
             <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-3">Operating hours</p>
