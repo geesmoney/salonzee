@@ -148,4 +148,8 @@
 @utility pt-safe {
   padding-top: env(safe-area-inset-top);
 }
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
 
