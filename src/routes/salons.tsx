@@ -27,7 +27,7 @@ function SalonsPage() {
     queryFn: async () => {
       let q = supabase
         .from("salons")
-        .select("id, name, location_city, location_area, salon_type, profile_photo_url, description")
+        .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description")
         .eq("status", "active")
         .order("name");
       if (city) q = q.eq("location_city", city);
