@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
@@ -47,10 +47,7 @@ function SalonsPage() {
   const [type, setType] = useState<string>("");
   const [search, setSearch] = useState<string>("");
 
-  const { data: salons = [], isLoading, isFetching } = useQuery({
-    ...salonsListQuery({ city, type, search }),
-    placeholderData: (prev) => prev,
-  });
+  const { data: salons = [], isFetching } = useSuspenseQuery(salonsListQuery({ city, type, search }));
 
 
   const hasFilters = Boolean(city || type || search.trim());
@@ -134,17 +131,7 @@ function SalonsPage() {
         </div>
 
 
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[4/5] bg-muted rounded-2xl mb-4" />
-                <div className="h-5 bg-muted rounded w-2/3 mb-2" />
-                <div className="h-4 bg-muted rounded w-1/2" />
-              </div>
-            ))}
-          </div>
-        ) : salons.length === 0 ? (
+        {salons.length === 0 ? (
           <div className="py-16 sm:py-20 text-center bg-card border border-border rounded-2xl px-6">
             <p className="font-display text-xl sm:text-2xl font-semibold mb-2">No salons match those filters yet.</p>
             <p className="text-muted-foreground mb-6">Try clearing the filters or check back as more partners join.</p>
