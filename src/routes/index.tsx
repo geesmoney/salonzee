@@ -226,7 +226,12 @@ function Index() {
       <section className="px-6 md:px-10 pb-24 max-w-7xl mx-auto">
         <div className="bg-foreground text-background rounded-3xl p-10 md:p-16 grid md:grid-cols-2 gap-10 md:gap-14 items-center overflow-hidden relative">
           <div>
-            <img src={logo} alt="Salonzee" className="h-10 md:h-12 w-auto mb-6 invert dark:invert-0" />
+            <div className="inline-flex items-center gap-2.5 mb-6">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/30">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </span>
+              <span className="font-display text-xl font-bold tracking-tight">Salon<span className="text-primary">zee</span></span>
+            </div>
             <h3 className="font-display text-3xl md:text-4xl font-bold mb-4 leading-tight">Grow your salon with Salonzee.</h3>
             <p className="text-background/70 leading-relaxed mb-6 max-w-md">
               Manage bookings, services, and your calendar from one dashboard. Get discovered by thousands of clients across Ghana — free until you're earning.
