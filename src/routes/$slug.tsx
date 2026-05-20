@@ -1,5 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
@@ -69,7 +69,8 @@ export const Route = createFileRoute("/$slug")({
 
 function SalonBySlug() {
   const { slug } = Route.useParams();
-  const { data } = useSuspenseQuery(salonBySlugQuery(slug));
+  const { data } = useQuery(salonBySlugQuery(slug));
+  if (!data) return null;
   const { salon, services } = data;
 
   return (
