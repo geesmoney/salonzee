@@ -224,3 +224,33 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </div>
   );
 }
+
+function SettingsShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-dvh bg-background">
+      <SiteNav />
+      {children}
+      <SiteFooter />
+    </div>
+  );
+}
+
+function SettingsSkeleton() {
+  return (
+    <section className="max-w-3xl mx-auto px-6 md:px-10 py-12 space-y-6" aria-label="Loading salon settings">
+      <div className="h-3 w-24 rounded-full bg-muted animate-pulse" />
+      <div className="h-12 w-64 max-w-full rounded-lg bg-muted animate-pulse" />
+      <div className="space-y-4">
+        <div className="h-12 rounded-lg bg-muted animate-pulse" />
+        <div className="h-28 rounded-lg bg-muted animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+          <div className="h-12 rounded-lg bg-muted animate-pulse" />
+        </div>
+        <div className="h-40 rounded-xl bg-muted animate-pulse" />
+      </div>
+    </section>
+  );
+}
