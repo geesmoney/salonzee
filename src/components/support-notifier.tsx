@@ -98,6 +98,7 @@ export function SupportNotifier() {
         (payload) => {
           const t = payload.new as Ticket;
           if (new Date(t.created_at).getTime() < mountedAt.current - 5000) return;
+          playNotificationSound();
           toast.success("New support ticket", {
             description: t.subject,
             action: {
