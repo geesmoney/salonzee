@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
+  const lastRoleUserId = useRef<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,8 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       if (sess?.user) {
         // Defer role fetch to avoid deadlock
-        setTimeout(() => fetchRoles(sess.user.id), 0);
+        queueRoleFetch(sess.user.id);
       } else {
+        lastRoleUserId.current = null;
         setRoles([]);
       }
     });
@@ -48,11 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then(({ data: { session: sess } }) => {
         setSession(sess);
         setUser(sess?.user ?? null);
-        if (sess?.user) fetchRoles(sess.user.id);
+        if (sess?.user) queueRoleFetch(sess.user.id);
       })
       .catch(() => {
         setSession(null);
         setUser(null);
+        lastRoleUserId.current = null;
         setRoles([]);
       })
       .finally(() => {
@@ -66,6 +69,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       subscription.unsubscribe();
     };
   }, []);
+
+  function queueRoleFetch(userId: string) {
+    if (lastRoleUserId.current === userId) return;
+    lastRoleUserId.current = userId;
+    setTimeout(() => fetchRoles(userId), 0);
+  }
 
   async function fetchRoles(userId: string) {
     const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
