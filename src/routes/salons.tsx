@@ -135,7 +135,7 @@ function SalonsPage() {
 
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="aspect-[4/5] bg-muted rounded-2xl mb-4" />
@@ -145,23 +145,25 @@ function SalonsPage() {
             ))}
           </div>
         ) : salons.length === 0 ? (
-          <div className="py-20 text-center bg-card border border-border rounded-2xl">
-            <p className="font-display text-2xl font-semibold mb-2">No salons match those filters yet.</p>
+          <div className="py-16 sm:py-20 text-center bg-card border border-border rounded-2xl px-6">
+            <p className="font-display text-xl sm:text-2xl font-semibold mb-2">No salons match those filters yet.</p>
             <p className="text-muted-foreground mb-6">Try clearing the filters or check back as more partners join.</p>
             <button
               onClick={() => { setCity(""); setType(""); setSearch(""); }}
-              className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-semibold"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-full text-sm font-semibold"
             >
               Show all salons
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {salons.map((s) => <SalonCard key={s.id} salon={s} />)}
           </div>
         )}
       </section>
-      <SiteFooter />
+      <div className="hidden md:block">
+        <SiteFooter />
+      </div>
     </div>
   );
 }
