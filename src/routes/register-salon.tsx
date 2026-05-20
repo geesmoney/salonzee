@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -21,6 +21,23 @@ function RegisterSalonPage() {
   const { user, signUp } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // If the signed-in user already owns a salon, send them straight to their dashboard.
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("salons")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!cancelled && data) navigate({ to: "/salon/dashboard" });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user, navigate]);
   const [form, setForm] = useState({
     salonName: "",
     ownerName: "",
