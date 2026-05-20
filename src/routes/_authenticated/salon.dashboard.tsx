@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
@@ -17,11 +17,13 @@ export const Route = createFileRoute("/_authenticated/salon/dashboard")({
   component: SalonDashboard,
 });
 
+type Tab = "overview" | "bookings" | "services";
+
 function SalonDashboard() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"bookings" | "services">("bookings");
+  const [tab, setTab] = useState<Tab>("overview");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -89,6 +91,8 @@ function SalonDashboard() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["my-services", salon?.id] }),
   });
 
+  const stats = useMemo(() => computeStats(bookings, services), [bookings, services]);
+
   if (loading) return <div className="p-10">Loading...</div>;
 
   if (!salon) {
@@ -106,9 +110,9 @@ function SalonDashboard() {
     );
   }
 
-  const today = new Date().toISOString().slice(0, 10);
-  const todayBookings = bookings.filter((b) => b.booking_date === today);
-  const pendingCount = bookings.filter((b) => b.status === "pending").length;
+  const publicUrl = salon.slug
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/${salon.slug}`
+    : null;
 
   return (
     <div className="min-h-dvh bg-background">
@@ -122,22 +126,27 @@ function SalonDashboard() {
               Status: <span className={`font-bold ${salon.status === "active" ? "text-green-700" : "text-clay"}`}>{salon.status}</span>
             </p>
           </div>
-          <a href="/salon/settings" className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 py-2 rounded-lg hover:bg-secondary">
-            Settings
-          </a>
-        </div>
-
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <StatCard label="Today" value={todayBookings.length} />
-          <StatCard label="Pending" value={pendingCount} />
-          <StatCard label="Total bookings" value={bookings.length} />
-          <StatCard label="Services" value={services.length} />
+          <div className="flex gap-2">
+            {publicUrl && salon.status === "active" && (
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(publicUrl);
+                  toast.success("Link copied");
+                }}
+                className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 py-2 rounded-lg hover:bg-secondary"
+              >
+                Copy public link
+              </button>
+            )}
+            <a href="/salon/settings" className="text-xs font-bold uppercase tracking-[0.2em] border border-foreground/20 px-4 py-2 rounded-lg hover:bg-secondary">
+              Settings
+            </a>
+          </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-foreground/10 mb-6">
-          {(["bookings", "services"] as const).map((t) => (
+        <div className="flex gap-2 border-b border-foreground/10 mb-8">
+          {(["overview", "bookings", "services"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -146,42 +155,19 @@ function SalonDashboard() {
               }`}
             >
               {t}
+              {t === "bookings" && stats.pendingCount > 0 && (
+                <span className="ml-2 bg-clay text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full">{stats.pendingCount}</span>
+              )}
             </button>
           ))}
         </div>
 
+        {tab === "overview" && (
+          <Overview stats={stats} bookings={bookings} salonSlug={salon.slug} publicUrl={publicUrl} />
+        )}
+
         {tab === "bookings" && (
-          <div className="space-y-3">
-            {bookings.length === 0 && <p className="text-foreground/50 italic py-12 text-center">No bookings yet.</p>}
-            {bookings.map((b) => (
-              <div key={b.id} className="bg-card border border-foreground/5 rounded-xl p-5 flex flex-col md:flex-row md:items-center gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-1">
-                    <p className="font-bold">{b.customer_name}</p>
-                    <StatusBadge status={b.status} />
-                  </div>
-                  <p className="text-sm text-foreground/60">
-                    {b.booking_date} • {formatTimeLabel(b.start_time)} •{" "}
-                    {(b as any).services?.name ?? "Service"} • {b.customer_phone}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {b.status === "pending" && (
-                    <ActionBtn onClick={() => updateStatus.mutate({ id: b.id, status: "confirmed" })}>Confirm</ActionBtn>
-                  )}
-                  {b.status === "confirmed" && (
-                    <>
-                      <ActionBtn onClick={() => updateStatus.mutate({ id: b.id, status: "completed" })}>Complete</ActionBtn>
-                      <ActionBtn onClick={() => updateStatus.mutate({ id: b.id, status: "no_show" })}>No-show</ActionBtn>
-                    </>
-                  )}
-                  {(b.status === "pending" || b.status === "confirmed") && (
-                    <ActionBtn variant="ghost" onClick={() => updateStatus.mutate({ id: b.id, status: "cancelled" })}>Cancel</ActionBtn>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          <BookingsList bookings={bookings} onUpdate={(id, status) => updateStatus.mutate({ id, status })} />
         )}
 
         {tab === "services" && (
@@ -213,11 +199,287 @@ function SalonDashboard() {
   );
 }
 
-function StatCard({ label, value }: { label: string; value: number }) {
+type Booking = {
+  id: string;
+  status: string;
+  booking_date: string;
+  start_time: string;
+  customer_name: string;
+  customer_phone: string;
+  service_id: string | null;
+  price_ghs_snapshot: number | string;
+  services?: { name: string } | null;
+};
+
+type Service = {
+  id: string;
+  name: string;
+  active: boolean;
+  price_ghs: number | string;
+  duration_minutes: number;
+};
+
+function computeStats(bookings: Booking[], services: Service[]) {
+  const today = new Date();
+  const todayKey = isoDate(today);
+  const weekStart = isoDate(daysAgo(today, today.getDay() === 0 ? 6 : today.getDay() - 1));
+  const monthStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-01`;
+
+  const revenue = (preds: (b: Booking) => boolean) =>
+    bookings
+      .filter((b) => b.status === "completed" && preds(b))
+      .reduce((sum, b) => sum + Number(b.price_ghs_snapshot ?? 0), 0);
+
+  const revenueToday = revenue((b) => b.booking_date === todayKey);
+  const revenueWeek = revenue((b) => b.booking_date >= weekStart);
+  const revenueMonth = revenue((b) => b.booking_date >= monthStart);
+  const revenueTotal = revenue(() => true);
+
+  const completed = bookings.filter((b) => b.status === "completed");
+  const avgTicket = completed.length ? revenueTotal / completed.length : 0;
+
+  const todayBookings = bookings
+    .filter((b) => b.booking_date === todayKey && b.status !== "cancelled" && b.status !== "no_show")
+    .sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+  const upcoming = bookings
+    .filter((b) => b.booking_date > todayKey && (b.status === "confirmed" || b.status === "pending"))
+    .slice(0, 5);
+
+  const pendingCount = bookings.filter((b) => b.status === "pending").length;
+  const cancelledCount = bookings.filter((b) => b.status === "cancelled").length;
+  const noShowCount = bookings.filter((b) => b.status === "no_show").length;
+  const totalDone = completed.length + cancelledCount + noShowCount;
+  const noShowRate = totalDone ? Math.round((noShowCount / totalDone) * 100) : 0;
+
+  // Top services by completed-booking revenue
+  const byService = new Map<string, { name: string; count: number; revenue: number }>();
+  for (const b of completed) {
+    const key = b.service_id ?? "unknown";
+    const name = b.services?.name ?? "Unknown";
+    const existing = byService.get(key) ?? { name, count: 0, revenue: 0 };
+    existing.count += 1;
+    existing.revenue += Number(b.price_ghs_snapshot ?? 0);
+    byService.set(key, existing);
+  }
+  const topServices = Array.from(byService.values()).sort((a, b) => b.revenue - a.revenue).slice(0, 3);
+
+  // Unique customers (by phone)
+  const phones = new Set<string>();
+  const visitsByPhone = new Map<string, number>();
+  for (const b of bookings) {
+    if (b.status === "cancelled") continue;
+    phones.add(b.customer_phone);
+    visitsByPhone.set(b.customer_phone, (visitsByPhone.get(b.customer_phone) ?? 0) + 1);
+  }
+  const totalCustomers = phones.size;
+  const repeatCustomers = Array.from(visitsByPhone.values()).filter((n) => n > 1).length;
+
+  // Profile health
+  const activeServices = services.filter((s) => s.active).length;
+
+  return {
+    revenueToday, revenueWeek, revenueMonth, revenueTotal,
+    avgTicket, todayBookings, upcoming, pendingCount,
+    noShowRate, topServices, totalCustomers, repeatCustomers,
+    activeServices, totalServices: services.length,
+    totalBookings: bookings.length, completedCount: completed.length,
+  };
+}
+
+function Overview({
+  stats, bookings, salonSlug, publicUrl,
+}: {
+  stats: ReturnType<typeof computeStats>;
+  bookings: Booking[];
+  salonSlug: string | null;
+  publicUrl: string | null;
+}) {
   return (
-    <div className="bg-card border border-foreground/5 rounded-2xl p-5">
+    <div className="space-y-10">
+      {/* Revenue cards */}
+      <div>
+        <h2 className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-3">Revenue</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard label="Today" value={formatGhs(stats.revenueToday)} accent />
+          <StatCard label="This week" value={formatGhs(stats.revenueWeek)} />
+          <StatCard label="This month" value={formatGhs(stats.revenueMonth)} />
+          <StatCard label="All-time" value={formatGhs(stats.revenueTotal)} />
+        </div>
+      </div>
+
+      {/* Operations cards */}
+      <div>
+        <h2 className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-3">Operations</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard label="Pending bookings" value={stats.pendingCount} />
+          <StatCard label="Avg ticket" value={formatGhs(stats.avgTicket)} />
+          <StatCard label="No-show rate" value={`${stats.noShowRate}%`} />
+          <StatCard label="Total bookings" value={stats.totalBookings} />
+        </div>
+      </div>
+
+      {/* Customers */}
+      <div>
+        <h2 className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-3">Customers</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard label="Unique customers" value={stats.totalCustomers} />
+          <StatCard label="Repeat customers" value={stats.repeatCustomers} />
+          <StatCard label="Active services" value={`${stats.activeServices} / ${stats.totalServices}`} />
+          <StatCard label="Completed" value={stats.completedCount} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Today's schedule */}
+        <div className="bg-card border border-foreground/5 rounded-2xl p-6">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="font-serif text-2xl">Today's schedule</h2>
+            <span className="text-xs text-foreground/40">{stats.todayBookings.length} appointments</span>
+          </div>
+          {stats.todayBookings.length === 0 ? (
+            <p className="text-foreground/40 italic text-sm py-8 text-center">Nothing on the books today.</p>
+          ) : (
+            <ul className="divide-y divide-foreground/5">
+              {stats.todayBookings.map((b) => (
+                <li key={b.id} className="py-3 flex items-center gap-3">
+                  <span className="font-bold tabular-nums text-sm w-16">{formatTimeLabel(b.start_time)}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{b.customer_name}</p>
+                    <p className="text-xs text-foreground/50 truncate">{b.services?.name ?? "Service"}</p>
+                  </div>
+                  <StatusBadge status={b.status} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Top services */}
+        <div className="bg-card border border-foreground/5 rounded-2xl p-6">
+          <h2 className="font-serif text-2xl mb-4">Top services</h2>
+          {stats.topServices.length === 0 ? (
+            <p className="text-foreground/40 italic text-sm py-8 text-center">No completed bookings yet — mark bookings as <em>Complete</em> to see revenue here.</p>
+          ) : (
+            <ul className="space-y-3">
+              {stats.topServices.map((s) => (
+                <li key={s.name} className="flex items-center justify-between">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{s.name}</p>
+                    <p className="text-xs text-foreground/50">{s.count} {s.count === 1 ? "booking" : "bookings"}</p>
+                  </div>
+                  <p className="font-serif text-lg text-accent">{formatGhs(s.revenue)}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* Upcoming */}
+      {stats.upcoming.length > 0 && (
+        <div className="bg-card border border-foreground/5 rounded-2xl p-6">
+          <h2 className="font-serif text-2xl mb-4">Coming up</h2>
+          <ul className="divide-y divide-foreground/5">
+            {stats.upcoming.map((b) => (
+              <li key={b.id} className="py-3 flex items-center gap-3 text-sm">
+                <span className="tabular-nums text-foreground/60 w-32">{b.booking_date} {formatTimeLabel(b.start_time)}</span>
+                <span className="flex-1 truncate font-medium">{b.customer_name}</span>
+                <span className="text-foreground/50 truncate hidden sm:inline">{b.services?.name}</span>
+                <StatusBadge status={b.status} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Public link */}
+      {publicUrl && (
+        <div className="bg-secondary/40 border border-foreground/5 rounded-2xl p-6">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-2">Your public booking link</p>
+          <Link to="/$slug" params={{ slug: salonSlug! }} className="font-serif text-xl text-accent hover:underline break-all">
+            {publicUrl}
+          </Link>
+          <p className="text-xs text-foreground/50 mt-2">Share this link on WhatsApp, Instagram, or anywhere customers find you.</p>
+        </div>
+      )}
+
+      {/* Empty state nudge */}
+      {bookings.length === 0 && stats.totalServices === 0 && (
+        <div className="text-center py-10 text-foreground/50 text-sm">
+          Start by adding your services in the Services tab so customers can book.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BookingsList({
+  bookings, onUpdate,
+}: {
+  bookings: Booking[];
+  onUpdate: (id: string, status: BookingStatus) => void;
+}) {
+  const [filter, setFilter] = useState<"all" | BookingStatus>("all");
+  const filtered = filter === "all" ? bookings : bookings.filter((b) => b.status === filter);
+
+  return (
+    <div>
+      <div className="flex flex-wrap gap-2 mb-4">
+        {(["all", "pending", "confirmed", "completed", "no_show", "cancelled"] as const).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`text-xs font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full ${
+              filter === f ? "bg-foreground text-background" : "border border-foreground/15 text-foreground/60 hover:text-foreground"
+            }`}
+          >
+            {f.replace("_", " ")}
+          </button>
+        ))}
+      </div>
+      <div className="space-y-3">
+        {filtered.length === 0 && <p className="text-foreground/50 italic py-12 text-center">No bookings.</p>}
+        {filtered.map((b) => (
+          <div key={b.id} className="bg-card border border-foreground/5 rounded-xl p-5 flex flex-col md:flex-row md:items-center gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-1">
+                <p className="font-bold">{b.customer_name}</p>
+                <StatusBadge status={b.status} />
+                {Number(b.price_ghs_snapshot) > 0 && (
+                  <span className="text-xs text-foreground/50">{formatGhs(Number(b.price_ghs_snapshot))}</span>
+                )}
+              </div>
+              <p className="text-sm text-foreground/60">
+                {b.booking_date} • {formatTimeLabel(b.start_time)} • {b.services?.name ?? "Service"} • {b.customer_phone}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {b.status === "pending" && (
+                <ActionBtn onClick={() => onUpdate(b.id, "confirmed")}>Confirm</ActionBtn>
+              )}
+              {b.status === "confirmed" && (
+                <>
+                  <ActionBtn onClick={() => onUpdate(b.id, "completed")}>Complete</ActionBtn>
+                  <ActionBtn onClick={() => onUpdate(b.id, "no_show")}>No-show</ActionBtn>
+                </>
+              )}
+              {(b.status === "pending" || b.status === "confirmed") && (
+                <ActionBtn variant="ghost" onClick={() => onUpdate(b.id, "cancelled")}>Cancel</ActionBtn>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
+  return (
+    <div className={`border rounded-2xl p-5 ${accent ? "bg-accent/10 border-accent/30" : "bg-card border-foreground/5"}`}>
       <p className="text-[10px] uppercase tracking-widest text-foreground/40 mb-2">{label}</p>
-      <p className="font-serif text-4xl">{value}</p>
+      <p className="font-serif text-3xl break-words">{value}</p>
     </div>
   );
 }
@@ -281,4 +543,13 @@ function ServiceForm({ onAdd }: { onAdd: (s: { name: string; duration_minutes: n
       <button className="md:col-span-4 bg-primary text-primary-foreground py-3 rounded-lg font-bold uppercase text-xs tracking-[0.2em] hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">Add service</button>
     </form>
   );
+}
+
+function isoDate(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function daysAgo(d: Date, n: number) {
+  const x = new Date(d);
+  x.setDate(x.getDate() - n);
+  return x;
 }
