@@ -125,6 +125,7 @@ export function SupportNotifier() {
         if (msg.sender_user_id === user.id) return; // sent by self (admin)
         if (isPlatformAdmin) return; // admins don't need owner-side toast
 
+        playReplySound();
         toast.message("New reply from Salonzee support", {
           description: msg.body.slice(0, 100),
           action: {
