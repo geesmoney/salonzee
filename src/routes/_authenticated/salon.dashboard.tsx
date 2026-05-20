@@ -563,3 +563,35 @@ function daysAgo(d: Date, n: number) {
   x.setDate(x.getDate() - n);
   return x;
 }
+
+function DashboardSkeleton() {
+  return (
+    <div className="min-h-dvh bg-background">
+      <SiteNav />
+      <section className="max-w-7xl mx-auto px-6 md:px-10 py-12 animate-pulse">
+        <div className="mb-8">
+          <div className="h-3 w-20 bg-muted rounded mb-3" />
+          <div className="h-12 w-72 bg-muted rounded mb-2" />
+          <div className="h-4 w-40 bg-muted rounded" />
+        </div>
+        <div className="flex gap-2 border-b border-foreground/10 mb-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-10 w-24 bg-muted rounded-t" />
+          ))}
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-card border border-border rounded-2xl p-5">
+              <div className="h-3 w-16 bg-muted rounded mb-3" />
+              <div className="h-8 w-24 bg-muted rounded" />
+            </div>
+          ))}
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-card border border-border rounded-2xl p-6 h-64" />
+          <div className="bg-card border border-border rounded-2xl p-6 h-64" />
+        </div>
+      </section>
+    </div>
+  );
+}
