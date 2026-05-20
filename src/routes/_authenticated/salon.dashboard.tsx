@@ -269,7 +269,7 @@ function ServiceForm({ onAdd }: { onAdd: (s: { name: string; duration_minutes: n
       <input className="md:col-span-2 bg-background border border-foreground/10 px-3 py-2 rounded-lg text-sm" placeholder="Service name" value={name} onChange={(e) => setName(e.target.value)} />
       <input type="number" min={5} step={5} className="bg-background border border-foreground/10 px-3 py-2 rounded-lg text-sm" placeholder="Mins" value={duration} onChange={(e) => setDuration(+e.target.value)} />
       <input type="number" min={0} step={1} className="bg-background border border-foreground/10 px-3 py-2 rounded-lg text-sm" placeholder="GHS" value={price} onChange={(e) => setPrice(+e.target.value)} />
-      <button className="md:col-span-4 bg-accent text-white py-3 rounded-lg font-bold uppercase text-xs tracking-[0.2em]">Add service</button>
+      <button className="md:col-span-4 bg-primary text-primary-foreground py-3 rounded-lg font-bold uppercase text-xs tracking-[0.2em] hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">Add service</button>
     </form>
   );
 }
