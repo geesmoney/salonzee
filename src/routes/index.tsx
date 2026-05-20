@@ -10,6 +10,7 @@ import heroImg from "@/assets/hero-salon.jpg";
 import featBarber from "@/assets/feature-barber.jpg";
 import featBraids from "@/assets/feature-braids.jpg";
 import featNails from "@/assets/feature-nails.jpg";
+import logo from "@/assets/salonzee-logo.png";
 
 const featuredSalonsQuery = queryOptions({
   queryKey: ["featured-salons"],
@@ -223,9 +224,9 @@ function Index() {
 
       {/* For business */}
       <section className="px-6 md:px-10 pb-24 max-w-7xl mx-auto">
-        <div className="bg-foreground text-background rounded-3xl p-10 md:p-16 grid md:grid-cols-2 gap-10 items-center overflow-hidden relative">
+        <div className="bg-foreground text-background rounded-3xl p-10 md:p-16 grid md:grid-cols-2 gap-10 md:gap-14 items-center overflow-hidden relative">
           <div>
-            <p className="font-display text-lg font-bold tracking-tight mb-5 text-background/90">Salonzee</p>
+            <img src={logo} alt="Salonzee" className="h-10 md:h-12 w-auto mb-6 invert dark:invert-0" />
             <h3 className="font-display text-3xl md:text-4xl font-bold mb-4 leading-tight">Grow your salon with Salonzee.</h3>
             <p className="text-background/70 leading-relaxed mb-6 max-w-md">
               Manage bookings, services, and your calendar from one dashboard. Get discovered by thousands of clients across Ghana — free until you're earning.
@@ -246,8 +247,8 @@ function Index() {
             </Link>
           </div>
           <div className="hidden md:block relative">
-            <div className="aspect-square rounded-2xl overflow-hidden ring-1 ring-background/10">
-              <img src={featBarber} alt="Barber giving a precision fade" className="size-full object-cover" loading="lazy" width={1280} height={1280} />
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden ring-1 ring-background/10">
+              <img src={featBarber} alt="Barber giving a precision fade" className="size-full object-cover" loading="lazy" width={1280} height={1600} />
             </div>
           </div>
         </div>
