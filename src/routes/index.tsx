@@ -29,7 +29,7 @@ function Index() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("salons")
-        .select("id, name, location_city, location_area, salon_type, profile_photo_url, description")
+        .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description")
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(6);
