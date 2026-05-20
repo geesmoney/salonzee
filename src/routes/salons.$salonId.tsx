@@ -113,10 +113,7 @@ function SalonPage() {
 
       {/* Mobile sticky booking bar */}
       {services.length > 0 && (
-        <div
-          className="lg:hidden fixed bottom-16 inset-x-0 z-30 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
-          style={{ marginBottom: "env(safe-area-inset-bottom)" }}
-        >
+        <div className="lg:hidden fixed bottom-16 inset-x-0 z-30 px-3 pb-2">
           <div className="mx-auto max-w-md bg-card border border-border shadow-2xl rounded-2xl p-3 flex items-center gap-3 backdrop-blur">
             <div className="flex-1 min-w-0 pl-1">
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">From</p>
