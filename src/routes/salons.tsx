@@ -47,10 +47,7 @@ function SalonsPage() {
   const [type, setType] = useState<string>("");
   const [search, setSearch] = useState<string>("");
 
-  const { data: salons = [], isFetching } = useSuspenseQuery({
-    ...salonsListQuery({ city, type, search }),
-    placeholderData: (prev) => prev,
-  });
+  const { data: salons = [], isFetching } = useSuspenseQuery(salonsListQuery({ city, type, search }));
 
 
   const hasFilters = Boolean(city || type || search.trim());
