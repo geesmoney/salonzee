@@ -81,7 +81,7 @@ function Index() {
             </div>
 
             <div className="mt-10 flex items-center gap-8 text-sm text-muted-foreground">
-              <Stat n={salons.length > 0 ? `${salons.length}+` : "New"} label="Vetted salons" />
+              <Stat n="Vetted" label="Salons" />
               <span className="w-px h-10 bg-border" />
               <Stat n="< 30s" label="To book" />
               <span className="hidden sm:block w-px h-10 bg-border" />

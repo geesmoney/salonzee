@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { SupportNotifier } from "@/components/support-notifier";
+import { MobileTabBar } from "@/components/mobile-tab-bar";
 
 function NotFoundComponent() {
   return (
@@ -71,7 +72,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "theme-color", content: "#ffffff", media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: "#0f1a2e", media: "(prefers-color-scheme: dark)" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { title: "Salonzee — Book Ghana's finest salons" },
       { name: "description", content: "Discover and book the best salons in Accra, Kumasi, and across Ghana. Professional grooming, hair, and beauty bookings — simple and instant." },
       { name: "author", content: "Salonzee" },
@@ -122,9 +128,10 @@ function RootComponent() {
       <ThemeProvider>
         <AuthProvider>
           <SupportNotifier />
-          <main id="main" className="min-h-dvh">
+          <main id="main" className="min-h-dvh pb-[calc(env(safe-area-inset-bottom)+4rem)] md:pb-0">
             <Outlet />
           </main>
+          <MobileTabBar />
           <Toaster position="top-center" richColors />
         </AuthProvider>
       </ThemeProvider>

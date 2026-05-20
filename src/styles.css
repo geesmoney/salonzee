@@ -128,4 +128,24 @@
     letter-spacing: -0.02em;
     color: var(--color-foreground);
   }
+  /* Disable the gray flash on tap for iOS / Android */
+  a, button, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Prevent zoom on focus on iOS by ensuring inputs are >=16px */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    input, select, textarea { font-size: inherit; }
+  }
+  html { scroll-behavior: smooth; }
 }
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
