@@ -36,13 +36,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    // Then existing session
-    supabase.auth.getSession().then(({ data: { session: sess } }) => {
-      setSession(sess);
-      setUser(sess?.user ?? null);
-      if (sess?.user) fetchRoles(sess.user.id);
-      setLoading(false);
-    });
+    // Then existing session. Never let auth hydration hold the whole app spinner forever.
+    supabase.auth.getSession()
+      .then(({ data: { session: sess } }) => {
+        setSession(sess);
+        setUser(sess?.user ?? null);
+        if (sess?.user) fetchRoles(sess.user.id);
+      })
+      .catch(() => {
+        setSession(null);
+        setUser(null);
+        setRoles([]);
+      })
+      .finally(() => setLoading(false));
 
     return () => subscription.unsubscribe();
   }, []);
