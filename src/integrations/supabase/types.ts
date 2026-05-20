@@ -276,7 +276,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      queue_24h_reminders: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "platform_admin" | "salon_admin"
