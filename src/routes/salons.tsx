@@ -123,7 +123,7 @@ function SalonsPage() {
             </button>
           )}
           <div className="self-end ml-auto text-sm text-muted-foreground">
-            {isLoading ? "Loading…" : `${salons.length} ${salons.length === 1 ? "salon" : "salons"}`}
+            {isFetching ? "Updating…" : `${salons.length} ${salons.length === 1 ? "salon" : "salons"}`}
           </div>
         </div>
 
