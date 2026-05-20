@@ -40,46 +40,78 @@ function SalonsPage() {
   return (
     <div className="min-h-dvh bg-background">
       <SiteNav />
-      <section className="px-6 md:px-10 py-16 max-w-7xl mx-auto">
-        <h1 className="font-serif text-5xl md:text-6xl mb-3">Discover Salons</h1>
-        <p className="text-foreground/60 mb-10 max-w-xl">
-          Hand-picked spaces across Ghana. Find one that suits your style and location.
-        </p>
 
-        <div className="flex flex-wrap gap-3 mb-12">
-          <select
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="bg-card border border-foreground/10 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-accent"
-          >
-            <option value="">All cities</option>
-            {GHANA_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="bg-card border border-foreground/10 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-accent"
-          >
-            <option value="">All types</option>
-            {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-          </select>
+      {/* Page header */}
+      <header className="px-6 md:px-10 pt-14 pb-10 max-w-7xl mx-auto">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">The Directory</p>
+        <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-3 max-w-3xl">
+          Hand-picked salons across Ghana.
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl">
+          Browse vetted partners by city, neighbourhood, and service. Filter to your style, then book in a few taps.
+        </p>
+      </header>
+
+      <section className="px-6 md:px-10 pb-24 max-w-7xl mx-auto">
+        {/* Filter bar */}
+        <div className="bg-card border border-border rounded-2xl p-4 md:p-5 flex flex-wrap gap-3 items-center mb-10 shadow-sm">
+          <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
+            <label htmlFor="city" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">City</label>
+            <select
+              id="city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className="bg-background border border-border h-10 px-3 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">All cities</option>
+              {GHANA_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
+            <label htmlFor="type" className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Salon type</label>
+            <select
+              id="type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="bg-background border border-border h-10 px-3 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">All types</option>
+              {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            </select>
+          </div>
           {(city || type) && (
             <button
               onClick={() => { setCity(""); setType(""); }}
-              className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/50 hover:text-accent"
+              className="self-end h-10 px-4 rounded-full text-sm font-semibold text-primary hover:bg-secondary transition-colors"
             >
-              Clear
+              Clear filters
             </button>
           )}
+          <div className="self-end ml-auto text-sm text-muted-foreground">
+            {isLoading ? "Loading…" : `${salons.length} ${salons.length === 1 ? "salon" : "salons"}`}
+          </div>
         </div>
 
         {isLoading ? (
-          <p className="text-foreground/50">Loading...</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="aspect-[4/5] bg-muted rounded-2xl mb-4" />
+                <div className="h-5 bg-muted rounded w-2/3 mb-2" />
+                <div className="h-4 bg-muted rounded w-1/2" />
+              </div>
+            ))}
+          </div>
         ) : salons.length === 0 ? (
-          <div className="py-20 text-center">
-            <p className="font-serif text-2xl text-foreground/40 italic">
-              No salons match those filters yet.
-            </p>
+          <div className="py-20 text-center bg-card border border-border rounded-2xl">
+            <p className="font-display text-2xl font-semibold mb-2">No salons match those filters yet.</p>
+            <p className="text-muted-foreground mb-6">Try clearing the filters or check back as more partners join.</p>
+            <button
+              onClick={() => { setCity(""); setType(""); }}
+              className="bg-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-semibold"
+            >
+              Show all salons
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
