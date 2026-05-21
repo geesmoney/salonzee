@@ -22,6 +22,7 @@ import { Route as AuthenticatedSalonSupportRouteImport } from './routes/_authent
 import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
+import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -92,6 +93,12 @@ const AuthenticatedAdminSupportRoute =
     path: '/admin/support',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminRevenueRoute =
+  AuthenticatedAdminRevenueRouteImport.update({
+    id: '/admin/revenue',
+    path: '/admin/revenue',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminPendingRoute =
   AuthenticatedAdminPendingRouteImport.update({
     id: '/admin/pending',
@@ -109,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
@@ -124,6 +132,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
@@ -141,6 +150,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/_authenticated/salon/settings': typeof AuthenticatedSalonSettingsRoute
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/salons/$salonId'
     | '/admin/pending'
+    | '/admin/revenue'
     | '/admin/support'
     | '/salon/dashboard'
     | '/salon/settings'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/salons/$salonId'
     | '/admin/pending'
+    | '/admin/revenue'
     | '/admin/support'
     | '/salon/dashboard'
     | '/salon/settings'
@@ -189,6 +201,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
+    | '/_authenticated/admin/revenue'
     | '/_authenticated/admin/support'
     | '/_authenticated/salon/dashboard'
     | '/_authenticated/salon/settings'
@@ -299,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/revenue': {
+      id: '/_authenticated/admin/revenue'
+      path: '/admin/revenue'
+      fullPath: '/admin/revenue'
+      preLoaderRoute: typeof AuthenticatedAdminRevenueRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/pending': {
       id: '/_authenticated/admin/pending'
       path: '/admin/pending'
@@ -311,6 +331,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
+  AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
   AuthenticatedSalonSettingsRoute: typeof AuthenticatedSalonSettingsRoute
@@ -319,6 +340,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
+  AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
   AuthenticatedSalonSettingsRoute: AuthenticatedSalonSettingsRoute,
