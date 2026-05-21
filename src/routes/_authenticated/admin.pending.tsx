@@ -91,7 +91,7 @@ function AdminPage() {
                   </span>
                 </div>
                 <p className="text-sm text-foreground/60">
-                  {s.owner_name} • {s.email} • {s.phone}
+                  {s.salon_contacts?.owner_name ?? "—"} • {s.salon_contacts?.email ?? "—"} • {s.phone}
                 </p>
                 <p className="text-sm text-foreground/60">
                   {s.location_area}, {s.location_city} • {SALON_TYPE_LABELS[s.salon_type]}
