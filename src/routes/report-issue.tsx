@@ -10,8 +10,12 @@ export const Route = createFileRoute("/report-issue")({
   head: () => ({
     meta: [
       { title: "Report a booking issue — Salonzee" },
-      { name: "description", content: "Tell the Salonzee team about a problem with a recent booking." },
+      { name: "description", content: "Tell the Salonzee team about a problem with a recent booking and we'll follow up with you and the salon." },
+      { property: "og:title", content: "Report a booking issue — Salonzee" },
+      { property: "og:description", content: "Reach the Salonzee team about a recent booking problem." },
+      { property: "og:url", content: "https://salonzee.lovable.app/report-issue" },
     ],
+    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/report-issue" }],
   }),
   component: ReportIssuePage,
 });
