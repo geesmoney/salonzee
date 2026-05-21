@@ -79,7 +79,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { name: "google-site-verification", content: "xLDIPAFQNPql6cbeyIEyEPM6pOHXhn8g2UylireLFuM" },
-      { name: "google-site-verification", content: "Epn0-GR7LVm5Qajn3z1hICTqt8kvOahPIS3L0LLlKOA" },
       { title: "Salonzee — Book Ghana's finest salons" },
       { name: "description", content: "Discover and book the best salons in Accra, Kumasi, and across Ghana. Professional grooming, hair, and beauty bookings — simple and instant." },
       { name: "author", content: "Salonzee" },
@@ -89,8 +88,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Salonzee — Book Ghana's finest salons" },
       { name: "twitter:description", content: "Discover and book the best salons in Accra, Kumasi, and across Ghana. Professional grooming, hair, and beauty bookings — simple and instant." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7f9157ec-648a-41a3-9ec0-dbe1bebcb2a5" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7f9157ec-648a-41a3-9ec0-dbe1bebcb2a5" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/92d0fb6b-4930-444b-9a91-9547691a233f" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/92d0fb6b-4930-444b-9a91-9547691a233f" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
