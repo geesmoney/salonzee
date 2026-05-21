@@ -34,7 +34,7 @@ function ReportIssuePage() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate({ to: "/login", search: { next: "/report-issue" } as never });
+      navigate({ to: "/login" });
     }
   }, [user, loading, navigate]);
 
