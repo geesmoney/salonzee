@@ -5,7 +5,16 @@ import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Sign in — Salonzee" }] }),
+  head: () => ({
+    meta: [
+      { title: "Sign in — Salonzee" },
+      { name: "description", content: "Sign in to manage your Salonzee salon profile, services, and bookings — or create an owner account to join the directory." },
+      { property: "og:title", content: "Sign in — Salonzee" },
+      { property: "og:description", content: "Salon owner sign-in for Salonzee." },
+      { property: "og:url", content: "https://salonzee.lovable.app/login" },
+    ],
+    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/login" }],
+  }),
   component: LoginPage,
 });
 
