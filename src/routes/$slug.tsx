@@ -38,15 +38,54 @@ const salonBySlugQuery = (slug: string) =>
 export const Route = createFileRoute("/$slug")({
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(salonBySlugQuery(params.slug)),
-  head: ({ loaderData }) => ({
-    meta: loaderData?.salon
-      ? [
-          { title: `${loaderData.salon.name} — Salonzee` },
-          { name: "description", content: loaderData.salon.description ?? `Book ${loaderData.salon.name} in ${loaderData.salon.location_area}, ${loaderData.salon.location_city}.` },
-          ...(loaderData.salon.profile_photo_url ? [{ property: "og:image", content: loaderData.salon.profile_photo_url }] : []),
-        ]
-      : [{ title: "Salon — Salonzee" }],
-  }),
+  head: ({ loaderData, params }) => {
+    const salon = loaderData?.salon;
+    const url = `https://salonzee.lovable.app/${params.slug}`;
+    if (!salon) {
+      return { meta: [{ title: "Salon — Salonzee" }] };
+    }
+    const description =
+      salon.description ??
+      `Book ${salon.name} in ${salon.location_area}, ${salon.location_city}. Real-time availability and instant SMS confirmation on Salonzee.`;
+    const trimmedDescription = description.length > 160 ? `${description.slice(0, 157)}…` : description;
+    return {
+      meta: [
+        { title: `${salon.name} — ${salon.location_area}, ${salon.location_city} | Salonzee` },
+        { name: "description", content: trimmedDescription },
+        { property: "og:title", content: `${salon.name} — Book on Salonzee` },
+        { property: "og:description", content: trimmedDescription },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+        ...(salon.profile_photo_url
+          ? [
+              { property: "og:image", content: salon.profile_photo_url },
+              { name: "twitter:image", content: salon.profile_photo_url },
+            ]
+          : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BeautySalon",
+            name: salon.name,
+            description: salon.description ?? undefined,
+            url,
+            image: salon.profile_photo_url ?? undefined,
+            telephone: salon.phone ?? undefined,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: salon.location_area,
+              addressRegion: salon.location_city,
+              addressCountry: "GH",
+            },
+          }),
+        },
+      ],
+    };
+  },
   notFoundComponent: () => (
     <div className="min-h-dvh bg-background">
       <SiteNav />
