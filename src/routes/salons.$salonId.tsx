@@ -92,38 +92,9 @@ function SalonPage() {
   const { salonId } = Route.useParams();
   const [bookingOpen, setBookingOpen] = useState(false);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["salon", salonId],
-    queryFn: async () => {
-      const { data: salon, error } = await supabase
-        .from("salons")
-        .select("*")
-        .eq("id", salonId)
-        .eq("status", "active")
-        .maybeSingle();
-      if (error) throw error;
-      if (!salon) throw notFound();
-
-      const { data: services } = await supabase
-        .from("services")
-        .select("id, name, duration_minutes, price_ghs")
-        .eq("salon_id", salonId)
-        .eq("active", true)
-        .order("price_ghs");
-
-      return { salon, services: services ?? [] };
-    },
-  });
-
-  if (isLoading) {
-    return (
-      <div className="min-h-dvh bg-background">
-        <SiteNav />
-        <div className="px-6 py-20 max-w-7xl mx-auto"><p>Loading...</p></div>
-      </div>
-    );
-  }
+  const { data } = useSuspenseQuery(salonByIdQuery(salonId));
   if (!data) return null;
+
   const { salon, services } = data;
   const cheapest = services.length
     ? services.reduce((min, s) => (Number(s.price_ghs) < Number(min.price_ghs) ? s : min))
