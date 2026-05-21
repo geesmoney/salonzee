@@ -34,8 +34,13 @@ export const Route = createFileRoute("/salons")({
   head: () => ({
     meta: [
       { title: "Discover salons — Salonzee" },
-      { name: "description", content: "Browse and filter salons across Ghana. Hair, braids, barbering, nails, and beauty." },
+      { name: "description", content: "Browse and filter vetted salons across Ghana. Hair, braids, barbering, nails, and beauty — book instantly with SMS confirmation." },
+      { property: "og:title", content: "Discover salons — Salonzee" },
+      { property: "og:description", content: "Browse and filter vetted salons across Ghana. Hair, braids, barbering, nails, and beauty." },
+      { property: "og:url", content: "https://salonzee.lovable.app/salons" },
+      { property: "og:type", content: "website" },
     ],
+    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/salons" }],
   }),
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(salonsListQuery({ city: "", type: "", search: "" })),
