@@ -34,7 +34,7 @@ function AdminSupportPage() {
   const { data: tickets = [] } = useQuery({
     queryKey: ["support-tickets", "admin"],
     enabled: !!user && isPlatformAdmin,
-    refetchInterval: 20_000,
+    refetchInterval: 10_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("support_tickets")
