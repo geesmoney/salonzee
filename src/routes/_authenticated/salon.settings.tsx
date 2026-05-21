@@ -99,7 +99,7 @@ function SalonSettings() {
       <SettingsShell>
         <div className="max-w-2xl mx-auto px-6 py-16 text-center">
           <h1 className="font-serif text-4xl mb-3">Settings couldn't load</h1>
-          <p className="text-sm text-foreground/60 mb-6">{salonError.message}</p>
+          <p className="text-sm text-foreground/60 mb-6">We couldn't load your settings. Please try again.</p>
           <button onClick={() => qc.invalidateQueries({ queryKey: ["my-salon-settings", user?.id] })} className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-[0.2em]">
             Try again
           </button>
