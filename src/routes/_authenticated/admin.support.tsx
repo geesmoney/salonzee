@@ -21,7 +21,7 @@ function AdminSupportPage() {
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | Status>("open");
-  const qc = useQueryClient();
+  
 
   useEffect(() => {
     if (!loading && (!user || !isPlatformAdmin)) navigate({ to: "/" });
