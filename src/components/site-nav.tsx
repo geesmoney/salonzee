@@ -28,6 +28,7 @@ export function SiteNav() {
         {user && <NavLink to="/salon/support">Support</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/support">Inbox</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/revenue">Revenue</NavLink>}
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2">
@@ -82,6 +83,7 @@ export function SiteNav() {
               {user && <MobileLink to="/salon/support" onSelect={close}>Support</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/pending" onSelect={close}>Admin · Pending</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/support" onSelect={close}>Admin · Inbox</MobileLink>}
+              {user && isPlatformAdmin && <MobileLink to="/admin/revenue" onSelect={close}>Admin · Revenue</MobileLink>}
               <MobileLink to="/report-issue" onSelect={close}>Report a booking issue</MobileLink>
             </div>
             <div className="border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
