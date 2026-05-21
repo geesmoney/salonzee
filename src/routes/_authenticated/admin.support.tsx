@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,43 +21,19 @@ function AdminSupportPage() {
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | Status>("open");
-  const qc = useQueryClient();
+  
 
   useEffect(() => {
     if (!loading && (!user || !isPlatformAdmin)) navigate({ to: "/" });
   }, [user, isPlatformAdmin, loading, navigate]);
 
-  useEffect(() => {
-    if (!user || !isPlatformAdmin) return;
-    const channel = supabase
-      .channel("admin-support-tickets")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "support_tickets" },
-        (payload) => {
-          const t = payload.new as Ticket;
-          toast.success("New support ticket", {
-            description: t.subject,
-            action: { label: "Open", onClick: () => setActiveId(t.id) },
-          });
-          qc.invalidateQueries({ queryKey: ["support-tickets", "admin"] });
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "support_messages" },
-        () => qc.invalidateQueries({ queryKey: ["support-tickets", "admin"] }),
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, isPlatformAdmin, qc]);
+  // Realtime CDC was removed for support tables to prevent cross-tenant data leaks.
+  // We rely on react-query polling (refetchInterval below) instead.
 
   const { data: tickets = [] } = useQuery({
     queryKey: ["support-tickets", "admin"],
     enabled: !!user && isPlatformAdmin,
-    refetchInterval: 20_000,
+    refetchInterval: 10_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("support_tickets")

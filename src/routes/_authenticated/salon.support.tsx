@@ -40,7 +40,7 @@ function SalonSupportPage() {
   const { data: tickets = [] } = useQuery({
     queryKey: ["support-tickets", "owner", user?.id, salon?.id],
     enabled: !!user,
-    refetchInterval: 30_000,
+    refetchInterval: 10_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("support_tickets")
@@ -51,31 +51,8 @@ function SalonSupportPage() {
     },
   });
 
-  useEffect(() => {
-    if (!user || tickets.length === 0) return;
-    const ticketIds = new Set(tickets.map((t) => t.id));
-    const channel = supabase
-      .channel(`owner-support-${user.id}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "support_messages", filter: "sender_type=eq.admin" },
-        (payload) => {
-          const msg = payload.new as Database["public"]["Tables"]["support_messages"]["Row"];
-          if (!ticketIds.has(msg.ticket_id)) return;
-          const ticket = tickets.find((t) => t.id === msg.ticket_id);
-          toast.message("New reply from Salonzee support", {
-            description: ticket?.subject ?? msg.body.slice(0, 80),
-            action: { label: "View", onClick: () => { setActiveId(msg.ticket_id); setComposing(false); } },
-          });
-          qc.invalidateQueries({ queryKey: ["support-tickets", "owner"] });
-          qc.invalidateQueries({ queryKey: ["support-messages", msg.ticket_id] });
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, tickets, qc]);
+  // Realtime CDC was removed for support tables to prevent cross-tenant data leaks.
+  // We rely on react-query polling (refetchInterval above) for new replies.
 
   const active = tickets.find((t) => t.id === activeId) ?? null;
 

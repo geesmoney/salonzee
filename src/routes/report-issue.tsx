@@ -1,10 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/report-issue")({
   head: () => ({
@@ -21,6 +22,8 @@ export const Route = createFileRoute("/report-issue")({
 });
 
 function ReportIssuePage() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [salonName, setSalonName] = useState("");
@@ -29,8 +32,15 @@ function ReportIssuePage() {
   const [body, setBody] = useState("");
   const [done, setDone] = useState(false);
 
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate({ to: "/login" });
+    }
+  }, [user, loading, navigate]);
+
   const submit = useMutation({
     mutationFn: async () => {
+      if (!user) throw new Error("Please sign in to report an issue");
       const trimmedSubject = subject.trim();
       const trimmedBody = body.trim();
       const trimmedName = name.trim();
@@ -49,6 +59,7 @@ function ReportIssuePage() {
           category: "booking_issue",
           customer_name: trimmedName,
           customer_phone: trimmedPhone,
+          opened_by_user_id: user.id,
         })
         .select("id")
         .single();
@@ -57,6 +68,7 @@ function ReportIssuePage() {
       const { error: msgErr } = await supabase.from("support_messages").insert({
         ticket_id: ticket.id,
         sender_type: "customer",
+        sender_user_id: user.id,
         body: fullBody,
       });
       if (msgErr) throw msgErr;
@@ -67,6 +79,18 @@ function ReportIssuePage() {
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-dvh bg-background text-foreground">
+        <SiteNav />
+        <div className="max-w-2xl mx-auto px-6 md:px-10 py-24 text-center text-foreground/50 text-sm">
+          Loading…
+        </div>
+        <SiteFooter />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
