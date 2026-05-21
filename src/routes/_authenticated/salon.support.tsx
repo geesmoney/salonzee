@@ -40,7 +40,7 @@ function SalonSupportPage() {
   const { data: tickets = [] } = useQuery({
     queryKey: ["support-tickets", "owner", user?.id, salon?.id],
     enabled: !!user,
-    refetchInterval: 30_000,
+    refetchInterval: 10_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("support_tickets")
