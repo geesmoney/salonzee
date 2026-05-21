@@ -34,9 +34,28 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Discover and book vetted hair, braid, barber, and nail salons across Accra, Kumasi, Takoradi and beyond. Instant SMS confirmation. Free for customers." },
       { property: "og:title", content: "Salonzee — Book Ghana's best salons in seconds" },
       { property: "og:description", content: "Browse vetted salons, pick a time, get an SMS confirmation. Free for customers." },
+      { property: "og:url", content: "https://salonzee.lovable.app/" },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: `https://salonzee.lovable.app${heroImg}` },
+      { name: "twitter:image", content: `https://salonzee.lovable.app${heroImg}` },
     ],
     links: [
       { rel: "preload", as: "image", href: heroImg, fetchpriority: "high" },
+      { rel: "canonical", href: "https://salonzee.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQ.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(featuredSalonsQuery),

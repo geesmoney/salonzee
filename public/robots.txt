@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /salon/
+Disallow: /admin/
+
+Sitemap: https://salonzee.lovable.app/sitemap.xml

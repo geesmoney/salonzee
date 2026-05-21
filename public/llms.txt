@@ -1,0 +1,11 @@
+# Salonzee
+
+> Salonzee is Ghana's salon booking platform. Customers discover and book vetted hair, braid, barber, and nail salons across Accra, Kumasi, Takoradi, and beyond — with instant SMS confirmation and no deposits.
+
+## Pages
+
+- [Home](/): Overview, featured salons, how booking works, FAQ.
+- [Discover salons](/salons): Browse and filter the salon directory by city and service type.
+- [List your salon](/register-salon): Onboarding for salon owners joining the directory.
+- [Report a booking issue](/report-issue): Customer-facing support form.
+- [Sign in](/login): Account access for salon owners and platform admins.

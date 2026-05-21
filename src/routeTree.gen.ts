@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SalonsRouteImport } from './routes/salons'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
@@ -23,6 +24,11 @@ import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SalonsRoute = SalonsRouteImport.update({
   id: '/salons',
   path: '/salons',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/register-salon'
     | '/report-issue'
     | '/salons'
+    | '/sitemap.xml'
     | '/salons/$salonId'
     | '/admin/pending'
     | '/admin/support'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/register-salon'
     | '/report-issue'
     | '/salons'
+    | '/sitemap.xml'
     | '/salons/$salonId'
     | '/admin/pending'
     | '/admin/support'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/register-salon'
     | '/report-issue'
     | '/salons'
+    | '/sitemap.xml'
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/support'
@@ -191,10 +203,18 @@ export interface RootRouteChildren {
   RegisterSalonRoute: typeof RegisterSalonRoute
   ReportIssueRoute: typeof ReportIssueRoute
   SalonsRoute: typeof SalonsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/salons': {
       id: '/salons'
       path: '/salons'
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterSalonRoute: RegisterSalonRoute,
   ReportIssueRoute: ReportIssueRoute,
   SalonsRoute: SalonsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
