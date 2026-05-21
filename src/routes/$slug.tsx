@@ -95,12 +95,12 @@ export const Route = createFileRoute("/$slug")({
       </div>
     </div>
   ),
-  errorComponent: ({ error }) => (
+  errorComponent: () => (
     <div className="min-h-dvh bg-background">
       <SiteNav />
       <div className="px-6 py-20 max-w-7xl mx-auto">
-        <h1 className="font-serif text-4xl mb-2">Something went wrong</h1>
-        <p className="text-foreground/60">{error.message}</p>
+        <h1 className="font-serif text-4xl mb-2">We couldn't load this salon</h1>
+        <p className="text-foreground/60">Please refresh the page or try again later.</p>
       </div>
     </div>
   ),
