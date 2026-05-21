@@ -104,6 +104,38 @@ export type Database = {
         }
         Relationships: []
       }
+      salon_contacts: {
+        Row: {
+          created_at: string
+          email: string
+          owner_name: string
+          salon_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          owner_name: string
+          salon_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          owner_name?: string
+          salon_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salon_contacts_salon_id_fkey"
+            columns: ["salon_id"]
+            isOneToOne: true
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       salon_images: {
         Row: {
           created_at: string
@@ -140,13 +172,11 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          email: string
           id: string
           location_area: string
           location_city: string
           name: string
           operating_hours: Json
-          owner_name: string
           phone: string
           profile_photo_url: string | null
           salon_type: Database["public"]["Enums"]["salon_type"]
@@ -159,13 +189,11 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
-          email: string
           id?: string
           location_area: string
           location_city: string
           name: string
           operating_hours?: Json
-          owner_name: string
           phone: string
           profile_photo_url?: string | null
           salon_type?: Database["public"]["Enums"]["salon_type"]
@@ -178,13 +206,11 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
-          email?: string
           id?: string
           location_area?: string
           location_city?: string
           name?: string
           operating_hours?: Json
-          owner_name?: string
           phone?: string
           profile_photo_url?: string | null
           salon_type?: Database["public"]["Enums"]["salon_type"]

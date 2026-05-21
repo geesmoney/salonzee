@@ -30,7 +30,10 @@ function AdminPage() {
     queryKey: ["admin-salons", tab],
     enabled: isPlatformAdmin,
     queryFn: async () => {
-      let q = supabase.from("salons").select("*").order("created_at", { ascending: false });
+      let q = supabase
+        .from("salons")
+        .select("*, salon_contacts(owner_name, email)")
+        .order("created_at", { ascending: false });
       if (tab === "pending") q = q.eq("status", "pending");
       const { data, error } = await q;
       if (error) throw error;
@@ -88,7 +91,7 @@ function AdminPage() {
                   </span>
                 </div>
                 <p className="text-sm text-foreground/60">
-                  {s.owner_name} • {s.email} • {s.phone}
+                  {s.salon_contacts?.owner_name ?? "—"} • {s.salon_contacts?.email ?? "—"} • {s.phone}
                 </p>
                 <p className="text-sm text-foreground/60">
                   {s.location_area}, {s.location_city} • {SALON_TYPE_LABELS[s.salon_type]}
