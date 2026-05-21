@@ -28,6 +28,7 @@ export function SiteNav() {
         {user && <NavLink to="/salon/support">Support</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/support">Inbox</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/revenue">Revenue</NavLink>}
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2">
