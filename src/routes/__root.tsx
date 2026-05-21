@@ -78,6 +78,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "google-site-verification", content: "xLDIPAFQNPql6cbeyIEyEPM6pOHXhn8g2UylireLFuM" },
+      { name: "google-site-verification", content: "Epn0-GR7LVm5Qajn3z1hICTqt8kvOahPIS3L0LLlKOA" },
       { title: "Salonzee — Book Ghana's finest salons" },
       { name: "description", content: "Discover and book the best salons in Accra, Kumasi, and across Ghana. Professional grooming, hair, and beauty bookings — simple and instant." },
       { name: "author", content: "Salonzee" },
