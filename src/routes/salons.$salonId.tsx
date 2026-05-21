@@ -1,5 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { CalendarCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +11,80 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 import { formatGhs, SALON_TYPE_LABELS } from "@/lib/ghana";
 import type { OperatingHours } from "@/lib/slots";
 
+const salonByIdQuery = (salonId: string) =>
+  queryOptions({
+    queryKey: ["salon", salonId],
+    queryFn: async () => {
+      const { data: salon, error } = await supabase
+        .from("salons")
+        .select("*")
+        .eq("id", salonId)
+        .eq("status", "active")
+        .maybeSingle();
+      if (error) throw error;
+      if (!salon) throw notFound();
+
+      const { data: services } = await supabase
+        .from("services")
+        .select("id, name, duration_minutes, price_ghs")
+        .eq("salon_id", salonId)
+        .eq("active", true)
+        .order("price_ghs");
+
+      return { salon, services: services ?? [] };
+    },
+    staleTime: 60_000,
+  });
+
 export const Route = createFileRoute("/salons/$salonId")({
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(salonByIdQuery(params.salonId)),
+  head: ({ loaderData, params }) => {
+    const salon = loaderData?.salon;
+    const url = `https://salonzee.lovable.app/salons/${params.salonId}`;
+    if (!salon) return { meta: [{ title: "Salon — Salonzee" }] };
+    const description =
+      salon.description ??
+      `Book ${salon.name} in ${salon.location_area}, ${salon.location_city}. Real-time availability and instant SMS confirmation on Salonzee.`;
+    const trimmed = description.length > 160 ? `${description.slice(0, 157)}…` : description;
+    return {
+      meta: [
+        { title: `${salon.name} — ${salon.location_area}, ${salon.location_city} | Salonzee` },
+        { name: "description", content: trimmed },
+        { property: "og:title", content: `${salon.name} — Book on Salonzee` },
+        { property: "og:description", content: trimmed },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+        ...(salon.profile_photo_url
+          ? [
+              { property: "og:image", content: salon.profile_photo_url },
+              { name: "twitter:image", content: salon.profile_photo_url },
+            ]
+          : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BeautySalon",
+            name: salon.name,
+            description: salon.description ?? undefined,
+            url,
+            image: salon.profile_photo_url ?? undefined,
+            telephone: salon.phone ?? undefined,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: salon.location_area,
+              addressRegion: salon.location_city,
+              addressCountry: "GH",
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: SalonPage,
 });
 
