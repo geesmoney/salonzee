@@ -73,19 +73,28 @@ function RegisterSalonPage() {
         userId = sess.session?.user.id;
       }
 
-      const { error: insertError } = await supabase.from("salons").insert({
-        user_id: userId ?? null,
-        name: form.salonName,
+      const { data: newSalon, error: insertError } = await supabase
+        .from("salons")
+        .insert({
+          user_id: userId ?? null,
+          name: form.salonName,
+          phone: form.phone.replace(/\s+/g, ""),
+          location_city: form.city,
+          location_area: form.area,
+          salon_type: form.salonType,
+          description: form.description || null,
+          status: "pending",
+        })
+        .select("id")
+        .single();
+      if (insertError) throw insertError;
+
+      const { error: contactError } = await supabase.from("salon_contacts").insert({
+        salon_id: newSalon.id,
         owner_name: form.ownerName,
         email: form.email,
-        phone: form.phone.replace(/\s+/g, ""),
-        location_city: form.city,
-        location_area: form.area,
-        salon_type: form.salonType,
-        description: form.description || null,
-        status: "pending",
       });
-      if (insertError) throw insertError;
+      if (contactError) throw contactError;
 
       toast.success("Submitted! Your salon is pending review.");
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
