@@ -11,8 +11,12 @@ export const Route = createFileRoute("/register-salon")({
   head: () => ({
     meta: [
       { title: "Register your salon — Salonzee" },
-      { name: "description", content: "List your salon on Salonzee. Manage bookings, services, and your calendar in one place." },
+      { name: "description", content: "List your salon on Salonzee. Manage bookings, services, and your calendar in one place — free until you're earning." },
+      { property: "og:title", content: "Register your salon — Salonzee" },
+      { property: "og:description", content: "Join Ghana's salon directory. Free onboarding, real-time bookings, SMS reminders." },
+      { property: "og:url", content: "https://salonzee.lovable.app/register-salon" },
     ],
+    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/register-salon" }],
   }),
   component: RegisterSalonPage,
 });
