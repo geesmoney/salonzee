@@ -68,15 +68,22 @@ function RegisterSalonPage() {
       if (!userId) {
         const { error } = await signUp(form.email, form.password, form.ownerName);
         if (error) throw new Error(error);
-        // Try to grab the session if email-confirmation is off
-        const { data: sess } = await supabase.auth.getSession();
+        let { data: sess } = await supabase.auth.getSession();
+        if (!sess.session) {
+          // Email confirmation may be on — try signing in immediately
+          await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
+          ({ data: sess } = await supabase.auth.getSession());
+        }
         userId = sess.session?.user.id;
+        if (!userId) {
+          throw new Error("Please confirm your email, then sign in to finish registering your salon.");
+        }
       }
 
       const { data: newSalon, error: insertError } = await supabase
         .from("salons")
         .insert({
-          user_id: userId ?? null,
+          user_id: userId,
           name: form.salonName,
           phone: form.phone.replace(/\s+/g, ""),
           location_city: form.city,
@@ -88,6 +95,7 @@ function RegisterSalonPage() {
         .select("id")
         .single();
       if (insertError) throw insertError;
+
 
       const { error: contactError } = await supabase.from("salon_contacts").insert({
         salon_id: newSalon.id,
