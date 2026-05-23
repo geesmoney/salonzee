@@ -50,6 +50,21 @@ function LoginPage() {
     }
   }
 
+  async function signInWithGoogle() {
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setLoading(false);
+      toast.error(result.error.message ?? "Google sign-in failed");
+      return;
+    }
+    if (result.redirected) return;
+    // Session set
+    navigate({ to: isPlatformAdmin ? "/admin/pending" : "/salon/dashboard" });
+  }
+
   return (
     <div className="min-h-dvh bg-background">
       <SiteNav />
