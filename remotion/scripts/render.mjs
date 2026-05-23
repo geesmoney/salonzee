@@ -26,10 +26,12 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  outputLocation: "/mnt/documents/salonzee-demo.mp4",
+  outputLocation: "/tmp/salonzee-demo-noaudio.mp4",
   puppeteerInstance: browser,
+  muted: true,
   concurrency: 1,
 });
+
 
 await browser.close({ silent: false });
 console.log("✅ Rendered /mnt/documents/salonzee-demo.mp4");
