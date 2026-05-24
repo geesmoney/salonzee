@@ -62,6 +62,7 @@ function SalonSettings() {
     setName(salon.name ?? "");
     setDescription(salon.description ?? "");
     setPhone(salon.phone ?? "");
+    setWhatsappPhone(salon.whatsapp_phone ?? "");
     setLocationCity(salon.location_city ?? "");
     setLocationArea(salon.location_area ?? "");
     setSlotDuration(salon.slot_duration_minutes ?? 30);
