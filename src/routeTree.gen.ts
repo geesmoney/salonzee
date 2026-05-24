@@ -18,6 +18,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
+import { Route as ReviewTokenRouteImport } from './routes/review.$token'
 import { Route as AuthenticatedSalonSupportRouteImport } from './routes/_authenticated/salon.support'
 import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
@@ -69,6 +70,11 @@ const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
   path: '/$salonId',
   getParentRoute: () => SalonsRoute,
 } as any)
+const ReviewTokenRoute = ReviewTokenRouteImport.update({
+  id: '/review/$token',
+  path: '/review/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedSalonSupportRoute =
   AuthenticatedSalonSupportRouteImport.update({
     id: '/salon/support',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/review/$token'
     | '/salons/$salonId'
     | '/admin/pending'
     | '/admin/revenue'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/review/$token'
     | '/salons/$salonId'
     | '/admin/pending'
     | '/admin/revenue'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/review/$token'
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/revenue'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   ReportIssueRoute: typeof ReportIssueRoute
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ReviewTokenRoute: typeof ReviewTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -283,6 +296,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/salons/$salonId'
       preLoaderRoute: typeof SalonsSalonIdRouteImport
       parentRoute: typeof SalonsRoute
+    }
+    '/review/$token': {
+      id: '/review/$token'
+      path: '/review/$token'
+      fullPath: '/review/$token'
+      preLoaderRoute: typeof ReviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/salon/support': {
       id: '/_authenticated/salon/support'
@@ -371,7 +391,18 @@ const rootRouteChildren: RootRouteChildren = {
   ReportIssueRoute: ReportIssueRoute,
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ReviewTokenRoute: ReviewTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
