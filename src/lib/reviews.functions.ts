@@ -37,7 +37,7 @@ export const submitReview = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin.rpc("submit_review", {
       _token: data.token,
       _rating: data.rating,
-      _comment: data.comment ?? null,
+      _comment: data.comment ?? "",
     });
     if (error) {
       throw new Error(error.message || "Could not submit review");
