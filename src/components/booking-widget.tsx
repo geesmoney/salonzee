@@ -117,6 +117,40 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
       ? "bg-card p-6 sm:p-8 rounded-3xl shadow-xl ring-1 ring-foreground/5 sticky top-24"
       : "p-1";
 
+  if (confirmation) {
+    return (
+      <div className={wrapperClass}>
+        <div className="text-center">
+          <div className="w-14 h-14 mx-auto rounded-full bg-green-100 text-green-700 flex items-center justify-center text-2xl mb-4">✓</div>
+          <h3 className="font-serif text-2xl mb-2">Booking received!</h3>
+          <p className="text-sm text-foreground/60 mb-1">
+            {confirmation.service} • {confirmation.date}
+          </p>
+          <p className="text-sm text-foreground/60 mb-6">at {confirmation.time}</p>
+          <p className="text-xs text-foreground/50 mb-6">
+            {salonName} will confirm shortly. You'll receive an SMS update.
+          </p>
+          {waLink && (
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] text-white py-4 rounded-xl font-bold uppercase text-xs tracking-[0.2em] hover:opacity-90 transition-opacity mb-3"
+            >
+              <WhatsAppIcon /> Message {salonName} on WhatsApp
+            </a>
+          )}
+          <button
+            onClick={() => setConfirmation(null)}
+            className="w-full border border-foreground/10 py-3 rounded-xl text-xs uppercase tracking-[0.2em] font-bold hover:border-primary transition-colors"
+          >
+            Book another
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={wrapperClass}>
       {variant === "card" && <h3 className="font-serif text-2xl mb-6">Secure Your Spot</h3>}
