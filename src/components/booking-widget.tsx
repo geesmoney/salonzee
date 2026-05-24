@@ -37,6 +37,9 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
   const [time, setTime] = useState<string>("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // bots fill hidden field
+  const mountedAt = useRef<number>(Date.now());
+  const submitBookingFn = useServerFn(submitBooking);
 
   const selectedService = services.find((s) => s.id === serviceId);
 
