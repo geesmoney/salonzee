@@ -85,6 +85,7 @@ export function SiteNav() {
               {user && isPlatformAdmin && <MobileLink to="/admin/pending" onSelect={close}>Admin · Pending</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/support" onSelect={close}>Admin · Inbox</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/revenue" onSelect={close}>Admin · Revenue</MobileLink>}
+              {user && isPlatformAdmin && <MobileLink to="/admin/sms" onSelect={close}>Admin · SMS Log</MobileLink>}
               <MobileLink to="/report-issue" onSelect={close}>Report a booking issue</MobileLink>
             </div>
             <div className="border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
