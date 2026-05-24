@@ -25,6 +25,7 @@ import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
+import { Route as ApiPublicHooksProcessSmsQueueRouteImport } from './routes/api/public/hooks/process-sms-queue'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -111,6 +112,12 @@ const AuthenticatedAdminPendingRoute =
     path: '/admin/pending',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiPublicHooksProcessSmsQueueRoute =
+  ApiPublicHooksProcessSmsQueueRouteImport.update({
+    id: '/api/public/hooks/process-sms-queue',
+    path: '/api/public/hooks/process-sms-queue',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
   '/salon/support': typeof AuthenticatedSalonSupportRoute
+  '/api/public/hooks/process-sms-queue': typeof ApiPublicHooksProcessSmsQueueRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -145,6 +153,7 @@ export interface FileRoutesByTo {
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
   '/salon/support': typeof AuthenticatedSalonSupportRoute
+  '/api/public/hooks/process-sms-queue': typeof ApiPublicHooksProcessSmsQueueRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -164,6 +173,7 @@ export interface FileRoutesById {
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/_authenticated/salon/settings': typeof AuthenticatedSalonSettingsRoute
   '/_authenticated/salon/support': typeof AuthenticatedSalonSupportRoute
+  '/api/public/hooks/process-sms-queue': typeof ApiPublicHooksProcessSmsQueueRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/salon/dashboard'
     | '/salon/settings'
     | '/salon/support'
+    | '/api/public/hooks/process-sms-queue'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/salon/dashboard'
     | '/salon/settings'
     | '/salon/support'
+    | '/api/public/hooks/process-sms-queue'
   id:
     | '__root__'
     | '/'
@@ -218,6 +230,7 @@ export interface FileRouteTypes {
     | '/_authenticated/salon/dashboard'
     | '/_authenticated/salon/settings'
     | '/_authenticated/salon/support'
+    | '/api/public/hooks/process-sms-queue'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -230,6 +243,7 @@ export interface RootRouteChildren {
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
+  ApiPublicHooksProcessSmsQueueRoute: typeof ApiPublicHooksProcessSmsQueueRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -346,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPendingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/hooks/process-sms-queue': {
+      id: '/api/public/hooks/process-sms-queue'
+      path: '/api/public/hooks/process-sms-queue'
+      fullPath: '/api/public/hooks/process-sms-queue'
+      preLoaderRoute: typeof ApiPublicHooksProcessSmsQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -392,6 +413,7 @@ const rootRouteChildren: RootRouteChildren = {
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ReviewTokenRoute: ReviewTokenRoute,
+  ApiPublicHooksProcessSmsQueueRoute: ApiPublicHooksProcessSmsQueueRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
