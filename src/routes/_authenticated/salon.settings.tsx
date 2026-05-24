@@ -50,6 +50,7 @@ function SalonSettings() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [phone, setPhone] = useState("");
+  const [whatsappPhone, setWhatsappPhone] = useState("");
   const [locationCity, setLocationCity] = useState("");
   const [locationArea, setLocationArea] = useState("");
   const [slotDuration, setSlotDuration] = useState(30);
