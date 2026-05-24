@@ -71,23 +71,28 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
       if (!isValidGhanaPhone(phone)) throw new Error("Enter a valid Ghana phone (e.g. 024XXXXXXX)");
 
       const endTime = addMinutesToTime(time, selectedService.duration_minutes);
-      const { error } = await supabase.from("bookings").insert({
-        salon_id: salonId,
-        service_id: selectedService.id,
-        customer_name: name.trim(),
-        customer_phone: phone.replace(/\s+/g, ""),
-        booking_date: dateKey,
-        start_time: time,
-        end_time: endTime,
-        price_ghs_snapshot: selectedService.price_ghs,
+      await submitBookingFn({
+        data: {
+          salonId,
+          serviceId: selectedService.id,
+          customerName: name.trim(),
+          customerPhone: phone.replace(/\s+/g, ""),
+          bookingDate: dateKey,
+          startTime: time,
+          endTime,
+          priceGhsSnapshot: Number(selectedService.price_ghs),
+          honeypot,
+          elapsedMs: Date.now() - mountedAt.current,
+        },
       });
-      if (error) throw error;
     },
     onSuccess: () => {
       toast.success("Booking received! The salon will confirm shortly.");
       setTime("");
       setName("");
       setPhone("");
+      setHoneypot("");
+      mountedAt.current = Date.now();
       qc.invalidateQueries({ queryKey: ["bookings-day", salonId, dateKey] });
     },
     onError: (e: Error) => toast.error(e.message),
