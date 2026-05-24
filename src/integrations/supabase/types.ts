@@ -236,6 +236,7 @@ export type Database = {
           status: Database["public"]["Enums"]["salon_status"]
           updated_at: string
           user_id: string | null
+          whatsapp_phone: string | null
         }
         Insert: {
           created_at?: string
@@ -253,6 +254,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["salon_status"]
           updated_at?: string
           user_id?: string | null
+          whatsapp_phone?: string | null
         }
         Update: {
           created_at?: string
@@ -270,6 +272,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["salon_status"]
           updated_at?: string
           user_id?: string | null
+          whatsapp_phone?: string | null
         }
         Relationships: []
       }
@@ -488,6 +491,7 @@ export type Database = {
         Args: { _comment: string; _rating: number; _token: string }
         Returns: Json
       }
+      wa_digits: { Args: { _phone: string }; Returns: string }
     }
     Enums: {
       app_role: "platform_admin" | "salon_admin"

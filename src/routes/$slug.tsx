@@ -159,6 +159,8 @@ function SalonBySlug() {
           <div className="lg:col-span-5">
             <BookingWidget
               salonId={salon.id}
+              salonName={salon.name}
+              salonWhatsapp={salon.whatsapp_phone ?? salon.phone}
               services={services}
               operatingHours={salon.operating_hours as OperatingHours}
               slotDuration={salon.slot_duration_minutes}

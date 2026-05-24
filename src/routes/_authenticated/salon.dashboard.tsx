@@ -9,7 +9,7 @@ type BookingStatus = Database["public"]["Enums"]["booking_status"];
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { formatGhs } from "@/lib/ghana";
+import { formatGhs, whatsappLink } from "@/lib/ghana";
 import { formatTimeLabel } from "@/lib/slots";
 
 export const Route = createFileRoute("/_authenticated/salon/dashboard")({
@@ -468,6 +468,22 @@ function BookingsList({
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
+              {(() => {
+                const wa = whatsappLink(
+                  b.customer_phone,
+                  `Hi ${b.customer_name}, regarding your booking on ${b.booking_date} at ${formatTimeLabel(b.start_time)} — `
+                );
+                return wa ? (
+                  <a
+                    href={wa}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded-full bg-[#25D366] text-white hover:opacity-90 transition-opacity"
+                  >
+                    WhatsApp
+                  </a>
+                ) : null;
+              })()}
               {b.status === "pending" && (
                 <ActionBtn onClick={() => onUpdate(b.id, "confirmed")}>Confirm</ActionBtn>
               )}

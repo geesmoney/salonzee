@@ -50,6 +50,7 @@ function SalonSettings() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [phone, setPhone] = useState("");
+  const [whatsappPhone, setWhatsappPhone] = useState("");
   const [locationCity, setLocationCity] = useState("");
   const [locationArea, setLocationArea] = useState("");
   const [slotDuration, setSlotDuration] = useState(30);
@@ -61,6 +62,7 @@ function SalonSettings() {
     setName(salon.name ?? "");
     setDescription(salon.description ?? "");
     setPhone(salon.phone ?? "");
+    setWhatsappPhone(salon.whatsapp_phone ?? "");
     setLocationCity(salon.location_city ?? "");
     setLocationArea(salon.location_area ?? "");
     setSlotDuration(salon.slot_duration_minutes ?? 30);
@@ -76,6 +78,7 @@ function SalonSettings() {
           name,
           description,
           phone,
+          whatsapp_phone: whatsappPhone.trim() || null,
           location_city: locationCity,
           location_area: locationArea,
           slot_duration_minutes: slotDuration,
@@ -147,6 +150,14 @@ function SalonSettings() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Phone">
               <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} />
+            </Field>
+            <Field label="WhatsApp number (optional)">
+              <input
+                className={inputCls}
+                value={whatsappPhone}
+                onChange={(e) => setWhatsappPhone(e.target.value)}
+                placeholder="Defaults to your phone"
+              />
             </Field>
             <Field label="Slot duration (minutes)">
               <input type="number" min={15} step={5} className={inputCls} value={slotDuration} onChange={(e) => setSlotDuration(+e.target.value)} />
