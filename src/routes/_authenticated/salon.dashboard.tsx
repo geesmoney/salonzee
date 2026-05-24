@@ -9,7 +9,7 @@ type BookingStatus = Database["public"]["Enums"]["booking_status"];
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { formatGhs } from "@/lib/ghana";
+import { formatGhs, whatsappLink } from "@/lib/ghana";
 import { formatTimeLabel } from "@/lib/slots";
 
 export const Route = createFileRoute("/_authenticated/salon/dashboard")({
