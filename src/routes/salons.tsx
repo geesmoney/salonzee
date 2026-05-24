@@ -13,7 +13,7 @@ const salonsListQuery = (filters: { city: string; type: string; search: string }
     queryFn: async () => {
       let q = supabase
         .from("salons")
-        .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description")
+        .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description, reviews(rating)")
         .eq("status", "active")
         .order("name");
       if (filters.city) q = q.eq("location_city", filters.city);
@@ -25,10 +25,17 @@ const salonsListQuery = (filters: { city: string; type: string; search: string }
       }
       const { data, error } = await q;
       if (error) throw error;
-      return data;
+      return (data ?? []).map((s) => {
+        const ratings = (s.reviews ?? []).map((r: { rating: number | null }) => r.rating).filter((r): r is number => typeof r === "number");
+        const count = ratings.length;
+        const avg = count ? ratings.reduce((a, b) => a + b, 0) / count : null;
+        const { reviews: _omit, ...rest } = s;
+        return { ...rest, rating_avg: avg, rating_count: count };
+      });
     },
     staleTime: 60_000,
   });
+
 
 export const Route = createFileRoute("/salons")({
   head: () => ({
