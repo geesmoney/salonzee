@@ -23,6 +23,7 @@ import { Route as AuthenticatedSalonSupportRouteImport } from './routes/_authent
 import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
+import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as ApiPublicHooksProcessSmsQueueRouteImport } from './routes/api/public/hooks/process-sms-queue'
@@ -100,6 +101,11 @@ const AuthenticatedAdminSupportRoute =
     path: '/admin/support',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminSmsRoute = AuthenticatedAdminSmsRouteImport.update({
+  id: '/admin/sms',
+  path: '/admin/sms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminRevenueRoute =
   AuthenticatedAdminRevenueRouteImport.update({
     id: '/admin/revenue',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/_authenticated/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/_authenticated/salon/settings': typeof AuthenticatedSalonSettingsRoute
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/admin/pending'
     | '/admin/revenue'
+    | '/admin/sms'
     | '/admin/support'
     | '/salon/dashboard'
     | '/salon/settings'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/admin/pending'
     | '/admin/revenue'
+    | '/admin/sms'
     | '/admin/support'
     | '/salon/dashboard'
     | '/salon/settings'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/revenue'
+    | '/_authenticated/admin/sms'
     | '/_authenticated/admin/support'
     | '/_authenticated/salon/dashboard'
     | '/_authenticated/salon/settings'
@@ -346,6 +358,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/sms': {
+      id: '/_authenticated/admin/sms'
+      path: '/admin/sms'
+      fullPath: '/admin/sms'
+      preLoaderRoute: typeof AuthenticatedAdminSmsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/revenue': {
       id: '/_authenticated/admin/revenue'
       path: '/admin/revenue'
@@ -373,6 +392,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
+  AuthenticatedAdminSmsRoute: typeof AuthenticatedAdminSmsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
   AuthenticatedSalonSettingsRoute: typeof AuthenticatedSalonSettingsRoute
@@ -382,6 +402,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,
+  AuthenticatedAdminSmsRoute: AuthenticatedAdminSmsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
   AuthenticatedSalonSettingsRoute: AuthenticatedSalonSettingsRoute,
@@ -418,3 +439,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
