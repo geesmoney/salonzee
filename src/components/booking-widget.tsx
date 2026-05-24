@@ -90,6 +90,11 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
     },
     onSuccess: () => {
       toast.success("Booking received! The salon will confirm shortly.");
+      setConfirmation({
+        service: selectedService?.name ?? "",
+        date: date.toLocaleDateString("en-GH", { weekday: "long", month: "long", day: "numeric" }),
+        time: formatTimeLabel(time),
+      });
       setTime("");
       setName("");
       setPhone("");
@@ -99,6 +104,13 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const waLink = confirmation
+    ? whatsappLink(
+        salonWhatsapp,
+        `Hi ${salonName}, I just booked ${confirmation.service} on ${confirmation.date} at ${confirmation.time}.`
+      )
+    : null;
 
   const wrapperClass =
     variant === "card"
