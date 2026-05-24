@@ -31,7 +31,7 @@ type Props = {
   variant?: "card" | "plain";
 };
 
-export function BookingWidget({ salonId, services, operatingHours, slotDuration, variant = "card" }: Props) {
+export function BookingWidget({ salonId, salonName, salonWhatsapp, services, operatingHours, slotDuration, variant = "card" }: Props) {
   const qc = useQueryClient();
   const dates = nextNDates(14);
   const [serviceId, setServiceId] = useState<string>(services[0]?.id ?? "");
@@ -40,6 +40,7 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [honeypot, setHoneypot] = useState(""); // bots fill hidden field
+  const [confirmation, setConfirmation] = useState<null | { service: string; date: string; time: string }>(null);
   const mountedAt = useRef<number>(Date.now());
   const submitBookingFn = useServerFn(submitBooking);
 
