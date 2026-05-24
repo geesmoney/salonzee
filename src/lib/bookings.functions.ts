@@ -37,8 +37,17 @@ export const submitBooking = createServerFn({ method: "POST" })
       throw new Error("Please take a moment to review your booking before confirming.");
     }
 
+    // 2b) Date must be today..+90 days
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const maxDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+    const bookingDay = new Date(data.bookingDate + "T00:00:00");
+    if (isNaN(bookingDay.getTime()) || bookingDay < today || bookingDay > maxDate) {
+      throw new Error("Pick a date within the next 90 days.");
+    }
+
     const phone = data.customerPhone.replace(/\s+/g, "");
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
 
     // 3) Per-phone abuse caps (last 24h)
     const { data: recent, error: recentErr } = await supabaseAdmin
