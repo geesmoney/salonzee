@@ -139,7 +139,10 @@ function SalonPage() {
                 ))
               )}
             </div>
+
+            <SalonReviews salonId={salon.id} />
           </div>
+
 
           {/* Booking widget — desktop only */}
           <div className="hidden lg:block lg:col-span-5">
