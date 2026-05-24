@@ -25,6 +25,8 @@ export type Database = {
           notes: string | null
           price_ghs_snapshot: number
           reminder_sent_at: string | null
+          review_reminder_sent_at: string | null
+          review_token: string | null
           salon_id: string
           service_id: string | null
           start_time: string
@@ -41,6 +43,8 @@ export type Database = {
           notes?: string | null
           price_ghs_snapshot?: number
           reminder_sent_at?: string | null
+          review_reminder_sent_at?: string | null
+          review_token?: string | null
           salon_id: string
           service_id?: string | null
           start_time: string
@@ -57,6 +61,8 @@ export type Database = {
           notes?: string | null
           price_ghs_snapshot?: number
           reminder_sent_at?: string | null
+          review_reminder_sent_at?: string | null
+          review_token?: string | null
           salon_id?: string
           service_id?: string | null
           start_time?: string
@@ -103,6 +109,51 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          booking_id: string
+          comment: string | null
+          created_at: string
+          customer_name: string
+          id: string
+          rating: number
+          salon_id: string
+        }
+        Insert: {
+          booking_id: string
+          comment?: string | null
+          created_at?: string
+          customer_name: string
+          id?: string
+          rating: number
+          salon_id: string
+        }
+        Update: {
+          booking_id?: string
+          comment?: string | null
+          created_at?: string
+          customer_name?: string
+          id?: string
+          rating?: number
+          salon_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_salon_id_fkey"
+            columns: ["salon_id"]
+            isOneToOne: false
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       salon_contacts: {
         Row: {
@@ -425,12 +476,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_review_context: { Args: { _token: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      submit_review: {
+        Args: { _comment: string; _rating: number; _token: string }
+        Returns: Json
       }
     }
     Enums: {
