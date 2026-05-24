@@ -12,7 +12,7 @@ import {
   nextNDates,
   type OperatingHours,
 } from "@/lib/slots";
-import { isValidGhanaPhone, formatGhs } from "@/lib/ghana";
+import { isValidGhanaPhone, formatGhs, whatsappLink } from "@/lib/ghana";
 
 type Service = {
   id: string;
@@ -23,6 +23,8 @@ type Service = {
 
 type Props = {
   salonId: string;
+  salonName: string;
+  salonWhatsapp?: string | null;
   services: Service[];
   operatingHours: OperatingHours;
   slotDuration: number;
