@@ -209,6 +209,19 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
             />
           </div>
 
+          {/* Honeypot — hidden from real users, bots fill it */}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: "1px", height: "1px", overflow: "hidden" }}>
+            <label htmlFor="booking-website">Website (leave blank)</label>
+            <input
+              id="booking-website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
+
           <button
             disabled={createBooking.isPending}
             onClick={() => createBooking.mutate()}
