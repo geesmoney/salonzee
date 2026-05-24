@@ -83,7 +83,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn: AuthCtx["signIn"] = async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
+    if (error) {
+      console.error("[auth] signIn failed", error);
+      return { error: "Invalid email or password." };
+    }
+    return { error: null };
   };
 
   const signUp: AuthCtx["signUp"] = async (email, password, fullName) => {
@@ -95,7 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         data: { full_name: fullName },
       },
     });
-    return { error: error?.message ?? null };
+    if (error) {
+      console.error("[auth] signUp failed", error);
+      const msg = /registered|exists/i.test(error.message)
+        ? "An account with that email already exists."
+        : "Could not create your account. Please try again.";
+      return { error: msg };
+    }
+    return { error: null };
   };
 
   const signOut = async () => {

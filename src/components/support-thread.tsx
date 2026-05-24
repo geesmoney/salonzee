@@ -49,7 +49,10 @@ export function SupportThread({
         sender_user_id: viewerUserId,
         body: text,
       });
-      if (error) throw error;
+      if (error) {
+        console.error("[support-thread] send failed", error);
+        throw new Error("Could not send your message. Please try again.");
+      }
     },
     onSuccess: () => {
       setBody("");
@@ -62,7 +65,10 @@ export function SupportThread({
   const updateStatus = useMutation({
     mutationFn: async (status: Status) => {
       const { error } = await supabase.from("support_tickets").update({ status }).eq("id", ticket.id);
-      if (error) throw error;
+      if (error) {
+        console.error("[support-thread] status update failed", error);
+        throw new Error("Could not update the ticket. Please try again.");
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["support-tickets"] });

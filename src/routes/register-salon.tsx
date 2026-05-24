@@ -107,7 +107,8 @@ function RegisterSalonPage() {
       toast.success("Submitted! Your salon is pending review.");
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
     } catch (err) {
-      toast.error((err as Error).message);
+      console.error("[register-salon] submission failed", err);
+      toast.error("Could not submit your salon. Please check your details and try again.");
     } finally {
       setLoading(false);
     }
