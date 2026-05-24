@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { submitBooking } from "@/lib/bookings.functions";
 import {
   generateSlots,
   addMinutesToTime,
@@ -35,6 +37,9 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
   const [time, setTime] = useState<string>("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // bots fill hidden field
+  const mountedAt = useRef<number>(Date.now());
+  const submitBookingFn = useServerFn(submitBooking);
 
   const selectedService = services.find((s) => s.id === serviceId);
 
@@ -66,23 +71,28 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
       if (!isValidGhanaPhone(phone)) throw new Error("Enter a valid Ghana phone (e.g. 024XXXXXXX)");
 
       const endTime = addMinutesToTime(time, selectedService.duration_minutes);
-      const { error } = await supabase.from("bookings").insert({
-        salon_id: salonId,
-        service_id: selectedService.id,
-        customer_name: name.trim(),
-        customer_phone: phone.replace(/\s+/g, ""),
-        booking_date: dateKey,
-        start_time: time,
-        end_time: endTime,
-        price_ghs_snapshot: selectedService.price_ghs,
+      await submitBookingFn({
+        data: {
+          salonId,
+          serviceId: selectedService.id,
+          customerName: name.trim(),
+          customerPhone: phone.replace(/\s+/g, ""),
+          bookingDate: dateKey,
+          startTime: time,
+          endTime,
+          priceGhsSnapshot: Number(selectedService.price_ghs),
+          honeypot,
+          elapsedMs: Date.now() - mountedAt.current,
+        },
       });
-      if (error) throw error;
     },
     onSuccess: () => {
       toast.success("Booking received! The salon will confirm shortly.");
       setTime("");
       setName("");
       setPhone("");
+      setHoneypot("");
+      mountedAt.current = Date.now();
       qc.invalidateQueries({ queryKey: ["bookings-day", salonId, dateKey] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -196,6 +206,19 @@ export function BookingWidget({ salonId, services, operatingHours, slotDuration,
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full bg-background px-4 py-3 rounded-xl outline-none text-sm border border-border focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
+            />
+          </div>
+
+          {/* Honeypot — hidden from real users, bots fill it */}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: "1px", height: "1px", overflow: "hidden" }}>
+            <label htmlFor="booking-website">Website (leave blank)</label>
+            <input
+              id="booking-website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
             />
           </div>
 
