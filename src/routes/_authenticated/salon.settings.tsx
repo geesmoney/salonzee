@@ -151,6 +151,14 @@ function SalonSettings() {
             <Field label="Phone">
               <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} />
             </Field>
+            <Field label="WhatsApp number (optional)">
+              <input
+                className={inputCls}
+                value={whatsappPhone}
+                onChange={(e) => setWhatsappPhone(e.target.value)}
+                placeholder="Defaults to your phone"
+              />
+            </Field>
             <Field label="Slot duration (minutes)">
               <input type="number" min={15} step={5} className={inputCls} value={slotDuration} onChange={(e) => setSlotDuration(+e.target.value)} />
             </Field>
