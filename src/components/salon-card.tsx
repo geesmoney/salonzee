@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { SALON_TYPE_LABELS } from "@/lib/ghana";
+import { RatingBadge } from "@/components/rating-badge";
 
 type Salon = {
   id: string;
@@ -10,6 +11,8 @@ type Salon = {
   profile_photo_url: string | null;
   description: string | null;
   slug?: string | null;
+  rating_avg?: number | null;
+  rating_count?: number;
 };
 
 export function SalonCard({ salon }: { salon: Salon }) {
@@ -40,8 +43,16 @@ export function SalonCard({ salon }: { salon: Salon }) {
         <span className="absolute top-3 left-3 bg-background/90 backdrop-blur text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full text-foreground">
           {SALON_TYPE_LABELS[salon.salon_type] ?? salon.salon_type}
         </span>
+        {(salon.rating_count ?? 0) > 0 && (
+          <span className="absolute top-3 right-3 bg-background/90 backdrop-blur px-2.5 py-1 rounded-full">
+            <RatingBadge average={salon.rating_avg ?? null} count={salon.rating_count ?? 0} size="sm" showNew={false} />
+          </span>
+        )}
       </div>
-      <h3 className="font-display text-xl font-semibold tracking-tight group-hover:text-primary transition-colors">{salon.name}</h3>
+      <div className="flex items-baseline justify-between gap-3">
+        <h3 className="font-display text-xl font-semibold tracking-tight group-hover:text-primary transition-colors min-w-0 truncate">{salon.name}</h3>
+        <RatingBadge average={salon.rating_avg ?? null} count={salon.rating_count ?? 0} size="sm" />
+      </div>
       <p className="text-sm text-muted-foreground mt-0.5">
         {salon.location_area}, {salon.location_city}
       </p>
@@ -51,3 +62,4 @@ export function SalonCard({ salon }: { salon: Salon }) {
     </Link>
   );
 }
+

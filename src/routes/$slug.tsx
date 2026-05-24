@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { BookingWidget } from "@/components/booking-widget";
 import { SalonGallery } from "@/components/salon-gallery";
+import { SalonReviews } from "@/components/salon-reviews";
 import { formatGhs, SALON_TYPE_LABELS } from "@/lib/ghana";
 import type { OperatingHours } from "@/lib/slots";
 
@@ -150,7 +151,10 @@ function SalonBySlug() {
                 ))
               )}
             </div>
+
+            <SalonReviews salonId={salon.id} />
           </div>
+
 
           <div className="lg:col-span-5">
             <BookingWidget

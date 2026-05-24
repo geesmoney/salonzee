@@ -7,6 +7,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { BookingWidget } from "@/components/booking-widget";
 import { SalonGallery } from "@/components/salon-gallery";
+import { SalonReviews } from "@/components/salon-reviews";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { formatGhs, SALON_TYPE_LABELS } from "@/lib/ghana";
 import type { OperatingHours } from "@/lib/slots";
@@ -138,7 +139,10 @@ function SalonPage() {
                 ))
               )}
             </div>
+
+            <SalonReviews salonId={salon.id} />
           </div>
+
 
           {/* Booking widget — desktop only */}
           <div className="hidden lg:block lg:col-span-5">
