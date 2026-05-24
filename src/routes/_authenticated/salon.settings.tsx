@@ -78,6 +78,7 @@ function SalonSettings() {
           name,
           description,
           phone,
+          whatsapp_phone: whatsappPhone.trim() || null,
           location_city: locationCity,
           location_area: locationArea,
           slot_duration_minutes: slotDuration,
