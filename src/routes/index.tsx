@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Scissors, Sparkles, Brush, CalendarCheck, Star, ShieldCheck } from "lucide-react";
@@ -79,7 +80,7 @@ function Index() {
               Now booking across Ghana
             </div>
             <h1 className="font-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05]">
-              Your next salon visit, <span className="text-primary">booked in seconds.</span>
+              Your next <RotatingWord />, <span className="text-primary">booked in seconds.</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-xl mb-7">
               Discover trusted hair, braid, barber and nail salons in Accra, Kumasi and beyond. Pick a time, confirm by SMS — no calls, no waiting.
@@ -281,6 +282,41 @@ function Index() {
       <SiteFooter />
       <BookingPulse salons={salons} />
     </div>
+  );
+}
+
+const ROTATING_WORDS = [
+  "salon visit",
+  "barber cut",
+  "braid session",
+  "nail appointment",
+  "lash & brow look",
+];
+
+function RotatingWord() {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % ROTATING_WORDS.length);
+        setVisible(true);
+      }, 300);
+    }, 2600);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <span
+      aria-live="polite"
+      className={`inline-block text-primary transition-all duration-300 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+      }`}
+    >
+      {ROTATING_WORDS[idx]}
+    </span>
   );
 }
 
