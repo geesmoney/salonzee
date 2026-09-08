@@ -285,6 +285,41 @@ function Index() {
   );
 }
 
+const ROTATING_WORDS = [
+  "salon visit",
+  "barber cut",
+  "braid session",
+  "nail appointment",
+  "lash & brow look",
+];
+
+function RotatingWord() {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % ROTATING_WORDS.length);
+        setVisible(true);
+      }, 300);
+    }, 2600);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <span
+      aria-live="polite"
+      className={`inline-block text-primary transition-all duration-300 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+      }`}
+    >
+      {ROTATING_WORDS[idx]}
+    </span>
+  );
+}
+
 function Stat({ n, label, className = "flex" }: { n: string; label: string; className?: string }) {
   return (
     <div className={`flex-col items-start ${className}`}>
