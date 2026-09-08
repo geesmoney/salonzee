@@ -80,7 +80,7 @@ function Index() {
               Now booking across Ghana
             </div>
             <h1 className="font-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05]">
-              Your next salon visit, <span className="text-primary">booked in seconds.</span>
+              Your next <RotatingWord />, <span className="text-primary">booked in seconds.</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-xl mb-7">
               Discover trusted hair, braid, barber and nail salons in Accra, Kumasi and beyond. Pick a time, confirm by SMS — no calls, no waiting.
