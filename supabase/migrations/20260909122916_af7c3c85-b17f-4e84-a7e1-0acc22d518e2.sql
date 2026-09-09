@@ -1,0 +1,1 @@
+revoke all on function public.handle_booking_completed() from public, anon, authenticated;
