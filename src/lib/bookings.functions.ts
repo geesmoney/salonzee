@@ -80,7 +80,7 @@ export const submitBooking = createServerFn({ method: "POST" })
     // Server-side authoritative service lookup — never trust client price
     const { data: svc, error: svcErr } = await supabaseAdmin
       .from("services")
-      .select("id, salon_id, active, price_ghs")
+      .select("id, salon_id, active, price_ghs, duration_minutes")
       .eq("id", data.serviceId)
       .maybeSingle();
     if (svcErr) {
@@ -91,21 +91,38 @@ export const submitBooking = createServerFn({ method: "POST" })
       throw new Error("Selected service is no longer available.");
     }
 
-    const { data: clash, error: clashErr } = await supabaseAdmin
+    // Server-authoritative end time from the service duration
+    const toMinutes = (t: string) => {
+      const [h, m] = t.split(":").map(Number);
+      return h * 60 + m;
+    };
+    const toTime = (mins: number) =>
+      `${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}:00`;
+
+    const startMins = toMinutes(data.startTime);
+    const endMins = startMins + Number(svc.duration_minutes);
+    const endTime = toTime(endMins);
+
+    // Overlap check across the whole day, not just identical start times
+    const { data: sameDay, error: clashErr } = await supabaseAdmin
       .from("bookings")
-      .select("id")
+      .select("start_time, end_time")
       .eq("salon_id", data.salonId)
       .eq("booking_date", data.bookingDate)
-      .eq("start_time", data.startTime)
-      .neq("status", "cancelled")
-      .limit(1);
+      .neq("status", "cancelled");
     if (clashErr) {
       console.error("[submitBooking] clash lookup failed", clashErr);
       throw new Error(GENERIC_ERR);
     }
-    if (clash && clash.length > 0) {
+    const overlaps = (sameDay ?? []).some((b) => {
+      const s = toMinutes(b.start_time as string);
+      const e = toMinutes(b.end_time as string);
+      return startMins < e && endMins > s;
+    });
+    if (overlaps) {
       throw new Error("That time slot was just taken. Please pick another.");
     }
+
 
     const { error: insertErr } = await supabaseAdmin.from("bookings").insert({
       salon_id: data.salonId,
@@ -114,10 +131,13 @@ export const submitBooking = createServerFn({ method: "POST" })
       customer_phone: phone,
       booking_date: data.bookingDate,
       start_time: data.startTime,
-      end_time: data.endTime,
+      end_time: endTime,
       price_ghs_snapshot: Number(svc.price_ghs),
     });
     if (insertErr) {
+      if (insertErr.code === "23505") {
+        throw new Error("That time slot was just taken. Please pick another.");
+      }
       console.error("[submitBooking] insert failed", insertErr);
       throw new Error(GENERIC_ERR);
     }
