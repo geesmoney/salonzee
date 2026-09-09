@@ -27,7 +27,7 @@ import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as ApiPublicHooksProcessSmsQueueRouteImport } from './routes/api/public/hooks/process-sms-queue'
-import { Route as ApiPublicCalendarTokenDoticsRouteImport } from './routes/api/public/calendar/$token[.]ics'
+import { Route as ApiPublicCalendarTokenRouteImport } from './routes/api/public/calendar/$token'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -125,12 +125,11 @@ const ApiPublicHooksProcessSmsQueueRoute =
     path: '/api/public/hooks/process-sms-queue',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicCalendarTokenDoticsRoute =
-  ApiPublicCalendarTokenDoticsRouteImport.update({
-    id: '/api/public/calendar/$token.ics',
-    path: '/api/public/calendar/$token.ics',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const ApiPublicCalendarTokenRoute = ApiPublicCalendarTokenRouteImport.update({
+  id: '/api/public/calendar/$token',
+  path: '/api/public/calendar/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -149,7 +148,7 @@ export interface FileRoutesByFullPath {
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
   '/salon/support': typeof AuthenticatedSalonSupportRoute
-  '/api/public/calendar/$token.ics': typeof ApiPublicCalendarTokenDoticsRoute
+  '/api/public/calendar/$token': typeof ApiPublicCalendarTokenRoute
   '/api/public/hooks/process-sms-queue': typeof ApiPublicHooksProcessSmsQueueRoute
 }
 export interface FileRoutesByTo {
@@ -169,7 +168,7 @@ export interface FileRoutesByTo {
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/salon/settings': typeof AuthenticatedSalonSettingsRoute
   '/salon/support': typeof AuthenticatedSalonSupportRoute
-  '/api/public/calendar/$token.ics': typeof ApiPublicCalendarTokenDoticsRoute
+  '/api/public/calendar/$token': typeof ApiPublicCalendarTokenRoute
   '/api/public/hooks/process-sms-queue': typeof ApiPublicHooksProcessSmsQueueRoute
 }
 export interface FileRoutesById {
@@ -191,7 +190,7 @@ export interface FileRoutesById {
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
   '/_authenticated/salon/settings': typeof AuthenticatedSalonSettingsRoute
   '/_authenticated/salon/support': typeof AuthenticatedSalonSupportRoute
-  '/api/public/calendar/$token.ics': typeof ApiPublicCalendarTokenDoticsRoute
+  '/api/public/calendar/$token': typeof ApiPublicCalendarTokenRoute
   '/api/public/hooks/process-sms-queue': typeof ApiPublicHooksProcessSmsQueueRoute
 }
 export interface FileRouteTypes {
@@ -213,7 +212,7 @@ export interface FileRouteTypes {
     | '/salon/dashboard'
     | '/salon/settings'
     | '/salon/support'
-    | '/api/public/calendar/$token.ics'
+    | '/api/public/calendar/$token'
     | '/api/public/hooks/process-sms-queue'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -233,7 +232,7 @@ export interface FileRouteTypes {
     | '/salon/dashboard'
     | '/salon/settings'
     | '/salon/support'
-    | '/api/public/calendar/$token.ics'
+    | '/api/public/calendar/$token'
     | '/api/public/hooks/process-sms-queue'
   id:
     | '__root__'
@@ -254,7 +253,7 @@ export interface FileRouteTypes {
     | '/_authenticated/salon/dashboard'
     | '/_authenticated/salon/settings'
     | '/_authenticated/salon/support'
-    | '/api/public/calendar/$token.ics'
+    | '/api/public/calendar/$token'
     | '/api/public/hooks/process-sms-queue'
   fileRoutesById: FileRoutesById
 }
@@ -268,7 +267,7 @@ export interface RootRouteChildren {
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
-  ApiPublicCalendarTokenDoticsRoute: typeof ApiPublicCalendarTokenDoticsRoute
+  ApiPublicCalendarTokenRoute: typeof ApiPublicCalendarTokenRoute
   ApiPublicHooksProcessSmsQueueRoute: typeof ApiPublicHooksProcessSmsQueueRoute
 }
 
@@ -400,11 +399,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksProcessSmsQueueRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/calendar/$token.ics': {
-      id: '/api/public/calendar/$token.ics'
-      path: '/api/public/calendar/$token.ics'
-      fullPath: '/api/public/calendar/$token.ics'
-      preLoaderRoute: typeof ApiPublicCalendarTokenDoticsRouteImport
+    '/api/public/calendar/$token': {
+      id: '/api/public/calendar/$token'
+      path: '/api/public/calendar/$token'
+      fullPath: '/api/public/calendar/$token'
+      preLoaderRoute: typeof ApiPublicCalendarTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -455,7 +454,7 @@ const rootRouteChildren: RootRouteChildren = {
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ReviewTokenRoute: ReviewTokenRoute,
-  ApiPublicCalendarTokenDoticsRoute: ApiPublicCalendarTokenDoticsRoute,
+  ApiPublicCalendarTokenRoute: ApiPublicCalendarTokenRoute,
   ApiPublicHooksProcessSmsQueueRoute: ApiPublicHooksProcessSmsQueueRoute,
 }
 export const routeTree = rootRouteImport

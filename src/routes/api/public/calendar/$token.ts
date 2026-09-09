@@ -27,7 +27,7 @@ function fold(line: string) {
   return parts.join('\r\n');
 }
 
-export const Route = createFileRoute('/api/public/calendar/$token.ics')({
+export const Route = createFileRoute('/api/public/calendar/$token')({
   server: {
     handlers: {
       GET: async ({ params }) => {
