@@ -221,6 +221,7 @@ export type Database = {
       }
       salons: {
         Row: {
+          calendar_token: string
           created_at: string
           description: string | null
           id: string
@@ -239,6 +240,7 @@ export type Database = {
           whatsapp_phone: string | null
         }
         Insert: {
+          calendar_token?: string
           created_at?: string
           description?: string | null
           id?: string
@@ -257,6 +259,7 @@ export type Database = {
           whatsapp_phone?: string | null
         }
         Update: {
+          calendar_token?: string
           created_at?: string
           description?: string | null
           id?: string
