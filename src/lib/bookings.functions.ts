@@ -80,7 +80,7 @@ export const submitBooking = createServerFn({ method: "POST" })
     // Server-side authoritative service lookup — never trust client price
     const { data: svc, error: svcErr } = await supabaseAdmin
       .from("services")
-      .select("id, salon_id, active, price_ghs")
+      .select("id, salon_id, active, price_ghs, duration_minutes")
       .eq("id", data.serviceId)
       .maybeSingle();
     if (svcErr) {
