@@ -131,10 +131,13 @@ export const submitBooking = createServerFn({ method: "POST" })
       customer_phone: phone,
       booking_date: data.bookingDate,
       start_time: data.startTime,
-      end_time: data.endTime,
+      end_time: endTime,
       price_ghs_snapshot: Number(svc.price_ghs),
     });
     if (insertErr) {
+      if (insertErr.code === "23505") {
+        throw new Error("That time slot was just taken. Please pick another.");
+      }
       console.error("[submitBooking] insert failed", insertErr);
       throw new Error(GENERIC_ERR);
     }
