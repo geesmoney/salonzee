@@ -220,6 +220,8 @@ function SalonSettings() {
             {save.isPending ? "Saving..." : "Save changes"}
           </button>
         </form>
+
+        <CalendarSync salonId={salon.id} />
       </section>
       <SiteFooter />
     </div>
