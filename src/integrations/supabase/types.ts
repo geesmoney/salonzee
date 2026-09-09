@@ -155,6 +155,32 @@ export type Database = {
           },
         ]
       }
+      salon_calendar_tokens: {
+        Row: {
+          created_at: string
+          salon_id: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          salon_id: string
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          salon_id?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salon_calendar_tokens_salon_id_fkey"
+            columns: ["salon_id"]
+            isOneToOne: true
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       salon_contacts: {
         Row: {
           created_at: string
@@ -221,7 +247,6 @@ export type Database = {
       }
       salons: {
         Row: {
-          calendar_token: string
           created_at: string
           description: string | null
           id: string
@@ -240,7 +265,6 @@ export type Database = {
           whatsapp_phone: string | null
         }
         Insert: {
-          calendar_token?: string
           created_at?: string
           description?: string | null
           id?: string
@@ -259,7 +283,6 @@ export type Database = {
           whatsapp_phone?: string | null
         }
         Update: {
-          calendar_token?: string
           created_at?: string
           description?: string | null
           id?: string

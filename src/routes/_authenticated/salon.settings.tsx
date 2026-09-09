@@ -220,8 +220,63 @@ function SalonSettings() {
             {save.isPending ? "Saving..." : "Save changes"}
           </button>
         </form>
+
+        <CalendarSync salonId={salon.id} />
       </section>
       <SiteFooter />
+    </div>
+  );
+}
+
+function CalendarSync({ salonId }: { salonId: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const { data: token } = useQuery({
+    queryKey: ["salon-calendar-token", salonId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("salon_calendar_tokens")
+        .select("token")
+        .eq("salon_id", salonId)
+        .maybeSingle();
+      if (error) throw error;
+      return data?.token ?? null;
+    },
+    staleTime: 60 * 60_000,
+  });
+
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://salonzee.com";
+  const feedUrl = token ? `${origin}/api/public/calendar/${token}.ics` : "";
+
+  return (
+    <div className="mt-12 border border-foreground/10 rounded-xl p-5">
+      <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mb-2">Calendar sync</p>
+      <h2 className="font-serif text-2xl mb-2">Add your bookings to your own calendar</h2>
+      <p className="text-sm text-foreground/60 mb-4">
+        Copy this private link and add it to Google Calendar (Other calendars → From URL), Apple Calendar
+        (File → New Calendar Subscription) or Outlook (Add calendar → Subscribe from web). Your bookings
+        then appear automatically. Keep the link private — anyone with it can see your bookings.
+      </p>
+
+      {token ? (
+        <div className="flex flex-col sm:flex-row gap-2">
+          <input readOnly value={feedUrl} className={inputCls + " font-mono text-xs"} onFocus={(e) => e.currentTarget.select()} />
+          <button
+            type="button"
+            onClick={async () => {
+              await navigator.clipboard.writeText(feedUrl);
+              setCopied(true);
+              toast.success("Calendar link copied");
+              setTimeout(() => setCopied(false), 2000);
+            }}
+            className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-bold uppercase text-xs tracking-[0.2em] whitespace-nowrap"
+          >
+            {copied ? "Copied" : "Copy link"}
+          </button>
+        </div>
+      ) : (
+        <p className="text-sm text-foreground/40">Preparing your calendar link…</p>
+      )}
     </div>
   );
 }
