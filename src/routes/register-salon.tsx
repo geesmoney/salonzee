@@ -207,6 +207,18 @@ function RegisterSalonPage() {
                 placeholder="What makes your salon special?"
               />
             </Field>
+            <Field label="Referral code (optional)">
+              <input
+                value={form.referralCode}
+                onChange={(e) => up("referralCode", e.target.value.toUpperCase())}
+                onBlur={(e) => checkReferral(e.target.value)}
+                className="input"
+                placeholder="Who told you about us?"
+              />
+              {referrer && (
+                <span className="block text-xs text-primary mt-1.5">Referred by {referrer}</span>
+              )}
+            </Field>
 
             <button
               disabled={loading}
