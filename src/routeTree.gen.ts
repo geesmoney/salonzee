@@ -25,6 +25,7 @@ import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
+import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as ApiPublicHooksProcessSmsQueueRouteImport } from './routes/api/public/hooks/process-sms-queue'
 import { Route as ApiPublicCalendarTokenRouteImport } from './routes/api/public/calendar/$token'
@@ -113,6 +114,12 @@ const AuthenticatedAdminRevenueRoute =
     path: '/admin/revenue',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminReferralsRoute =
+  AuthenticatedAdminReferralsRouteImport.update({
+    id: '/admin/referrals',
+    path: '/admin/referrals',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminPendingRoute =
   AuthenticatedAdminPendingRouteImport.update({
     id: '/admin/pending',
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -162,6 +170,7 @@ export interface FileRoutesByTo {
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -184,6 +193,7 @@ export interface FileRoutesById {
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
+  '/_authenticated/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/_authenticated/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/pending'
+    | '/admin/referrals'
     | '/admin/revenue'
     | '/admin/sms'
     | '/admin/support'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/pending'
+    | '/admin/referrals'
     | '/admin/revenue'
     | '/admin/sms'
     | '/admin/support'
@@ -247,6 +259,7 @@ export interface FileRouteTypes {
     | '/review/$token'
     | '/salons/$salonId'
     | '/_authenticated/admin/pending'
+    | '/_authenticated/admin/referrals'
     | '/_authenticated/admin/revenue'
     | '/_authenticated/admin/sms'
     | '/_authenticated/admin/support'
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRevenueRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/referrals': {
+      id: '/_authenticated/admin/referrals'
+      path: '/admin/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AuthenticatedAdminReferralsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/pending': {
       id: '/_authenticated/admin/pending'
       path: '/admin/pending'
@@ -411,6 +431,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
+  AuthenticatedAdminReferralsRoute: typeof AuthenticatedAdminReferralsRoute
   AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
   AuthenticatedAdminSmsRoute: typeof AuthenticatedAdminSmsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
@@ -421,6 +442,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
+  AuthenticatedAdminReferralsRoute: AuthenticatedAdminReferralsRoute,
   AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,
   AuthenticatedAdminSmsRoute: AuthenticatedAdminSmsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,

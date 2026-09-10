@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SalonImageManager } from "@/components/salon-image-manager";
+import { ReferralCard } from "@/components/referral-card";
 
 export const Route = createFileRoute("/_authenticated/salon/settings")({
   head: () => ({ meta: [{ title: "Salon Settings — Salonzee" }] }),
@@ -220,6 +221,8 @@ function SalonSettings() {
             {save.isPending ? "Saving..." : "Save changes"}
           </button>
         </form>
+
+        <ReferralCard salonId={salon.id} />
 
         <CalendarSync salonId={salon.id} />
       </section>

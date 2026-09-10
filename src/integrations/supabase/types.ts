@@ -110,6 +110,89 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_codes: {
+        Row: {
+          active: boolean
+          agent_phone: string | null
+          code: string
+          created_at: string
+          id: string
+          label: string
+          salon_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          agent_phone?: string | null
+          code: string
+          created_at?: string
+          id?: string
+          label: string
+          salon_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          agent_phone?: string | null
+          code?: string
+          created_at?: string
+          id?: string
+          label?: string
+          salon_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_codes_salon_id_fkey"
+            columns: ["salon_id"]
+            isOneToOne: false
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_rewards: {
+        Row: {
+          awarded_at: string
+          code: string
+          id: string
+          months_awarded: number
+          referral_code_id: string
+          referred_salon_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          code: string
+          id?: string
+          months_awarded?: number
+          referral_code_id: string
+          referred_salon_id: string
+        }
+        Update: {
+          awarded_at?: string
+          code?: string
+          id?: string
+          months_awarded?: number
+          referral_code_id?: string
+          referred_salon_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_rewards_referral_code_id_fkey"
+            columns: ["referral_code_id"]
+            isOneToOne: false
+            referencedRelation: "referral_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_rewards_referred_salon_id_fkey"
+            columns: ["referred_salon_id"]
+            isOneToOne: true
+            referencedRelation: "salons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           booking_id: string
@@ -256,6 +339,7 @@ export type Database = {
           operating_hours: Json
           phone: string
           profile_photo_url: string | null
+          referred_by_code: string | null
           salon_type: Database["public"]["Enums"]["salon_type"]
           slot_duration_minutes: number
           slug: string | null
@@ -274,6 +358,7 @@ export type Database = {
           operating_hours?: Json
           phone: string
           profile_photo_url?: string | null
+          referred_by_code?: string | null
           salon_type?: Database["public"]["Enums"]["salon_type"]
           slot_duration_minutes?: number
           slug?: string | null
@@ -292,6 +377,7 @@ export type Database = {
           operating_hours?: Json
           phone?: string
           profile_photo_url?: string | null
+          referred_by_code?: string | null
           salon_type?: Database["public"]["Enums"]["salon_type"]
           slot_duration_minutes?: number
           slug?: string | null
@@ -517,6 +603,7 @@ export type Database = {
         Args: { _comment: string; _rating: number; _token: string }
         Returns: Json
       }
+      validate_referral_code: { Args: { _code: string }; Returns: Json }
       wa_digits: { Args: { _phone: string }; Returns: string }
     }
     Enums: {

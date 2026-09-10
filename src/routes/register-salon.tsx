@@ -52,7 +52,18 @@ function RegisterSalonPage() {
     area: "",
     salonType: "unisex" as "male" | "female" | "unisex",
     description: "",
+    referralCode: "",
   });
+  const [referrer, setReferrer] = useState<string | null>(null);
+
+  async function checkReferral(raw: string) {
+    const code = raw.trim();
+    if (!code) return setReferrer(null);
+    const { data } = await supabase.rpc("validate_referral_code", { _code: code });
+    const res = data as { valid: boolean; label?: string } | null;
+    setReferrer(res?.valid ? (res.label ?? "Valid code") : null);
+    if (!res?.valid) toast.error("That referral code wasn't found.");
+  }
 
   function up<K extends keyof typeof form>(k: K, v: (typeof form)[K]) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -90,6 +101,7 @@ function RegisterSalonPage() {
           location_area: form.area,
           salon_type: form.salonType,
           description: form.description || null,
+          referred_by_code: form.referralCode.trim() ? form.referralCode.trim().toUpperCase() : null,
           status: "pending",
         })
         .select("id")
@@ -194,6 +206,18 @@ function RegisterSalonPage() {
                 className="input"
                 placeholder="What makes your salon special?"
               />
+            </Field>
+            <Field label="Referral code (optional)">
+              <input
+                value={form.referralCode}
+                onChange={(e) => up("referralCode", e.target.value.toUpperCase())}
+                onBlur={(e) => checkReferral(e.target.value)}
+                className="input"
+                placeholder="Who told you about us?"
+              />
+              {referrer && (
+                <span className="block text-xs text-primary mt-1.5">Referred by {referrer}</span>
+              )}
             </Field>
 
             <button

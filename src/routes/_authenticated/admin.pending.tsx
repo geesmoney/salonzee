@@ -96,6 +96,12 @@ function AdminPage() {
                 <p className="text-sm text-foreground/60">
                   {s.location_area}, {s.location_city} • {SALON_TYPE_LABELS[s.salon_type]}
                 </p>
+                {s.referred_by_code && (
+                  <p className="text-xs mt-1.5">
+                    <span className="text-foreground/40">Referred by code </span>
+                    <span className="font-mono tracking-[0.15em] text-primary">{s.referred_by_code}</span>
+                  </p>
+                )}
                 {s.description && <p className="text-xs text-foreground/50 mt-2 italic">"{s.description}"</p>}
               </div>
               <div className="flex flex-wrap gap-2">
