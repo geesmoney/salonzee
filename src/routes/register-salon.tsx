@@ -101,6 +101,7 @@ function RegisterSalonPage() {
           location_area: form.area,
           salon_type: form.salonType,
           description: form.description || null,
+          referred_by_code: form.referralCode.trim() ? form.referralCode.trim().toUpperCase() : null,
           status: "pending",
         })
         .select("id")
