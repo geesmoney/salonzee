@@ -52,7 +52,18 @@ function RegisterSalonPage() {
     area: "",
     salonType: "unisex" as "male" | "female" | "unisex",
     description: "",
+    referralCode: "",
   });
+  const [referrer, setReferrer] = useState<string | null>(null);
+
+  async function checkReferral(raw: string) {
+    const code = raw.trim();
+    if (!code) return setReferrer(null);
+    const { data } = await supabase.rpc("validate_referral_code", { _code: code });
+    const res = data as { valid: boolean; label?: string } | null;
+    setReferrer(res?.valid ? (res.label ?? "Valid code") : null);
+    if (!res?.valid) toast.error("That referral code wasn't found.");
+  }
 
   function up<K extends keyof typeof form>(k: K, v: (typeof form)[K]) {
     setForm((f) => ({ ...f, [k]: v }));
