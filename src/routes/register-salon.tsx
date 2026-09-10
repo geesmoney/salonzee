@@ -108,7 +108,10 @@ function RegisterSalonPage() {
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
     } catch (err) {
       console.error("[register-salon] submission failed", err);
-      toast.error("Could not submit your salon. Please check your details and try again.");
+      const known = err instanceof Error && /password|email|account|confirm|attempts/i.test(err.message);
+      toast.error(
+        known ? err.message : "Could not submit your business. Please check your details and try again.",
+      );
     } finally {
       setLoading(false);
     }

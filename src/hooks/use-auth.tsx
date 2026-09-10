@@ -101,9 +101,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     if (error) {
       console.error("[auth] signUp failed", error);
-      const msg = /registered|exists/i.test(error.message)
-        ? "An account with that email already exists."
-        : "Could not create your account. Please try again.";
+      const m = error.message ?? "";
+      let msg = "Could not create your account. Please try again.";
+      if (/registered|exists/i.test(m)) {
+        msg = "An account with that email already exists. Sign in instead.";
+      } else if (/weak|easy to guess|pwned|leaked/i.test(m)) {
+        msg = "That password is too easy to guess. Use a longer one with numbers and symbols.";
+      } else if (/at least|should be/i.test(m) && /password/i.test(m)) {
+        msg = "Password is too short. Use at least 6 characters.";
+      } else if (/email/i.test(m) && /invalid|valid/i.test(m)) {
+        msg = "That email address doesn't look valid.";
+      } else if (/rate|too many/i.test(m)) {
+        msg = "Too many attempts. Please wait a minute and try again.";
+      }
       return { error: msg };
     }
     return { error: null };
