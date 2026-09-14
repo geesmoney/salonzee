@@ -132,12 +132,47 @@ function AdminPage() {
                   </p>
                 )}
                 {s.description && <p className="text-xs text-foreground/50 mt-2 italic">"{s.description}"</p>}
+                {s.rejection_reason && s.status === "suspended" && (
+                  <p className="text-xs text-destructive mt-2">Rejected: {s.rejection_reason}</p>
+                )}
+                {rejecting === s.id && (
+                  <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                    <input
+                      autoFocus
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      placeholder="Reason sent to the owner by SMS (e.g. phone number is invalid)"
+                      className="flex-1 bg-background border border-foreground/15 rounded-lg px-3 py-2 text-sm"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        disabled={reason.trim().length < 5 || setStatus.isPending}
+                        onClick={() => setStatus.mutate({ id: s.id, status: "suspended", rejection_reason: reason.trim() })}
+                        className="bg-destructive text-destructive-foreground px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.18em] disabled:opacity-40"
+                      >
+                        Send rejection
+                      </button>
+                      <button
+                        onClick={() => { setRejecting(null); setReason(""); }}
+                        className="border border-foreground/20 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.18em]"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="flex flex-wrap gap-2">
                 {s.status !== "active" && (
                   <button onClick={() => setStatus.mutate({ id: s.id, status: "active" })}
                     className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.18em] hover:bg-clay">
                     Approve
+                  </button>
+                )}
+                {s.status === "pending" && rejecting !== s.id && (
+                  <button onClick={() => { setRejecting(s.id); setReason(""); }}
+                    className="border border-foreground/20 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.18em] hover:text-destructive">
+                    Reject
                   </button>
                 )}
                 {s.status === "active" && (
@@ -152,6 +187,16 @@ function AdminPage() {
                     Reactivate
                   </button>
                 )}
+                <button
+                  onClick={() => {
+                    if (window.confirm(`Permanently delete "${s.name}" and all of its bookings, services and photos? This cannot be undone.`)) {
+                      removeSalon.mutate(s.id);
+                    }
+                  }}
+                  className="border border-destructive/40 text-destructive px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.18em] hover:bg-destructive hover:text-destructive-foreground"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
