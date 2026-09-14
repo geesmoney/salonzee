@@ -340,6 +340,7 @@ export type Database = {
           phone: string
           profile_photo_url: string | null
           referred_by_code: string | null
+          rejection_reason: string | null
           salon_type: Database["public"]["Enums"]["salon_type"]
           slot_duration_minutes: number
           slug: string | null
@@ -359,6 +360,7 @@ export type Database = {
           phone: string
           profile_photo_url?: string | null
           referred_by_code?: string | null
+          rejection_reason?: string | null
           salon_type?: Database["public"]["Enums"]["salon_type"]
           slot_duration_minutes?: number
           slug?: string | null
@@ -378,6 +380,7 @@ export type Database = {
           phone?: string
           profile_photo_url?: string | null
           referred_by_code?: string | null
+          rejection_reason?: string | null
           salon_type?: Database["public"]["Enums"]["salon_type"]
           slot_duration_minutes?: number
           slug?: string | null
