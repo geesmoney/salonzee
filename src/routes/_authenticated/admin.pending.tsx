@@ -54,9 +54,10 @@ function AdminPage() {
       status: "active" | "pending" | "suspended";
       rejection_reason?: string;
     }) => {
-      const patch: Record<string, unknown> = { status };
-      if (rejection_reason !== undefined) patch.rejection_reason = rejection_reason;
-      const { error } = await supabase.from("salons").update(patch).eq("id", id);
+      const { error } = await supabase
+        .from("salons")
+        .update(rejection_reason === undefined ? { status } : { status, rejection_reason })
+        .eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
