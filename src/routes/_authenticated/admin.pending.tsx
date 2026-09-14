@@ -41,15 +41,43 @@ function AdminPage() {
     },
   });
 
+  const [rejecting, setRejecting] = useState<string | null>(null);
+  const [reason, setReason] = useState("");
+
   const setStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: "active" | "pending" | "suspended" }) => {
-      const { error } = await supabase.from("salons").update({ status }).eq("id", id);
+    mutationFn: async ({
+      id,
+      status,
+      rejection_reason,
+    }: {
+      id: string;
+      status: "active" | "pending" | "suspended";
+      rejection_reason?: string;
+    }) => {
+      const patch: Record<string, unknown> = { status };
+      if (rejection_reason !== undefined) patch.rejection_reason = rejection_reason;
+      const { error } = await supabase.from("salons").update(patch).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success("Updated");
+      setRejecting(null);
+      setReason("");
       qc.invalidateQueries({ queryKey: ["admin-salons"] });
     },
+    onError: () => toast.error("Could not update this listing. Please try again."),
+  });
+
+  const removeSalon = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("salons").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Listing deleted");
+      qc.invalidateQueries({ queryKey: ["admin-salons"] });
+    },
+    onError: () => toast.error("Could not delete this listing. Please try again."),
   });
 
   if (loading || !isPlatformAdmin) return <div className="p-10">Loading...</div>;
