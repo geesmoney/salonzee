@@ -225,6 +225,78 @@ function SalonDashboard() {
   );
 }
 
+function SetupChecklist({
+  status,
+  serviceCount,
+  imageCount,
+  onAddService,
+}: {
+  status: string;
+  serviceCount: number;
+  imageCount: number;
+  onAddService: () => void;
+}) {
+  const hasService = serviceCount > 0;
+  const hasPhoto = imageCount > 0;
+  const done = (hasService ? 1 : 0) + (hasPhoto ? 1 : 0);
+  const complete = done === 2;
+
+  if (status === "active" && complete) return null;
+
+  return (
+    <div className="mb-6 sm:mb-8 rounded-2xl border border-foreground/10 bg-secondary/40 p-5">
+      <div className="flex items-baseline justify-between gap-3 flex-wrap">
+        <p className="font-serif text-xl">
+          {complete ? "Ready for review" : "Get ready for approval"}
+        </p>
+        <p className="text-xs uppercase tracking-[0.2em] text-foreground/50">{done} of 2 done</p>
+      </div>
+      <p className="text-sm text-foreground/60 mt-1">
+        {complete
+          ? "Your profile has everything customers need. We'll review your listing shortly."
+          : "Listings with services and real photos get approved faster and win more bookings."}
+      </p>
+
+      <ul className="mt-4 space-y-3">
+        <li className="flex items-start gap-3">
+          <span className={`mt-0.5 h-5 w-5 shrink-0 rounded-full text-[11px] font-bold flex items-center justify-center ${hasService ? "bg-green-600 text-white" : "border border-foreground/25 text-foreground/40"}`}>
+            {hasService ? "✓" : "1"}
+          </span>
+          <div className="flex-1">
+            <p className="text-sm font-bold">Add at least one service with price and duration</p>
+            <p className="text-xs text-foreground/55">Customers can only book a time when a service exists.</p>
+          </div>
+          {!hasService && (
+            <button
+              onClick={onAddService}
+              className="text-[11px] font-bold uppercase tracking-[0.18em] border border-foreground/20 rounded-lg px-3 py-1.5 hover:bg-background"
+            >
+              Add service
+            </button>
+          )}
+        </li>
+        <li className="flex items-start gap-3">
+          <span className={`mt-0.5 h-5 w-5 shrink-0 rounded-full text-[11px] font-bold flex items-center justify-center ${hasPhoto ? "bg-green-600 text-white" : "border border-foreground/25 text-foreground/40"}`}>
+            {hasPhoto ? "✓" : "2"}
+          </span>
+          <div className="flex-1">
+            <p className="text-sm font-bold">Upload at least one photo of your shop or work</p>
+            <p className="text-xs text-foreground/55">Real photos prove your shop exists and attract clients.</p>
+          </div>
+          {!hasPhoto && (
+            <Link
+              to="/salon/settings"
+              className="text-[11px] font-bold uppercase tracking-[0.18em] border border-foreground/20 rounded-lg px-3 py-1.5 hover:bg-background"
+            >
+              Add photo
+            </Link>
+          )}
+        </li>
+      </ul>
+    </div>
+  );
+}
+
 type Booking = {
   id: string;
   status: string;
