@@ -54,11 +54,16 @@ function SalonDashboard() {
           .select("*")
           .eq("salon_id", salon.id)
           .order("created_at"),
+        supabase
+          .from("salon_images")
+          .select("id", { count: "exact", head: true })
+          .eq("salon_id", salon.id),
       ]);
       return {
         salon,
         bookings: bookingsRes.data ?? [],
         services: servicesRes.data ?? [],
+        imageCount: imagesRes.count ?? 0,
       };
     },
   });
@@ -66,6 +71,7 @@ function SalonDashboard() {
   const salon = data?.salon ?? null;
   const bookings = data?.bookings ?? [];
   const services = data?.services ?? [];
+  const imageCount = data?.imageCount ?? 0;
 
   const invalidateDashboard = () =>
     qc.invalidateQueries({ queryKey: ["salon-dashboard", user?.id] });
