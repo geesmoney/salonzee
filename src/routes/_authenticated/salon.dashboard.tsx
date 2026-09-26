@@ -39,10 +39,10 @@ function SalonDashboard() {
         .select("*")
         .eq("user_id", user!.id)
         .maybeSingle();
-      if (!salon) return { salon: null, bookings: [], services: [] };
+      if (!salon) return { salon: null, bookings: [], services: [], imageCount: 0 };
 
       // Parallel fetch — no waterfall
-      const [bookingsRes, servicesRes] = await Promise.all([
+      const [bookingsRes, servicesRes, imagesRes] = await Promise.all([
         supabase
           .from("bookings")
           .select("*, services(name)")
