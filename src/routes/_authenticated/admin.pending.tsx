@@ -109,8 +109,8 @@ function AdminPage() {
         <div className="space-y-3">
           {salons.length === 0 && <p className="text-foreground/50 italic py-12 text-center">Nothing here.</p>}
           {salons.map((s) => (
-            <div key={s.id} className="bg-card border border-foreground/5 rounded-xl p-5 flex flex-col md:flex-row md:items-center gap-4">
-              <div className="flex-1">
+            <div key={s.id} className="bg-card border border-foreground/5 rounded-xl p-5 flex flex-col md:flex-row md:items-start gap-4">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-1 flex-wrap">
                   <p className="font-serif text-xl">{s.name}</p>
                   <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${
