@@ -160,6 +160,13 @@ function SalonDashboard() {
           </div>
         </div>
 
+        <SetupChecklist
+          status={salon.status}
+          serviceCount={services.filter((s) => s.active).length}
+          imageCount={imageCount}
+          onAddService={() => setTab("services")}
+        />
+
         {/* Tabs — horizontally scrollable on small screens */}
         <div className="-mx-5 sm:mx-0 px-5 sm:px-0 mb-6 sm:mb-8 overflow-x-auto scrollbar-none border-b border-foreground/10">
           <div className="flex gap-1 min-w-max">
