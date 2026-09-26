@@ -245,7 +245,19 @@ function AdminPage() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {s.status !== "active" && (
-                  <button onClick={() => setStatus.mutate({ id: s.id, status: "active" })}
+                  <button
+                    onClick={() => {
+                      const imgCount = (s.salon_images ?? []).length;
+                      const svcCount = ((s.services ?? []) as { active: boolean }[]).filter((sv) => sv.active).length;
+                      if (
+                        (imgCount === 0 || svcCount === 0) &&
+                        !window.confirm(
+                          `This listing has ${svcCount} active service(s) and ${imgCount} photo(s). Customers may not be able to book. Approve anyway?`,
+                        )
+                      )
+                        return;
+                      setStatus.mutate({ id: s.id, status: "active" });
+                    }}
                     className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.18em] hover:bg-clay">
                     Approve
                   </button>
