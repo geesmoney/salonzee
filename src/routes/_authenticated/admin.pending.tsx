@@ -32,7 +32,9 @@ function AdminPage() {
     queryFn: async () => {
       let q = supabase
         .from("salons")
-        .select("*, salon_contacts(owner_name, email)")
+        .select(
+          "*, salon_contacts(owner_name, email), salon_images(id, image_url, position), services(id, name, price_ghs, duration_minutes, active)",
+        )
         .order("created_at", { ascending: false });
       if (tab === "pending") q = q.eq("status", "pending");
       const { data, error } = await q;
