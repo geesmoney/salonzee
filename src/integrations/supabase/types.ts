@@ -330,6 +330,7 @@ export type Database = {
       }
       salons: {
         Row: {
+          business_category: Database["public"]["Enums"]["business_category"]
           created_at: string
           description: string | null
           id: string
@@ -350,6 +351,7 @@ export type Database = {
           whatsapp_phone: string | null
         }
         Insert: {
+          business_category?: Database["public"]["Enums"]["business_category"]
           created_at?: string
           description?: string | null
           id?: string
@@ -370,6 +372,7 @@ export type Database = {
           whatsapp_phone?: string | null
         }
         Update: {
+          business_category?: Database["public"]["Enums"]["business_category"]
           created_at?: string
           description?: string | null
           id?: string
@@ -617,6 +620,15 @@ export type Database = {
         | "completed"
         | "no_show"
         | "cancelled"
+      business_category:
+        | "hair_salon"
+        | "barbershop"
+        | "braiding"
+        | "nail_tech"
+        | "makeup"
+        | "lashes_brows"
+        | "spa"
+        | "other"
       salon_status: "pending" | "active" | "suspended"
       salon_type: "male" | "female" | "unisex"
       sms_status: "queued" | "sent" | "failed" | "stubbed"
@@ -762,6 +774,16 @@ export const Constants = {
         "completed",
         "no_show",
         "cancelled",
+      ],
+      business_category: [
+        "hair_salon",
+        "barbershop",
+        "braiding",
+        "nail_tech",
+        "makeup",
+        "lashes_brows",
+        "spa",
+        "other",
       ],
       salon_status: ["pending", "active", "suspended"],
       salon_type: ["male", "female", "unisex"],
