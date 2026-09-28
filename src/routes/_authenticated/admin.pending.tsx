@@ -125,7 +125,7 @@ function AdminPage() {
                   {s.salon_contacts?.owner_name ?? "—"} • {s.salon_contacts?.email ?? "—"} • {s.phone}
                 </p>
                 <p className="text-sm text-foreground/60">
-                  {s.location_area}, {s.location_city} • {SALON_TYPE_LABELS[s.salon_type]}
+                  {s.location_area}, {s.location_city} • {BUSINESS_CATEGORY_LABELS[(s as { business_category?: BusinessCategory }).business_category ?? "hair_salon"]} • {SALON_TYPE_LABELS[s.salon_type]}
                 </p>
                 {s.referred_by_code && (
                   <p className="text-xs mt-1.5">

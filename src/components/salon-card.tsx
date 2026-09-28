@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { SALON_TYPE_LABELS } from "@/lib/ghana";
+import { SALON_TYPE_LABELS, BUSINESS_CATEGORY_LABELS, type BusinessCategory } from "@/lib/ghana";
 import { RatingBadge } from "@/components/rating-badge";
 
 type Salon = {
@@ -8,6 +8,7 @@ type Salon = {
   location_city: string;
   location_area: string;
   salon_type: string;
+  business_category?: string | null;
   profile_photo_url: string | null;
   description: string | null;
   slug?: string | null;
@@ -41,7 +42,9 @@ export function SalonCard({ salon }: { salon: Salon }) {
           </div>
         )}
         <span className="absolute top-3 left-3 bg-background/90 backdrop-blur text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full text-foreground">
-          {SALON_TYPE_LABELS[salon.salon_type] ?? salon.salon_type}
+          {salon.business_category
+            ? `${BUSINESS_CATEGORY_LABELS[salon.business_category as BusinessCategory] ?? salon.business_category} · ${SALON_TYPE_LABELS[salon.salon_type] ?? salon.salon_type}`
+            : (SALON_TYPE_LABELS[salon.salon_type] ?? salon.salon_type)}
         </span>
         {(salon.rating_count ?? 0) > 0 && (
           <span className="absolute top-3 right-3 bg-background/90 backdrop-blur px-2.5 py-1 rounded-full">
