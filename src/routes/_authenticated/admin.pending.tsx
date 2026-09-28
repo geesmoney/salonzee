@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { SALON_TYPE_LABELS, formatGhs, whatsappLink } from "@/lib/ghana";
+import { SALON_TYPE_LABELS, BUSINESS_CATEGORY_LABELS, type BusinessCategory, formatGhs, whatsappLink } from "@/lib/ghana";
 
 export const Route = createFileRoute("/_authenticated/admin/pending")({
   head: () => ({ meta: [{ title: "Platform Admin — Salonzee" }] }),
