@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { SALON_TYPE_LABELS, formatGhs, whatsappLink } from "@/lib/ghana";
+import { SALON_TYPE_LABELS, BUSINESS_CATEGORY_LABELS, type BusinessCategory, formatGhs, whatsappLink } from "@/lib/ghana";
 
 export const Route = createFileRoute("/_authenticated/admin/pending")({
   head: () => ({ meta: [{ title: "Platform Admin — Salonzee" }] }),
@@ -125,7 +125,7 @@ function AdminPage() {
                   {s.salon_contacts?.owner_name ?? "—"} • {s.salon_contacts?.email ?? "—"} • {s.phone}
                 </p>
                 <p className="text-sm text-foreground/60">
-                  {s.location_area}, {s.location_city} • {SALON_TYPE_LABELS[s.salon_type]}
+                  {s.location_area}, {s.location_city} • {BUSINESS_CATEGORY_LABELS[(s as { business_category?: BusinessCategory }).business_category ?? "hair_salon"]} • {SALON_TYPE_LABELS[s.salon_type]}
                 </p>
                 {s.referred_by_code && (
                   <p className="text-xs mt-1.5">

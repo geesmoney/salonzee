@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { GHANA_CITIES, isValidGhanaPhone, SALON_TYPE_LABELS } from "@/lib/ghana";
+import { GHANA_CITIES, isValidGhanaPhone, SALON_TYPE_LABELS, BUSINESS_CATEGORY_LABELS, type BusinessCategory } from "@/lib/ghana";
 
 export const Route = createFileRoute("/register-salon")({
   head: () => ({
@@ -51,6 +51,7 @@ function RegisterSalonPage() {
     city: "Accra",
     area: "",
     salonType: "unisex" as "male" | "female" | "unisex",
+    category: "hair_salon" as BusinessCategory,
     description: "",
     referralCode: "",
   });
@@ -100,6 +101,7 @@ function RegisterSalonPage() {
           location_city: form.city,
           location_area: form.area,
           salon_type: form.salonType,
+          business_category: form.category,
           description: form.description || null,
           referred_by_code: form.referralCode.trim() ? form.referralCode.trim().toUpperCase() : null,
           status: "pending",
@@ -193,11 +195,18 @@ function RegisterSalonPage() {
                 <input required value={form.area} onChange={(e) => up("area", e.target.value)} className="input" placeholder="e.g. East Legon" />
               </Field>
             </div>
-            <Field label="Salon type">
-              <select value={form.salonType} onChange={(e) => up("salonType", e.target.value as "male" | "female" | "unisex")} className="input">
-                {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-              </select>
-            </Field>
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Business category">
+                <select value={form.category} onChange={(e) => up("category", e.target.value as BusinessCategory)} className="input">
+                  {Object.entries(BUSINESS_CATEGORY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
+              </Field>
+              <Field label="Who you serve">
+                <select value={form.salonType} onChange={(e) => up("salonType", e.target.value as "male" | "female" | "unisex")} className="input">
+                  {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
+              </Field>
+            </div>
             <Field label="Short description">
               <textarea
                 rows={3}

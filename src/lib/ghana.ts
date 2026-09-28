@@ -52,3 +52,18 @@ export const SALON_TYPE_LABELS: Record<string, string> = {
   female: "Women's",
   unisex: "Unisex",
 };
+
+export type BusinessCategory =
+  | "hair_salon" | "barbershop" | "braiding" | "nail_tech"
+  | "makeup" | "lashes_brows" | "spa" | "other";
+
+export const BUSINESS_CATEGORY_LABELS: Record<BusinessCategory, string> = {
+  hair_salon: "Hair salon",
+  barbershop: "Barbering shop",
+  braiding: "Braiding & locs",
+  nail_tech: "Nail tech",
+  makeup: "Makeup artist",
+  lashes_brows: "Lashes & brows",
+  spa: "Spa & skincare",
+  other: "Other beauty service",
+};
