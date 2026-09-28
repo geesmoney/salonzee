@@ -5,19 +5,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SalonCard } from "@/components/salon-card";
-import { GHANA_CITIES, SALON_TYPE_LABELS } from "@/lib/ghana";
+import { GHANA_CITIES, SALON_TYPE_LABELS, BUSINESS_CATEGORY_LABELS, type BusinessCategory } from "@/lib/ghana";
 
-const salonsListQuery = (filters: { city: string; type: string; search: string }) =>
+const salonsListQuery = (filters: { city: string; type: string; category: string; search: string }) =>
   queryOptions({
-    queryKey: ["salons", filters.city, filters.type, filters.search],
+    queryKey: ["salons", filters.city, filters.type, filters.category, filters.search],
     queryFn: async () => {
       let q = supabase
         .from("salons")
-        .select("id, name, slug, location_city, location_area, salon_type, profile_photo_url, description, reviews(rating)")
+        .select("id, name, slug, location_city, location_area, salon_type, business_category, profile_photo_url, description, reviews(rating)")
         .eq("status", "active")
         .order("name");
       if (filters.city) q = q.eq("location_city", filters.city);
       if (filters.type) q = q.eq("salon_type", filters.type as "male" | "female" | "unisex");
+      if (filters.category) q = q.eq("business_category", filters.category as BusinessCategory);
       const term = filters.search.trim().replace(/[%,()]/g, "");
       if (term) {
         const like = `%${term}%`;
@@ -50,7 +51,7 @@ export const Route = createFileRoute("/salons")({
     links: [{ rel: "canonical", href: "https://salonzee.lovable.app/salons" }],
   }),
   loader: ({ context }) =>
-    context.queryClient.ensureQueryData(salonsListQuery({ city: "", type: "", search: "" })),
+    context.queryClient.ensureQueryData(salonsListQuery({ city: "", type: "", category: "", search: "" })),
   component: SalonsPage,
 });
 
@@ -58,11 +59,12 @@ function SalonsPage() {
   const [city, setCity] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
 
-  const { data: salons = [], isFetching } = useSuspenseQuery(salonsListQuery({ city, type, search }));
+  const { data: salons = [], isFetching } = useSuspenseQuery(salonsListQuery({ city, type, category, search }));
 
 
-  const hasFilters = Boolean(city || type || search.trim());
+  const hasFilters = Boolean(city || type || category || search.trim());
 
   return (
     <div className="min-h-dvh bg-background">
@@ -102,6 +104,18 @@ function SalonsPage() {
             </div>
             <div className="flex gap-2 w-full sm:w-auto sm:flex-1">
               <div className="flex flex-col gap-1 flex-1 sm:min-w-[160px]">
+                <label htmlFor="category" className="sr-only sm:not-sr-only text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Category</label>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="bg-background border border-border h-12 sm:h-10 px-3 rounded-xl text-base sm:text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 min-w-0"
+                >
+                  <option value="">All services</option>
+                  {Object.entries(BUSINESS_CATEGORY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1 flex-1 sm:min-w-[160px]">
                 <label htmlFor="city" className="sr-only sm:not-sr-only text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">City</label>
                 <select
                   id="city"
@@ -121,7 +135,7 @@ function SalonsPage() {
                   onChange={(e) => setType(e.target.value)}
                   className="bg-background border border-border h-12 sm:h-10 px-3 rounded-xl text-base sm:text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 >
-                  <option value="">All types</option>
+                  <option value="">Anyone</option>
                   {Object.entries(SALON_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
               </div>
@@ -129,7 +143,7 @@ function SalonsPage() {
             <div className="flex items-center justify-between w-full sm:w-auto sm:ml-auto gap-3">
               {hasFilters && (
                 <button
-                  onClick={() => { setCity(""); setType(""); setSearch(""); }}
+                  onClick={() => { setCity(""); setType(""); setCategory(""); setSearch(""); }}
                   className="h-10 px-4 rounded-full text-sm font-semibold text-primary hover:bg-secondary transition-colors"
                 >
                   Clear
@@ -148,7 +162,7 @@ function SalonsPage() {
             <p className="font-display text-xl sm:text-2xl font-semibold mb-2">No salons match those filters yet.</p>
             <p className="text-muted-foreground mb-6">Try clearing the filters or check back as more partners join.</p>
             <button
-              onClick={() => { setCity(""); setType(""); setSearch(""); }}
+              onClick={() => { setCity(""); setType(""); setCategory(""); setSearch(""); }}
               className="bg-primary text-primary-foreground px-6 py-3 rounded-full text-sm font-semibold"
             >
               Show all salons
