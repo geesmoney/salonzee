@@ -171,10 +171,6 @@ function SalonSettings() {
             </Field>
           </div>
 
-          <Field label="Cover photo URL (optional, shown if no gallery)">
-            <input className={inputCls} value={profilePhoto} onChange={(e) => setProfilePhoto(e.target.value)} placeholder="https://..." />
-          </Field>
-
           <div className="border border-foreground/10 rounded-xl p-4">
             <SalonImageManager salonId={salon.id} />
           </div>
