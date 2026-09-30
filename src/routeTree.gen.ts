@@ -9,54 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SalonsRouteImport } from './routes/salons'
-import { Route as ReportIssueRouteImport } from './routes/report-issue'
-import { Route as RegisterSalonRouteImport } from './routes/register-salon'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
+import { Route as SlugRouteImport } from './routes/$slug'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as RegisterSalonRouteImport } from './routes/register-salon'
+import { Route as ReportIssueRouteImport } from './routes/report-issue'
+import { Route as SalonsRouteImport } from './routes/salons'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ReviewTokenRouteImport } from './routes/review.$token'
-import { Route as AuthenticatedSalonSupportRouteImport } from './routes/_authenticated/salon.support'
-import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
-import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
-import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
-import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
-import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
-import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
+import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
-import { Route as ApiPublicHooksProcessSmsQueueRouteImport } from './routes/api/public/hooks/process-sms-queue'
+import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
+import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
+import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
+import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
+import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
+import { Route as AuthenticatedSalonSettingsRouteImport } from './routes/_authenticated/salon.settings'
+import { Route as AuthenticatedSalonSupportRouteImport } from './routes/_authenticated/salon.support'
 import { Route as ApiPublicCalendarTokenRouteImport } from './routes/api/public/calendar/$token'
+import { Route as ApiPublicHooksProcessSmsQueueRouteImport } from './routes/api/public/hooks/process-sms-queue'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SalonsRoute = SalonsRouteImport.update({
-  id: '/salons',
-  path: '/salons',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportIssueRoute = ReportIssueRouteImport.update({
-  id: '/report-issue',
-  path: '/report-issue',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterSalonRoute = RegisterSalonRouteImport.update({
-  id: '/register-salon',
-  path: '/register-salon',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SlugRoute = SlugRouteImport.update({
@@ -64,9 +40,38 @@ const SlugRoute = SlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterSalonRoute = RegisterSalonRouteImport.update({
+  id: '/register-salon',
+  path: '/register-salon',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIssueRoute = ReportIssueRouteImport.update({
+  id: '/report-issue',
+  path: '/report-issue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalonsRoute = SalonsRouteImport.update({
+  id: '/salons',
+  path: '/salons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewTokenRoute = ReviewTokenRouteImport.update({
+  id: '/review/$token',
+  path: '/review/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
@@ -74,44 +79,10 @@ const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
   path: '/$salonId',
   getParentRoute: () => SalonsRoute,
 } as any)
-const ReviewTokenRoute = ReviewTokenRouteImport.update({
-  id: '/review/$token',
-  path: '/review/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedSalonSupportRoute =
-  AuthenticatedSalonSupportRouteImport.update({
-    id: '/salon/support',
-    path: '/salon/support',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSalonSettingsRoute =
-  AuthenticatedSalonSettingsRouteImport.update({
-    id: '/salon/settings',
-    path: '/salon/settings',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSalonDashboardRoute =
-  AuthenticatedSalonDashboardRouteImport.update({
-    id: '/salon/dashboard',
-    path: '/salon/dashboard',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminSupportRoute =
-  AuthenticatedAdminSupportRouteImport.update({
-    id: '/admin/support',
-    path: '/admin/support',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminSmsRoute = AuthenticatedAdminSmsRouteImport.update({
-  id: '/admin/sms',
-  path: '/admin/sms',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedAdminRevenueRoute =
-  AuthenticatedAdminRevenueRouteImport.update({
-    id: '/admin/revenue',
-    path: '/admin/revenue',
+const AuthenticatedAdminPendingRoute =
+  AuthenticatedAdminPendingRouteImport.update({
+    id: '/admin/pending',
+    path: '/admin/pending',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminReferralsRoute =
@@ -120,23 +91,52 @@ const AuthenticatedAdminReferralsRoute =
     path: '/admin/referrals',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminPendingRoute =
-  AuthenticatedAdminPendingRouteImport.update({
-    id: '/admin/pending',
-    path: '/admin/pending',
+const AuthenticatedAdminRevenueRoute =
+  AuthenticatedAdminRevenueRouteImport.update({
+    id: '/admin/revenue',
+    path: '/admin/revenue',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const ApiPublicHooksProcessSmsQueueRoute =
-  ApiPublicHooksProcessSmsQueueRouteImport.update({
-    id: '/api/public/hooks/process-sms-queue',
-    path: '/api/public/hooks/process-sms-queue',
-    getParentRoute: () => rootRouteImport,
+const AuthenticatedAdminSmsRoute = AuthenticatedAdminSmsRouteImport.update({
+  id: '/admin/sms',
+  path: '/admin/sms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAdminSupportRoute =
+  AuthenticatedAdminSupportRouteImport.update({
+    id: '/admin/support',
+    path: '/admin/support',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSalonDashboardRoute =
+  AuthenticatedSalonDashboardRouteImport.update({
+    id: '/salon/dashboard',
+    path: '/salon/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSalonSettingsRoute =
+  AuthenticatedSalonSettingsRouteImport.update({
+    id: '/salon/settings',
+    path: '/salon/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSalonSupportRoute =
+  AuthenticatedSalonSupportRouteImport.update({
+    id: '/salon/support',
+    path: '/salon/support',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const ApiPublicCalendarTokenRoute = ApiPublicCalendarTokenRouteImport.update({
   id: '/api/public/calendar/$token',
   path: '/api/public/calendar/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksProcessSmsQueueRoute =
+  ApiPublicHooksProcessSmsQueueRouteImport.update({
+    id: '/api/public/hooks/process-sms-queue',
+    path: '/api/public/hooks/process-sms-queue',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -286,46 +286,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/salons': {
-      id: '/salons'
-      path: '/salons'
-      fullPath: '/salons'
-      preLoaderRoute: typeof SalonsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/report-issue': {
-      id: '/report-issue'
-      path: '/report-issue'
-      fullPath: '/report-issue'
-      preLoaderRoute: typeof ReportIssueRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register-salon': {
-      id: '/register-salon'
-      path: '/register-salon'
-      fullPath: '/register-salon'
-      preLoaderRoute: typeof RegisterSalonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
+    '/': {
+      id: '/'
+      path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$slug': {
@@ -335,11 +300,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register-salon': {
+      id: '/register-salon'
+      path: '/register-salon'
+      fullPath: '/register-salon'
+      preLoaderRoute: typeof RegisterSalonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report-issue': {
+      id: '/report-issue'
+      path: '/report-issue'
+      fullPath: '/report-issue'
+      preLoaderRoute: typeof ReportIssueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/salons': {
+      id: '/salons'
+      path: '/salons'
+      fullPath: '/salons'
+      preLoaderRoute: typeof SalonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/$token': {
+      id: '/review/$token'
+      path: '/review/$token'
+      fullPath: '/review/$token'
+      preLoaderRoute: typeof ReviewTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/salons/$salonId': {
@@ -349,53 +356,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalonsSalonIdRouteImport
       parentRoute: typeof SalonsRoute
     }
-    '/review/$token': {
-      id: '/review/$token'
-      path: '/review/$token'
-      fullPath: '/review/$token'
-      preLoaderRoute: typeof ReviewTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/salon/support': {
-      id: '/_authenticated/salon/support'
-      path: '/salon/support'
-      fullPath: '/salon/support'
-      preLoaderRoute: typeof AuthenticatedSalonSupportRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/salon/settings': {
-      id: '/_authenticated/salon/settings'
-      path: '/salon/settings'
-      fullPath: '/salon/settings'
-      preLoaderRoute: typeof AuthenticatedSalonSettingsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/salon/dashboard': {
-      id: '/_authenticated/salon/dashboard'
-      path: '/salon/dashboard'
-      fullPath: '/salon/dashboard'
-      preLoaderRoute: typeof AuthenticatedSalonDashboardRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/support': {
-      id: '/_authenticated/admin/support'
-      path: '/admin/support'
-      fullPath: '/admin/support'
-      preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/sms': {
-      id: '/_authenticated/admin/sms'
-      path: '/admin/sms'
-      fullPath: '/admin/sms'
-      preLoaderRoute: typeof AuthenticatedAdminSmsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/revenue': {
-      id: '/_authenticated/admin/revenue'
-      path: '/admin/revenue'
-      fullPath: '/admin/revenue'
-      preLoaderRoute: typeof AuthenticatedAdminRevenueRouteImport
+    '/_authenticated/admin/pending': {
+      id: '/_authenticated/admin/pending'
+      path: '/admin/pending'
+      fullPath: '/admin/pending'
+      preLoaderRoute: typeof AuthenticatedAdminPendingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/referrals': {
@@ -405,25 +370,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReferralsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/pending': {
-      id: '/_authenticated/admin/pending'
-      path: '/admin/pending'
-      fullPath: '/admin/pending'
-      preLoaderRoute: typeof AuthenticatedAdminPendingRouteImport
+    '/_authenticated/admin/revenue': {
+      id: '/_authenticated/admin/revenue'
+      path: '/admin/revenue'
+      fullPath: '/admin/revenue'
+      preLoaderRoute: typeof AuthenticatedAdminRevenueRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/api/public/hooks/process-sms-queue': {
-      id: '/api/public/hooks/process-sms-queue'
-      path: '/api/public/hooks/process-sms-queue'
-      fullPath: '/api/public/hooks/process-sms-queue'
-      preLoaderRoute: typeof ApiPublicHooksProcessSmsQueueRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/admin/sms': {
+      id: '/_authenticated/admin/sms'
+      path: '/admin/sms'
+      fullPath: '/admin/sms'
+      preLoaderRoute: typeof AuthenticatedAdminSmsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/support': {
+      id: '/_authenticated/admin/support'
+      path: '/admin/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/salon/dashboard': {
+      id: '/_authenticated/salon/dashboard'
+      path: '/salon/dashboard'
+      fullPath: '/salon/dashboard'
+      preLoaderRoute: typeof AuthenticatedSalonDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/salon/settings': {
+      id: '/_authenticated/salon/settings'
+      path: '/salon/settings'
+      fullPath: '/salon/settings'
+      preLoaderRoute: typeof AuthenticatedSalonSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/salon/support': {
+      id: '/_authenticated/salon/support'
+      path: '/salon/support'
+      fullPath: '/salon/support'
+      preLoaderRoute: typeof AuthenticatedSalonSupportRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/public/calendar/$token': {
       id: '/api/public/calendar/$token'
       path: '/api/public/calendar/$token'
       fullPath: '/api/public/calendar/$token'
       preLoaderRoute: typeof ApiPublicCalendarTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/process-sms-queue': {
+      id: '/api/public/hooks/process-sms-queue'
+      path: '/api/public/hooks/process-sms-queue'
+      fullPath: '/api/public/hooks/process-sms-queue'
+      preLoaderRoute: typeof ApiPublicHooksProcessSmsQueueRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

@@ -55,7 +55,6 @@ function SalonSettings() {
   const [locationCity, setLocationCity] = useState("");
   const [locationArea, setLocationArea] = useState("");
   const [slotDuration, setSlotDuration] = useState(30);
-  const [profilePhoto, setProfilePhoto] = useState("");
   const [hours, setHours] = useState<Hours>(DEFAULT_HOURS);
 
   useEffect(() => {
@@ -67,7 +66,6 @@ function SalonSettings() {
     setLocationCity(salon.location_city ?? "");
     setLocationArea(salon.location_area ?? "");
     setSlotDuration(salon.slot_duration_minutes ?? 30);
-    setProfilePhoto(salon.profile_photo_url ?? "");
     setHours({ ...DEFAULT_HOURS, ...(salon.operating_hours as Hours) });
   }, [salon]);
 
@@ -83,7 +81,6 @@ function SalonSettings() {
           location_city: locationCity,
           location_area: locationArea,
           slot_duration_minutes: slotDuration,
-          profile_photo_url: profilePhoto || null,
           operating_hours: hours,
         })
         .eq("id", salon!.id);
@@ -170,10 +167,6 @@ function SalonSettings() {
               <input className={inputCls} value={locationArea} onChange={(e) => setLocationArea(e.target.value)} />
             </Field>
           </div>
-
-          <Field label="Cover photo URL (optional, shown if no gallery)">
-            <input className={inputCls} value={profilePhoto} onChange={(e) => setProfilePhoto(e.target.value)} placeholder="https://..." />
-          </Field>
 
           <div className="border border-foreground/10 rounded-xl p-4">
             <SalonImageManager salonId={salon.id} />

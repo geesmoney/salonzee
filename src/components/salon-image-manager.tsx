@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Upload, X, Loader2 } from "lucide-react";
+import { Upload, X, Loader2, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Props {
@@ -33,6 +33,35 @@ export function SalonImageManager({ salonId }: Props) {
       if (error) throw error;
       return data as SalonImage[];
     },
+  });
+
+  const { data: coverUrl } = useQuery({
+    queryKey: ["salon-cover", salonId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("salons")
+        .select("profile_photo_url")
+        .eq("id", salonId)
+        .maybeSingle();
+      if (error) throw error;
+      return data?.profile_photo_url ?? null;
+    },
+  });
+
+  const setCover = useMutation({
+    mutationFn: async (img: SalonImage) => {
+      const { error } = await supabase
+        .from("salons")
+        .update({ profile_photo_url: img.image_url })
+        .eq("id", salonId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
+      qc.invalidateQueries({ queryKey: ["my-salon-settings"] });
+      toast.success("Cover photo updated");
+    },
+    onError: () => toast.error("Could not update the cover photo. Please try again."),
   });
 
   const handleFiles = async (files: FileList | null) => {
@@ -77,6 +106,7 @@ export function SalonImageManager({ salonId }: Props) {
         }
       }
       await qc.invalidateQueries({ queryKey: ["salon-images", salonId] });
+      await qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
       toast.success("Images uploaded");
     } finally {
       setUploading(false);
@@ -98,6 +128,7 @@ export function SalonImageManager({ salonId }: Props) {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["salon-images", salonId] });
+      qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
       toast.success("Image removed");
     },
     onError: (e: Error) => toast.error(e.message),
@@ -138,19 +169,36 @@ export function SalonImageManager({ salonId }: Props) {
         </button>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {images.map((img) => (
-            <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden bg-muted group">
-              <img src={img.image_url} alt="" className="w-full h-full object-cover" />
-              <button
-                type="button"
-                onClick={() => remove.mutate(img)}
-                aria-label="Remove image"
-                className="absolute top-1.5 right-1.5 bg-background/90 text-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition shadow"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+          {images.map((img) => {
+            const isCover = coverUrl === img.image_url;
+            return (
+              <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden bg-muted group">
+                <img src={img.image_url} alt="" className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => remove.mutate(img)}
+                  aria-label="Remove image"
+                  className="absolute top-1.5 right-1.5 bg-background/90 text-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition shadow"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+                {isCover ? (
+                  <span className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 bg-primary text-primary-foreground rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] shadow">
+                    <Star className="w-3 h-3 fill-current" /> Cover
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setCover.mutate(img)}
+                    disabled={setCover.isPending}
+                    className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 bg-background/90 text-foreground rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] shadow opacity-0 group-hover:opacity-100 focus:opacity-100 transition disabled:opacity-50"
+                  >
+                    <Star className="w-3 h-3" /> Set as cover
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
