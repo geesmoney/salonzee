@@ -169,19 +169,36 @@ export function SalonImageManager({ salonId }: Props) {
         </button>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {images.map((img) => (
-            <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden bg-muted group">
-              <img src={img.image_url} alt="" className="w-full h-full object-cover" />
-              <button
-                type="button"
-                onClick={() => remove.mutate(img)}
-                aria-label="Remove image"
-                className="absolute top-1.5 right-1.5 bg-background/90 text-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition shadow"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+          {images.map((img) => {
+            const isCover = coverUrl === img.image_url;
+            return (
+              <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden bg-muted group">
+                <img src={img.image_url} alt="" className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => remove.mutate(img)}
+                  aria-label="Remove image"
+                  className="absolute top-1.5 right-1.5 bg-background/90 text-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition shadow"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+                {isCover ? (
+                  <span className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 bg-primary text-primary-foreground rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] shadow">
+                    <Star className="w-3 h-3 fill-current" /> Cover
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setCover.mutate(img)}
+                    disabled={setCover.isPending}
+                    className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 bg-background/90 text-foreground rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] shadow opacity-0 group-hover:opacity-100 focus:opacity-100 transition disabled:opacity-50"
+                  >
+                    <Star className="w-3 h-3" /> Set as cover
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
