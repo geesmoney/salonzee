@@ -66,7 +66,6 @@ function SalonSettings() {
     setLocationCity(salon.location_city ?? "");
     setLocationArea(salon.location_area ?? "");
     setSlotDuration(salon.slot_duration_minutes ?? 30);
-    setProfilePhoto(salon.profile_photo_url ?? "");
     setHours({ ...DEFAULT_HOURS, ...(salon.operating_hours as Hours) });
   }, [salon]);
 
