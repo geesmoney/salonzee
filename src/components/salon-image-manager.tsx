@@ -35,6 +35,35 @@ export function SalonImageManager({ salonId }: Props) {
     },
   });
 
+  const { data: coverUrl } = useQuery({
+    queryKey: ["salon-cover", salonId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("salons")
+        .select("profile_photo_url")
+        .eq("id", salonId)
+        .maybeSingle();
+      if (error) throw error;
+      return data?.profile_photo_url ?? null;
+    },
+  });
+
+  const setCover = useMutation({
+    mutationFn: async (img: SalonImage) => {
+      const { error } = await supabase
+        .from("salons")
+        .update({ profile_photo_url: img.image_url })
+        .eq("id", salonId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
+      qc.invalidateQueries({ queryKey: ["my-salon-settings"] });
+      toast.success("Cover photo updated");
+    },
+    onError: () => toast.error("Could not update the cover photo. Please try again."),
+  });
+
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     if (images.length + files.length > MAX_IMAGES) {
