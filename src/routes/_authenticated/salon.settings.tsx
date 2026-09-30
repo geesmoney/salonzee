@@ -55,7 +55,6 @@ function SalonSettings() {
   const [locationCity, setLocationCity] = useState("");
   const [locationArea, setLocationArea] = useState("");
   const [slotDuration, setSlotDuration] = useState(30);
-  const [profilePhoto, setProfilePhoto] = useState("");
   const [hours, setHours] = useState<Hours>(DEFAULT_HOURS);
 
   useEffect(() => {
