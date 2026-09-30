@@ -106,6 +106,7 @@ export function SalonImageManager({ salonId }: Props) {
         }
       }
       await qc.invalidateQueries({ queryKey: ["salon-images", salonId] });
+      await qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
       toast.success("Images uploaded");
     } finally {
       setUploading(false);
