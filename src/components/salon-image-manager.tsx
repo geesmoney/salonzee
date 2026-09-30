@@ -128,6 +128,7 @@ export function SalonImageManager({ salonId }: Props) {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["salon-images", salonId] });
+      qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
       toast.success("Image removed");
     },
     onError: (e: Error) => toast.error(e.message),
