@@ -81,7 +81,6 @@ function SalonSettings() {
           location_city: locationCity,
           location_area: locationArea,
           slot_duration_minutes: slotDuration,
-          profile_photo_url: profilePhoto || null,
           operating_hours: hours,
         })
         .eq("id", salon!.id);
