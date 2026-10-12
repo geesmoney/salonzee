@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791801827814,
+      "tag": "0000_salon_acquisition_source",
+      "breakpoints": true
+    }
+  ]
+}
