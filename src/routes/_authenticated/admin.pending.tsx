@@ -133,6 +133,12 @@ function AdminPage() {
                     <span className="font-mono tracking-[0.15em] text-primary">{s.referred_by_code}</span>
                   </p>
                 )}
+                {(s as { acquisition_source?: string | null }).acquisition_source && (
+                  <p className="text-xs mt-1">
+                    <span className="text-foreground/40">Heard about us via </span>
+                    <span className="font-semibold">{(s as { acquisition_source?: string | null }).acquisition_source}</span>
+                  </p>
+                )}
                 {s.description && <p className="text-xs text-foreground/50 mt-2 italic">"{s.description}"</p>}
                 {s.rejection_reason && s.status === "suspended" && (
                   <p className="text-xs text-destructive mt-2">Rejected: {s.rejection_reason}</p>

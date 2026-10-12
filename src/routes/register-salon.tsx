@@ -54,6 +54,7 @@ function RegisterSalonPage() {
     category: "hair_salon" as BusinessCategory,
     description: "",
     referralCode: "",
+    source: "",
   });
   const [referrer, setReferrer] = useState<string | null>(null);
 
@@ -103,6 +104,7 @@ function RegisterSalonPage() {
           salon_type: form.salonType,
           business_category: form.category,
           description: form.description || null,
+          acquisition_source: form.source || null,
           referred_by_code: form.referralCode.trim() ? form.referralCode.trim().toUpperCase() : null,
           status: "pending",
         })
@@ -215,6 +217,14 @@ function RegisterSalonPage() {
                 className="input"
                 placeholder="What makes your salon special?"
               />
+            </Field>
+            <Field label="How did you hear about Salonzee?">
+              <select required value={form.source} onChange={(e) => up("source", e.target.value)} className="input">
+                <option value="" disabled>Choose one</option>
+                {["WhatsApp", "Instagram", "TikTok", "Facebook", "Flyer", "Salonzee agent visit", "Friend or another salon owner", "Google search", "Other"].map((o) => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
+              </select>
             </Field>
             <Field label="Referral code (optional)">
               <input

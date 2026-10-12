@@ -330,6 +330,7 @@ export type Database = {
       }
       salons: {
         Row: {
+          acquisition_source: string | null
           business_category: Database["public"]["Enums"]["business_category"]
           created_at: string
           description: string | null
@@ -351,6 +352,7 @@ export type Database = {
           whatsapp_phone: string | null
         }
         Insert: {
+          acquisition_source?: string | null
           business_category?: Database["public"]["Enums"]["business_category"]
           created_at?: string
           description?: string | null
@@ -372,6 +374,7 @@ export type Database = {
           whatsapp_phone?: string | null
         }
         Update: {
+          acquisition_source?: string | null
           business_category?: Database["public"]["Enums"]["business_category"]
           created_at?: string
           description?: string | null
