@@ -49,7 +49,7 @@ function AnalyticsPage() {
       else since.setDate(since.getDate() - Number(range));
       const all: Visit[] = [];
       for (let from = 0; from < 20000; from += 1000) {
-        const { data, error } = await supabase.from("site_visits")
+        const { data, error } = await (supabase as unknown as import("@supabase/supabase-js").SupabaseClient).from("site_visits")
           .select("session_id, path, source, utm_campaign, gclid, device, created_at")
           .gte("created_at", since.toISOString()).order("created_at", { ascending: false })
           .range(from, from + 999);

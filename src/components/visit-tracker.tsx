@@ -51,7 +51,7 @@ export function VisitTracker() {
         sessionStorage.setItem("sz_attr", attr);
       }
       const device = window.matchMedia("(max-width: 768px)").matches ? "mobile" : "desktop";
-      void supabase.from("site_visits").insert({ session_id: sid, path: path.slice(0, 300), device, ...JSON.parse(attr) });
+      void (supabase as unknown as import("@supabase/supabase-js").SupabaseClient).from("site_visits").insert({ session_id: sid, path: path.slice(0, 300), device, ...JSON.parse(attr) });
     } catch {
       /* tracking must never break the app */
     }
