@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 
 const BASE_URL = "https://salonzee.com";
 
@@ -23,22 +24,44 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/login", changefreq: "yearly", priority: "0.2" },
         ];
 
+        const databaseUrl = process.env["SUPABASE_URL"];
+        const publicKey = process.env["SUPABASE_PUBLISHABLE_KEY"];
+        if (!databaseUrl || !publicKey) {
+          return new Response("Sitemap temporarily unavailable", { status: 503 });
+        }
+        const client = createClient<Database>(databaseUrl, publicKey, {
+          auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+          global: {
+            fetch: (input, init) => {
+              const headers = new Headers(init?.headers);
+              if (publicKey.startsWith("sb_")) headers.delete("Authorization");
+              headers.set("apikey", publicKey);
+              return fetch(input, { ...init, headers });
+            },
+          },
+        });
         try {
-          const { data } = await supabaseAdmin
+          for (let offset = 0; ; offset += 1000) {
+          const { data, error } = await client
             .from("salons")
             .select("slug, updated_at")
-            .eq("status", "active");
+            .eq("status", "active")
+            .order("id")
+            .range(offset, offset + 999);
+          if (error) throw error;
           for (const s of data ?? []) {
             if (!s.slug) continue;
             entries.push({
-              path: `/${s.slug}`,
+              path: `/${encodeURIComponent(s.slug)}`,
               lastmod: s.updated_at ?? undefined,
               changefreq: "weekly",
               priority: "0.8",
             });
           }
+          if ((data?.length ?? 0) < 1000) break;
+          }
         } catch {
-          // If the DB call fails, still return the static entries.
+          return new Response("Sitemap temporarily unavailable", { status: 503 });
         }
 
         const urls = entries.map((e) =>
