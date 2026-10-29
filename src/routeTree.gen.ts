@@ -19,6 +19,7 @@ import { Route as SalonsRouteImport } from './routes/salons'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ReviewTokenRouteImport } from './routes/review.$token'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
+import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
@@ -79,6 +80,12 @@ const SalonsSalonIdRoute = SalonsSalonIdRouteImport.update({
   path: '/$salonId',
   getParentRoute: () => SalonsRoute,
 } as any)
+const AuthenticatedAdminAnalyticsRoute =
+  AuthenticatedAdminAnalyticsRouteImport.update({
+    id: '/admin/analytics',
+    path: '/admin/analytics',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminPendingRoute =
   AuthenticatedAdminPendingRouteImport.update({
     id: '/admin/pending',
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
@@ -169,6 +177,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
@@ -192,6 +201,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
+  '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/review/$token'
     | '/salons/$salonId'
+    | '/admin/analytics'
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/revenue'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/review/$token'
     | '/salons/$salonId'
+    | '/admin/analytics'
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/revenue'
@@ -258,6 +270,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/review/$token'
     | '/salons/$salonId'
+    | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/referrals'
     | '/_authenticated/admin/revenue'
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalonsSalonIdRouteImport
       parentRoute: typeof SalonsRoute
     }
+    '/_authenticated/admin/analytics': {
+      id: '/_authenticated/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/pending': {
       id: '/_authenticated/admin/pending'
       path: '/admin/pending'
@@ -430,6 +450,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedAdminReferralsRoute: typeof AuthenticatedAdminReferralsRoute
   AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
@@ -441,6 +462,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedAdminReferralsRoute: AuthenticatedAdminReferralsRoute,
   AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,

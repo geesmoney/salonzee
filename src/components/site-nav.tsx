@@ -30,6 +30,7 @@ export function SiteNav() {
         {user && isPlatformAdmin && <NavLink to="/admin/support">Inbox</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/revenue">Revenue</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/sms">SMS</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/analytics">Traffic</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/referrals">Referrals</NavLink>}
       </div>
 
@@ -87,6 +88,7 @@ export function SiteNav() {
               {user && isPlatformAdmin && <MobileLink to="/admin/support" onSelect={close}>Admin · Inbox</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/revenue" onSelect={close}>Admin · Revenue</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/sms" onSelect={close}>Admin · SMS Log</MobileLink>}
+              {user && isPlatformAdmin && <MobileLink to="/admin/analytics" onSelect={close}>Admin · Traffic</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/referrals" onSelect={close}>Admin · Referrals</MobileLink>}
               <MobileLink to="/report-issue" onSelect={close}>Report a booking issue</MobileLink>
             </div>
