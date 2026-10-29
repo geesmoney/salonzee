@@ -12,9 +12,11 @@ export const Route = createFileRoute("/login")({
       { name: "description", content: "Sign in to manage your Salonzee salon profile, services, and bookings — or create an owner account to join the directory." },
       { property: "og:title", content: "Sign in — Salonzee" },
       { property: "og:description", content: "Salon owner sign-in for Salonzee." },
-      { property: "og:url", content: "https://salonzee.lovable.app/login" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:url", content: "https://salonzee.com/login" },
     ],
-    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/login" }],
+    links: [{ rel: "canonical", href: "https://salonzee.com/login" }],
   }),
   component: LoginPage,
 });

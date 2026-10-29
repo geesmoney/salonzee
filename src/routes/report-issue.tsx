@@ -14,9 +14,11 @@ export const Route = createFileRoute("/report-issue")({
       { name: "description", content: "Tell the Salonzee team about a problem with a recent booking and we'll follow up with you and the salon." },
       { property: "og:title", content: "Report a booking issue — Salonzee" },
       { property: "og:description", content: "Reach the Salonzee team about a recent booking problem." },
-      { property: "og:url", content: "https://salonzee.lovable.app/report-issue" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:url", content: "https://salonzee.com/report-issue" },
     ],
-    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/report-issue" }],
+    links: [{ rel: "canonical", href: "https://salonzee.com/report-issue" }],
   }),
   component: ReportIssuePage,
 });

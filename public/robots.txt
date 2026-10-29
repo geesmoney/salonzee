@@ -4,4 +4,4 @@ Allow: /
 Disallow: /salon/
 Disallow: /admin/
 
-Sitemap: https://salonzee.lovable.app/sitemap.xml
+Sitemap: https://salonzee.com/sitemap.xml

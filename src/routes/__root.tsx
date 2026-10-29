@@ -90,8 +90,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Salonzee — Book Ghana's finest salons" },
       { name: "twitter:description", content: "Discover and book the best salons in Accra, Kumasi, and across Ghana. Professional grooming, hair, and beauty bookings — simple and instant." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/92d0fb6b-4930-444b-9a91-9547691a233f" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/92d0fb6b-4930-444b-9a91-9547691a233f" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -111,7 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "Salonzee",
-          url: "https://salonzee.lovable.app",
+          url: "https://salonzee.com",
           description:
             "Salonzee helps customers across Ghana discover and book vetted hair, braid, barber, and nail salons with instant SMS confirmation.",
           areaServed: { "@type": "Country", name: "Ghana" },
@@ -123,7 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "Salonzee",
-          url: "https://salonzee.lovable.app",
+          url: "https://salonzee.com",
         }),
       },
     ],

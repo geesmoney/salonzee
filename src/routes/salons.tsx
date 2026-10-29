@@ -45,10 +45,11 @@ export const Route = createFileRoute("/salons")({
       { name: "description", content: "Browse and filter vetted salons across Ghana. Hair, braids, barbering, nails, and beauty — book instantly with SMS confirmation." },
       { property: "og:title", content: "Discover salons — Salonzee" },
       { property: "og:description", content: "Browse and filter vetted salons across Ghana. Hair, braids, barbering, nails, and beauty." },
-      { property: "og:url", content: "https://salonzee.lovable.app/salons" },
+      { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:url", content: "https://salonzee.com/salons" },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://salonzee.lovable.app/salons" }],
+    links: [{ rel: "canonical", href: "https://salonzee.com/salons" }],
   }),
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(salonsListQuery({ city: "", type: "", category: "", search: "" })),
