@@ -42,7 +42,7 @@ export const Route = createFileRoute("/salons/$salonId")({
     context.queryClient.ensureQueryData(salonByIdQuery(params.salonId)),
   head: ({ loaderData, params }) => {
     const salon = loaderData?.salon;
-    const url = `https://salonzee.lovable.app/salons/${params.salonId}`;
+    const url = `https://salonzee.com/salons/${params.salonId}`;
     if (!salon) return { meta: [{ title: "Salon — Salonzee" }] };
     const description =
       salon.description ??
@@ -54,6 +54,7 @@ export const Route = createFileRoute("/salons/$salonId")({
         { name: "description", content: trimmed },
         { property: "og:title", content: `${salon.name} — Book on Salonzee` },
         { property: "og:description", content: trimmed },
+        { name: "twitter:card", content: "summary_large_image" },
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
         ...(salon.profile_photo_url

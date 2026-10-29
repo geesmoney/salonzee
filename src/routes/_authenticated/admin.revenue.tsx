@@ -35,7 +35,14 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/admin/revenue")({
-  head: () => ({ meta: [{ title: "Revenue Simulator — Salonzee Admin" }] }),
+  head: () => ({ meta: [
+    { title: "Revenue Simulator — Salonzee Admin" },
+    { name: "description", content: "Explore Salonzee revenue projections and growth scenarios." },
+    { property: "og:title", content: "Revenue Simulator — Salonzee Admin" },
+    { property: "og:description", content: "Explore Salonzee revenue projections and growth scenarios." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   ssr: false,
   component: RevenueSimulator,
 });

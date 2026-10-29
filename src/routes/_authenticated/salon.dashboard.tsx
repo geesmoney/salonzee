@@ -13,7 +13,14 @@ import { formatGhs, whatsappLink } from "@/lib/ghana";
 import { formatTimeLabel } from "@/lib/slots";
 
 export const Route = createFileRoute("/_authenticated/salon/dashboard")({
-  head: () => ({ meta: [{ title: "Salon Dashboard — Salonzee" }] }),
+  head: () => ({ meta: [
+    { title: "Salon Dashboard — Salonzee" },
+    { name: "description", content: "Manage your Salonzee appointments, services, and business activity." },
+    { property: "og:title", content: "Salon Dashboard — Salonzee" },
+    { property: "og:description", content: "Manage your Salonzee appointments, services, and business activity." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: SalonDashboard,
 });
 

@@ -10,7 +10,14 @@ import { SalonImageManager } from "@/components/salon-image-manager";
 import { ReferralCard } from "@/components/referral-card";
 
 export const Route = createFileRoute("/_authenticated/salon/settings")({
-  head: () => ({ meta: [{ title: "Salon Settings — Salonzee" }] }),
+  head: () => ({ meta: [
+    { title: "Salon Settings — Salonzee" },
+    { name: "description", content: "Manage your Salonzee business profile, photos, and calendar settings." },
+    { property: "og:title", content: "Salon Settings — Salonzee" },
+    { property: "og:description", content: "Manage your Salonzee business profile, photos, and calendar settings." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: SalonSettings,
 });
 

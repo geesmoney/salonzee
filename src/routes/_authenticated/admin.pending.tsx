@@ -9,7 +9,14 @@ import { SiteFooter } from "@/components/site-footer";
 import { SALON_TYPE_LABELS, BUSINESS_CATEGORY_LABELS, type BusinessCategory, formatGhs, whatsappLink } from "@/lib/ghana";
 
 export const Route = createFileRoute("/_authenticated/admin/pending")({
-  head: () => ({ meta: [{ title: "Platform Admin — Salonzee" }] }),
+  head: () => ({ meta: [
+    { title: "Platform Admin — Salonzee" },
+    { name: "description", content: "Review business listings awaiting approval on Salonzee." },
+    { property: "og:title", content: "Platform Admin — Salonzee" },
+    { property: "og:description", content: "Review business listings awaiting approval on Salonzee." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminPage,
 });
 

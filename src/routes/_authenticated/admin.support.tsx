@@ -12,7 +12,14 @@ type Ticket = Database["public"]["Tables"]["support_tickets"]["Row"];
 type Status = Database["public"]["Enums"]["support_ticket_status"];
 
 export const Route = createFileRoute("/_authenticated/admin/support")({
-  head: () => ({ meta: [{ title: "Admin Support — Salonzee" }] }),
+  head: () => ({ meta: [
+    { title: "Admin Support — Salonzee" },
+    { name: "description", content: "Manage customer and business support conversations on Salonzee." },
+    { property: "og:title", content: "Admin Support — Salonzee" },
+    { property: "og:description", content: "Manage customer and business support conversations on Salonzee." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminSupportPage,
 });
 

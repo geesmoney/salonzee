@@ -9,7 +9,14 @@ import { SiteFooter } from "@/components/site-footer";
 type SmsStatus = "all" | "stubbed" | "sent" | "failed" | "queued";
 
 export const Route = createFileRoute("/_authenticated/admin/sms")({
-  head: () => ({ meta: [{ title: "SMS Log — Salonzee Admin" }] }),
+  head: () => ({ meta: [
+    { title: "SMS Log — Salonzee Admin" },
+    { name: "description", content: "Monitor Salonzee booking notifications and SMS delivery." },
+    { property: "og:title", content: "SMS Log — Salonzee Admin" },
+    { property: "og:description", content: "Monitor Salonzee booking notifications and SMS delivery." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: SmsLogPage,
 });
 

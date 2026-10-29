@@ -8,7 +8,14 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 
 export const Route = createFileRoute("/_authenticated/admin/referrals")({
-  head: () => ({ meta: [{ title: "Referrals — Salonzee Admin" }] }),
+  head: () => ({ meta: [
+    { title: "Referrals — Salonzee Admin" },
+    { name: "description", content: "Manage Salonzee referral codes and view referral performance." },
+    { property: "og:title", content: "Referrals — Salonzee Admin" },
+    { property: "og:description", content: "Manage Salonzee referral codes and view referral performance." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminReferrals,
 });
 

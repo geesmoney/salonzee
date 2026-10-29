@@ -12,6 +12,11 @@ export const Route = createFileRoute("/review/$token")({
   head: () => ({
     meta: [
       { title: "Leave a review — Salonzee" },
+      { name: "description", content: "Share your experience after a Salonzee appointment." },
+      { property: "og:title", content: "Leave a review — Salonzee" },
+      { property: "og:description", content: "Share your experience after a Salonzee appointment." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
