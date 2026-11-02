@@ -17,6 +17,7 @@ import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as SalonsRouteImport } from './routes/salons'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ApiSeoAdvisorRouteImport } from './routes/api/seo-advisor'
 import { Route as ReviewTokenRouteImport } from './routes/review.$token'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
@@ -68,6 +69,11 @@ const SalonsRoute = SalonsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSeoAdvisorRoute = ApiSeoAdvisorRouteImport.update({
+  id: '/api/seo-advisor',
+  path: '/api/seo-advisor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewTokenRoute = ReviewTokenRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/api/seo-advisor'
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/analytics'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/api/seo-advisor'
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/analytics'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/api/seo-advisor'
     | '/review/$token'
     | '/salons/$salonId'
     | '/_authenticated/admin/analytics'
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   ReportIssueRoute: typeof ReportIssueRoute
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiSeoAdvisorRoute: typeof ApiSeoAdvisorRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   ApiPublicCalendarTokenRoute: typeof ApiPublicCalendarTokenRoute
   ApiPublicHooksProcessSmsQueueRoute: typeof ApiPublicHooksProcessSmsQueueRoute
@@ -353,6 +366,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/seo-advisor': {
+      id: '/api/seo-advisor'
+      path: '/api/seo-advisor'
+      fullPath: '/api/seo-advisor'
+      preLoaderRoute: typeof ApiSeoAdvisorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/review/$token': {
@@ -497,6 +517,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportIssueRoute: ReportIssueRoute,
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiSeoAdvisorRoute: ApiSeoAdvisorRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   ApiPublicCalendarTokenRoute: ApiPublicCalendarTokenRoute,
   ApiPublicHooksProcessSmsQueueRoute: ApiPublicHooksProcessSmsQueueRoute,
