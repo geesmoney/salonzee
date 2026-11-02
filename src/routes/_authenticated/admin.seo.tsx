@@ -58,6 +58,7 @@ function SeoAdvisorPage() {
       let buffer = "";
       let completed = false;
       const consume = (line: string) => {
+        if (controller.signal.aborted) return;
         if (!line.trim()) return;
         const part = JSON.parse(line) as SeoEvent;
         if (part.type === "text") { setResult((value) => value + (part.text ?? "")); setStatus("Writing recommendations…"); }
@@ -77,9 +78,16 @@ function SeoAdvisorPage() {
       consume(buffer);
       if (!completed) throw new Error("The connection ended early. Partial recommendations are kept below.");
     } catch (caught) {
-      if (controller.signal.aborted) setStatus("Stopped — partial recommendations kept");
+      if (controller.signal.aborted && abort.current === controller) setStatus("Stopped — partial recommendations kept");
       else { setError(caught instanceof Error ? caught.message : "Recommendations could not be generated."); setStatus("Request ended"); }
-    } finally { setBusy(false); abort.current = null; }
+    } finally { if (abort.current === controller) { setBusy(false); abort.current = null; } }
+  }
+
+  function stop() {
+    abort.current?.abort();
+    abort.current = null;
+    setBusy(false);
+    setStatus("Stopped — partial recommendations kept");
   }
 
   async function copy() {
@@ -108,7 +116,7 @@ function SeoAdvisorPage() {
           <label className="space-y-2 text-sm font-semibold"><span className="flex items-center gap-2"><MapPin className="h-4 w-4 text-muted-foreground" />Target city</span><input required minLength={2} maxLength={80} list="ghana-cities" disabled={busy} value={city} onChange={(e) => setCity(e.target.value)} className="h-12 w-full rounded-lg border border-input bg-background px-3 font-normal outline-none focus:ring-2 focus:ring-ring disabled:opacity-60" /><datalist id="ghana-cities">{GHANA_CITIES.map((name) => <option key={name} value={name} />)}</datalist></label>
         </div>
         <div className="mt-5 flex flex-wrap items-center gap-4">
-          {busy ? <Button type="button" variant="outline" onClick={() => abort.current?.abort()}><Square />Stop</Button> : <Button type="submit"><Sparkles />Generate recommendations</Button>}
+          {busy ? <Button type="button" variant="outline" onClick={stop}><Square />Stop</Button> : <Button type="submit"><Sparkles />Generate recommendations</Button>}
           <p className="text-xs text-muted-foreground">AI suggestions · Not live keyword data · Uses workspace AI credits</p>
         </div>
       </form>
