@@ -78,8 +78,7 @@ function SeoAdvisorPage() {
       consume(buffer);
       if (!completed) throw new Error("The connection ended early. Partial recommendations are kept below.");
     } catch (caught) {
-      if (controller.signal.aborted && abort.current === controller) setStatus("Stopped — partial recommendations kept");
-      else { setError(caught instanceof Error ? caught.message : "Recommendations could not be generated."); setStatus("Request ended"); }
+      if (!controller.signal.aborted) { setError(caught instanceof Error ? caught.message : "Recommendations could not be generated."); setStatus("Request ended"); }
     } finally { if (abort.current === controller) { setBusy(false); abort.current = null; } }
   }
 
