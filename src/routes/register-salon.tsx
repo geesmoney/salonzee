@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { trackSignupConversion } from "@/lib/gtag";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
@@ -122,6 +123,7 @@ function RegisterSalonPage() {
       });
       if (contactError) throw contactError;
 
+      trackSignupConversion();
       toast.success("Submitted! Your salon is pending review.");
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
     } catch (err) {
