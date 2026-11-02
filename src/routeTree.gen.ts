@@ -24,6 +24,7 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin.seo'
 import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
@@ -110,6 +111,11 @@ const AuthenticatedAdminRevenueRoute =
     path: '/admin/revenue',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/admin/seo',
+  path: '/admin/seo',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminSmsRoute = AuthenticatedAdminSmsRouteImport.update({
   id: '/admin/sms',
   path: '/admin/sms',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByTo {
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/revenue'
+    | '/admin/seo'
     | '/admin/sms'
     | '/admin/support'
     | '/salon/dashboard'
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/revenue'
+    | '/admin/seo'
     | '/admin/sms'
     | '/admin/support'
     | '/salon/dashboard'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/referrals'
     | '/_authenticated/admin/revenue'
+    | '/_authenticated/admin/seo'
     | '/_authenticated/admin/sms'
     | '/_authenticated/admin/support'
     | '/_authenticated/salon/dashboard'
@@ -417,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRevenueRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/admin/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/sms': {
       id: '/_authenticated/admin/sms'
       path: '/admin/sms'
@@ -474,6 +493,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedAdminReferralsRoute: typeof AuthenticatedAdminReferralsRoute
   AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminSmsRoute: typeof AuthenticatedAdminSmsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
@@ -486,6 +506,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedAdminReferralsRoute: AuthenticatedAdminReferralsRoute,
   AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,
+  AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
   AuthenticatedAdminSmsRoute: AuthenticatedAdminSmsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
