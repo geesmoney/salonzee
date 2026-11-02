@@ -122,6 +122,7 @@ function RegisterSalonPage() {
       });
       if (contactError) throw contactError;
 
+      trackSignupConversion();
       toast.success("Submitted! Your salon is pending review.");
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
     } catch (err) {
