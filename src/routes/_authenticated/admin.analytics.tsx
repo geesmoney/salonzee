@@ -1,4 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -97,6 +99,7 @@ function AnalyticsPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-serif text-3xl text-foreground">Traffic analytics</h1>
+            <Button asChild variant="link" className="px-0"><Link to="/admin/seo"><Sparkles />Local SEO advisor</Link></Button>
             <p className="text-sm text-muted-foreground">Visits, where they come from, and Google Ads clicks. {isFetching && "Refreshing…"}</p>
           </div>
           <div className="flex gap-1 rounded-full border border-border p-1">

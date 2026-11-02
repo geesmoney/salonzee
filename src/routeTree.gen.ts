@@ -17,12 +17,14 @@ import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as SalonsRouteImport } from './routes/salons'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ApiSeoAdvisorRouteImport } from './routes/api/seo-advisor'
 import { Route as ReviewTokenRouteImport } from './routes/review.$token'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin.seo'
 import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedSalonDashboardRouteImport } from './routes/_authenticated/salon.dashboard'
@@ -70,6 +72,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSeoAdvisorRoute = ApiSeoAdvisorRouteImport.update({
+  id: '/api/seo-advisor',
+  path: '/api/seo-advisor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReviewTokenRoute = ReviewTokenRouteImport.update({
   id: '/review/$token',
   path: '/review/$token',
@@ -104,6 +111,11 @@ const AuthenticatedAdminRevenueRoute =
     path: '/admin/revenue',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/admin/seo',
+  path: '/admin/seo',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminSmsRoute = AuthenticatedAdminSmsRouteImport.update({
   id: '/admin/sms',
   path: '/admin/sms',
@@ -153,12 +165,14 @@ export interface FileRoutesByFullPath {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
@@ -175,12 +189,14 @@ export interface FileRoutesByTo {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
@@ -199,12 +215,14 @@ export interface FileRoutesById {
   '/report-issue': typeof ReportIssueRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/sms': typeof AuthenticatedAdminSmsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/salon/dashboard': typeof AuthenticatedSalonDashboardRoute
@@ -223,12 +241,14 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/api/seo-advisor'
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/analytics'
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/revenue'
+    | '/admin/seo'
     | '/admin/sms'
     | '/admin/support'
     | '/salon/dashboard'
@@ -245,12 +265,14 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/api/seo-advisor'
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/analytics'
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/revenue'
+    | '/admin/seo'
     | '/admin/sms'
     | '/admin/support'
     | '/salon/dashboard'
@@ -268,12 +290,14 @@ export interface FileRouteTypes {
     | '/report-issue'
     | '/salons'
     | '/sitemap.xml'
+    | '/api/seo-advisor'
     | '/review/$token'
     | '/salons/$salonId'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/referrals'
     | '/_authenticated/admin/revenue'
+    | '/_authenticated/admin/seo'
     | '/_authenticated/admin/sms'
     | '/_authenticated/admin/support'
     | '/_authenticated/salon/dashboard'
@@ -292,6 +316,7 @@ export interface RootRouteChildren {
   ReportIssueRoute: typeof ReportIssueRoute
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiSeoAdvisorRoute: typeof ApiSeoAdvisorRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   ApiPublicCalendarTokenRoute: typeof ApiPublicCalendarTokenRoute
   ApiPublicHooksProcessSmsQueueRoute: typeof ApiPublicHooksProcessSmsQueueRoute
@@ -355,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/seo-advisor': {
+      id: '/api/seo-advisor'
+      path: '/api/seo-advisor'
+      fullPath: '/api/seo-advisor'
+      preLoaderRoute: typeof ApiSeoAdvisorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/review/$token': {
       id: '/review/$token'
       path: '/review/$token'
@@ -395,6 +427,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/revenue'
       fullPath: '/admin/revenue'
       preLoaderRoute: typeof AuthenticatedAdminRevenueRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/admin/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/sms': {
@@ -454,6 +493,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedAdminReferralsRoute: typeof AuthenticatedAdminReferralsRoute
   AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminSmsRoute: typeof AuthenticatedAdminSmsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedSalonDashboardRoute: typeof AuthenticatedSalonDashboardRoute
@@ -466,6 +506,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedAdminReferralsRoute: AuthenticatedAdminReferralsRoute,
   AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,
+  AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
   AuthenticatedAdminSmsRoute: AuthenticatedAdminSmsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedSalonDashboardRoute: AuthenticatedSalonDashboardRoute,
@@ -497,6 +538,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportIssueRoute: ReportIssueRoute,
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiSeoAdvisorRoute: ApiSeoAdvisorRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   ApiPublicCalendarTokenRoute: ApiPublicCalendarTokenRoute,
   ApiPublicHooksProcessSmsQueueRoute: ApiPublicHooksProcessSmsQueueRoute,
