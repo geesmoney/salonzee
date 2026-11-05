@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { trackSignupConversion } from "@/lib/gtag";
+import { trackSignupPageView, trackSalonRegistration } from "@/lib/gtag";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
@@ -29,9 +29,9 @@ function RegisterSalonPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  // Google Ads conversion: a visit to the salon sign-up page.
+  // Google Ads "Page view" conversion: a visit to the salon sign-up page.
   useEffect(() => {
-    trackSignupConversion();
+    trackSignupPageView();
   }, []);
 
   // If the signed-in user already owns a salon, send them straight to their dashboard.
@@ -127,6 +127,9 @@ function RegisterSalonPage() {
         email: form.email,
       });
       if (contactError) throw contactError;
+
+      // Google Ads "Registration" conversion: the salon finished registering.
+      trackSalonRegistration();
 
       toast.success("Submitted! Your salon is pending review.");
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
