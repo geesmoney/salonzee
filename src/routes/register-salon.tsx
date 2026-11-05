@@ -29,6 +29,11 @@ function RegisterSalonPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  // Google Ads conversion: a visit to the salon sign-up page.
+  useEffect(() => {
+    trackSignupConversion();
+  }, []);
+
   // If the signed-in user already owns a salon, send them straight to their dashboard.
   useEffect(() => {
     if (!user) return;
@@ -123,7 +128,6 @@ function RegisterSalonPage() {
       });
       if (contactError) throw contactError;
 
-      trackSignupConversion();
       toast.success("Submitted! Your salon is pending review.");
       navigate({ to: userId ? "/salon/dashboard" : "/login" });
     } catch (err) {
