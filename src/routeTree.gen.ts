@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
@@ -45,6 +46,11 @@ const SlugRoute = SlugRouteImport.update({
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -160,6 +166,7 @@ const ApiPublicHooksProcessSmsQueueRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
+  '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
@@ -184,6 +191,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
+  '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
@@ -210,6 +218,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
@@ -236,6 +245,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$slug'
+    | '/features'
     | '/login'
     | '/register-salon'
     | '/report-issue'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$slug'
+    | '/features'
     | '/login'
     | '/register-salon'
     | '/report-issue'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug'
     | '/_authenticated'
+    | '/features'
     | '/login'
     | '/register-salon'
     | '/report-issue'
@@ -311,6 +323,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SlugRoute: typeof SlugRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  FeaturesRoute: typeof FeaturesRoute
   LoginRoute: typeof LoginRoute
   RegisterSalonRoute: typeof RegisterSalonRoute
   ReportIssueRoute: typeof ReportIssueRoute
@@ -343,6 +356,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -533,6 +553,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SlugRoute: SlugRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  FeaturesRoute: FeaturesRoute,
   LoginRoute: LoginRoute,
   RegisterSalonRoute: RegisterSalonRoute,
   ReportIssueRoute: ReportIssueRoute,

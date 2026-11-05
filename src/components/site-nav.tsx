@@ -22,6 +22,7 @@ export function SiteNav() {
       {/* Desktop nav */}
       <div className="hidden md:flex gap-1 text-sm font-medium">
         <NavLink to="/salons">Discover</NavLink>
+        <NavLink to="/features">Features</NavLink>
         <NavLink to="/register-salon">For business</NavLink>
         {!user && <NavLink to="/login">Sign in</NavLink>}
         {user && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
@@ -81,6 +82,7 @@ export function SiteNav() {
             <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-1 text-base">
               <MobileLink to="/" onSelect={close}>Home</MobileLink>
               <MobileLink to="/salons" onSelect={close}>Discover salons</MobileLink>
+              <MobileLink to="/features" onSelect={close}>Features</MobileLink>
               <MobileLink to="/register-salon" onSelect={close}>For business</MobileLink>
               {user && <MobileLink to="/salon/dashboard" onSelect={close}>Dashboard</MobileLink>}
               {user && <MobileLink to="/salon/settings" onSelect={close}>Settings</MobileLink>}
