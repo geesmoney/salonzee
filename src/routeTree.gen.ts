@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
@@ -19,6 +20,7 @@ import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as SalonsRouteImport } from './routes/salons'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ApiSeoAdvisorRouteImport } from './routes/api/seo-advisor'
+import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as ReviewTokenRouteImport } from './routes/review.$token'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
@@ -47,6 +49,11 @@ const SlugRoute = SlugRouteImport.update({
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -82,6 +89,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ApiSeoAdvisorRoute = ApiSeoAdvisorRouteImport.update({
   id: '/api/seo-advisor',
   path: '/api/seo-advisor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog_/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewTokenRoute = ReviewTokenRouteImport.update({
@@ -173,6 +185,7 @@ const ApiPublicHooksProcessSmsQueueRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
+  '/blog': typeof BlogRoute
   '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
@@ -180,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/seo-advisor': typeof ApiSeoAdvisorRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -199,6 +213,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
+  '/blog': typeof BlogRoute
   '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
@@ -206,6 +221,7 @@ export interface FileRoutesByTo {
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/seo-advisor': typeof ApiSeoAdvisorRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -227,6 +243,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/blog': typeof BlogRoute
   '/features': typeof FeaturesRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
@@ -234,6 +251,7 @@ export interface FileRoutesById {
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/seo-advisor': typeof ApiSeoAdvisorRoute
+  '/blog_/$slug': typeof BlogSlugRoute
   '/review/$token': typeof ReviewTokenRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -255,6 +273,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$slug'
+    | '/blog'
     | '/features'
     | '/login'
     | '/register-salon'
@@ -262,6 +281,7 @@ export interface FileRouteTypes {
     | '/salons'
     | '/sitemap.xml'
     | '/api/seo-advisor'
+    | '/blog/$slug'
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/analytics'
@@ -281,6 +301,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$slug'
+    | '/blog'
     | '/features'
     | '/login'
     | '/register-salon'
@@ -288,6 +309,7 @@ export interface FileRouteTypes {
     | '/salons'
     | '/sitemap.xml'
     | '/api/seo-advisor'
+    | '/blog/$slug'
     | '/review/$token'
     | '/salons/$salonId'
     | '/admin/analytics'
@@ -308,6 +330,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug'
     | '/_authenticated'
+    | '/blog'
     | '/features'
     | '/login'
     | '/register-salon'
@@ -315,6 +338,7 @@ export interface FileRouteTypes {
     | '/salons'
     | '/sitemap.xml'
     | '/api/seo-advisor'
+    | '/blog_/$slug'
     | '/review/$token'
     | '/salons/$salonId'
     | '/_authenticated/admin/analytics'
@@ -336,6 +360,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SlugRoute: typeof SlugRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  BlogRoute: typeof BlogRoute
   FeaturesRoute: typeof FeaturesRoute
   LoginRoute: typeof LoginRoute
   RegisterSalonRoute: typeof RegisterSalonRoute
@@ -343,6 +368,7 @@ export interface RootRouteChildren {
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiSeoAdvisorRoute: typeof ApiSeoAdvisorRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   ReviewTokenRoute: typeof ReviewTokenRoute
   ApiPublicCalendarTokenRoute: typeof ApiPublicCalendarTokenRoute
   ApiPublicHooksProcessSmsQueueRoute: typeof ApiPublicHooksProcessSmsQueueRoute
@@ -369,6 +395,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -418,6 +451,13 @@ declare module '@tanstack/react-router' {
       path: '/api/seo-advisor'
       fullPath: '/api/seo-advisor'
       preLoaderRoute: typeof ApiSeoAdvisorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog_/$slug': {
+      id: '/blog_/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/review/$token': {
@@ -575,6 +615,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SlugRoute: SlugRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  BlogRoute: BlogRoute,
   FeaturesRoute: FeaturesRoute,
   LoginRoute: LoginRoute,
   RegisterSalonRoute: RegisterSalonRoute,
@@ -582,6 +623,7 @@ const rootRouteChildren: RootRouteChildren = {
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiSeoAdvisorRoute: ApiSeoAdvisorRoute,
+  BlogSlugRoute: BlogSlugRoute,
   ReviewTokenRoute: ReviewTokenRoute,
   ApiPublicCalendarTokenRoute: ApiPublicCalendarTokenRoute,
   ApiPublicHooksProcessSmsQueueRoute: ApiPublicHooksProcessSmsQueueRoute,

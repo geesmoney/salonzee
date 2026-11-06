@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,10 +41,10 @@ const salonsListQuery = (filters: { city: string; type: string; category: string
 export const Route = createFileRoute("/salons")({
   head: () => ({
     meta: [
-      { title: "Discover salons — Salonzee" },
-      { name: "description", content: "Browse and filter vetted salons across Ghana. Hair, braids, barbering, nails, and beauty — book instantly with SMS confirmation." },
-      { property: "og:title", content: "Discover salons — Salonzee" },
-      { property: "og:description", content: "Browse and filter vetted salons across Ghana. Hair, braids, barbering, nails, and beauty." },
+      { title: "Find Hair Salons, Barbers & Nail Techs in Ghana — Salonzee" },
+      { name: "description", content: "Find hair salons, barbering shops, braiders and nail technicians in Ghana. Filter by city and service, compare listings and request an appointment." },
+      { property: "og:title", content: "Find Hair Salons, Barbers & Nail Techs in Ghana — Salonzee" },
+      { property: "og:description", content: "Compare beauty shops by city and service, view photos and request an appointment on Salonzee." },
       { name: "twitter:card", content: "summary_large_image" },
         { property: "og:url", content: "https://salonzee.com/salons" },
       { property: "og:type", content: "website" },
@@ -75,11 +75,12 @@ function SalonsPage() {
       <header className="px-5 sm:px-6 md:px-10 pt-8 sm:pt-14 pb-6 sm:pb-10 max-w-7xl mx-auto">
         <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-2 sm:mb-3">The Directory</p>
         <h1 className="font-display text-[2rem] sm:text-4xl md:text-6xl font-bold tracking-tight mb-3 max-w-3xl leading-[1.05]">
-          Hand-picked salons across Ghana.
+          Hair salons, barbers & beauty shops in Ghana.
         </h1>
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl">
-          Already know the salon you want? Search by name. Or browse vetted partners by city and service.
+          Search by name or area, or filter by city and service. Compare shop photos and listed services before requesting an appointment.
         </p>
+        <Link to="/blog" className="mt-4 inline-block text-sm font-medium text-primary hover:underline">Before you book: beauty & appointment guides →</Link>
       </header>
 
       <section className="px-5 sm:px-6 md:px-10 pb-24 max-w-7xl mx-auto">

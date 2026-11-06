@@ -11,3 +11,8 @@
 # Platform booking reports
 - [x] Add read-only admin reports across all shops with daily, weekly, monthly and status totals.
 - [x] Verify totals, server-side admin check, signed-out denial and mobile layout without modifying bookings.
+
+# Starter search guides
+- [x] Add four factual customer/owner guides and a public blog index.
+- [x] Link guides from navigation, directory and sitemap; improve directory search copy without changing filters or bookings.
+- [x] Verify article links, search metadata, sitemap and phone layouts.

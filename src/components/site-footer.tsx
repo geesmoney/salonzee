@@ -7,7 +7,8 @@ export function SiteFooter() {
         <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-foreground/30">
           Salonzee © {new Date().getFullYear()} • Accra, Ghana
         </p>
-        <div className="flex gap-5 text-xs text-foreground/50">
+        <div className="flex flex-wrap justify-center gap-5 text-xs text-foreground/50">
+          <Link to="/blog" className="hover:text-foreground transition-colors">Beauty & business guides</Link>
           <Link to="/register-salon" className="hover:text-foreground transition-colors">
             List your salon
           </Link>
