@@ -546,6 +546,7 @@ export type Database = {
           id: string
           sender_type: Database["public"]["Enums"]["support_sender_type"]
           sender_user_id: string | null
+          seq: number
           ticket_id: string
         }
         Insert: {
@@ -554,6 +555,7 @@ export type Database = {
           id?: string
           sender_type: Database["public"]["Enums"]["support_sender_type"]
           sender_user_id?: string | null
+          seq?: never
           ticket_id: string
         }
         Update: {
@@ -562,6 +564,7 @@ export type Database = {
           id?: string
           sender_type?: Database["public"]["Enums"]["support_sender_type"]
           sender_user_id?: string | null
+          seq?: never
           ticket_id?: string
         }
         Relationships: [

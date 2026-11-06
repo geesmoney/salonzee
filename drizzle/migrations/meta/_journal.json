@@ -22,6 +22,27 @@
       "when": 1793946088650,
       "tag": "0002_admin_new_support_ticket_sms",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793946939057,
+      "tag": "0003_support_owner_reply_and_resolution_sms",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793946963819,
+      "tag": "0004_support_messages_deterministic_order",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793946980080,
+      "tag": "0005_fix_support_status_owner_phone_lookup",
+      "breakpoints": true
     }
   ]
 }

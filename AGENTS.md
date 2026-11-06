@@ -7,3 +7,4 @@
 - Keep Features page walkthroughs isolated from live booking and owner workflows, and label their sample data so previews cannot mutate records or imply actual business results.
 - Delete gallery rows with an ownership-scoped, returning query before best-effort storage cleanup; keep destructive photo actions visible on touch devices and behind confirmation to protect live covers.
 - Queue new support ticket alerts on insertion using the existing SMS queue, excluding admin-created tickets and message bodies to avoid duplicate and sensitive notifications.
+- Text the shop owner through the same SMS queue when support replies or a ticket is resolved or closed, alerting once per owner turn so a burst of internal replies cannot spam them; keep message bodies out of owner alerts.
