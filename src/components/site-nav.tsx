@@ -20,7 +20,7 @@ export function SiteNav() {
       </Link>
 
       {/* Desktop nav */}
-      <div className="hidden md:flex gap-1 text-sm font-medium">
+      <div className="hidden md:flex flex-1 min-w-0 flex-wrap justify-center gap-1 text-sm font-medium">
         <NavLink to="/salons">Discover</NavLink>
         <NavLink to="/features">Features</NavLink>
         <NavLink to="/register-salon">For business</NavLink>
@@ -28,6 +28,7 @@ export function SiteNav() {
         {user && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
         {user && <NavLink to="/salon/support">Support</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/bookings">Bookings</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/support">Inbox</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/revenue">Revenue</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/sms">SMS</NavLink>}
@@ -88,6 +89,7 @@ export function SiteNav() {
               {user && <MobileLink to="/salon/settings" onSelect={close}>Settings</MobileLink>}
               {user && <MobileLink to="/salon/support" onSelect={close}>Support</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/pending" onSelect={close}>Admin · Pending</MobileLink>}
+              {user && isPlatformAdmin && <MobileLink to="/admin/bookings" onSelect={close}>Admin · Bookings</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/support" onSelect={close}>Admin · Inbox</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/revenue" onSelect={close}>Admin · Revenue</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/sms" onSelect={close}>Admin · SMS Log</MobileLink>}
