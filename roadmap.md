@@ -16,3 +16,7 @@
 - [x] Add four factual customer/owner guides and a public blog index.
 - [x] Link guides from navigation, directory and sitemap; improve directory search copy without changing filters or bookings.
 - [x] Verify article links, search metadata, sitemap and phone layouts.
+
+# Journal voice rewrite
+- [x] Rewrite all four guides in Godwin's conversational style with proper introductions and conclusions.
+- [x] Preserve factual limitations, URLs and search metadata; verify articles and phone layouts.

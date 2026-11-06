@@ -9,4 +9,4 @@
 - Queue new support ticket alerts on insertion using the existing SMS queue, excluding admin-created tickets and message bodies to avoid duplicate and sensitive notifications.
 - Text the shop owner through the same SMS queue when support replies or a ticket is resolved or closed, alerting once per owner turn so a burst of internal replies cannot spam them; keep message bodies out of owner alerts.
 - Keep platform booking reports read-only behind server-verified platform_admin access using the caller's existing booking policies; paginate without truncation, use Accra date boundaries and distinguish appointment dates from creation dates so totals remain auditable.
-- Keep editorial guides in a shared browser-safe content catalogue used by article routes and sitemap; preserve factual product limitations and individual canonical metadata so article discovery does not alter booking workflows.
+- Keep editorial guides, including separate introduction paragraphs, in a shared browser-safe content catalogue used by article routes and sitemap; preserve factual product limitations and individual canonical metadata so article discovery does not alter booking workflows.
