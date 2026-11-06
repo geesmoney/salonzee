@@ -11,6 +11,8 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { formatGhs, whatsappLink } from "@/lib/ghana";
 import { formatTimeLabel } from "@/lib/slots";
+import { Button } from "@/components/ui/button";
+import { Images } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/salon/dashboard")({
   head: () => ({ meta: [
@@ -150,6 +152,7 @@ function SalonDashboard() {
             </p>
           </div>
           <div className="flex gap-2 flex-wrap">
+            <Button asChild variant="outline"><Link to="/salon/settings" hash="photos"><Images /> Manage photos</Link></Button>
             {publicUrl && salon.status === "active" && (
               <button
                 onClick={() => {

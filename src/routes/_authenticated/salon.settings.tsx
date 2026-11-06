@@ -175,7 +175,7 @@ function SalonSettings() {
             </Field>
           </div>
 
-          <div className="border border-foreground/10 rounded-xl p-4">
+          <div id="photos" className="scroll-mt-24 border-y border-border py-6">
             <SalonImageManager salonId={salon.id} />
           </div>
 

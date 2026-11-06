@@ -5,3 +5,5 @@
 - Keep SEO advisor AI calls in server-only modules behind bearer verification and a platform_admin role check; stream recommendations to the admin page and never auto-apply generated copy, because suggestions are not verified search data.
 - Persist provider access denials in seo_ai_access_state and fail closed while blocked; clear the matching row only after a workspace administrator confirms provider access has been restored, so reloads cannot replay denied work.
 - Keep Features page walkthroughs isolated from live booking and owner workflows, and label their sample data so previews cannot mutate records or imply actual business results.
+- Delete gallery rows with an ownership-scoped, returning query before best-effort storage cleanup; keep destructive photo actions visible on touch devices and behind confirmation to protect live covers.
+- Queue new support ticket alerts on insertion using the existing SMS queue, excluding admin-created tickets and message bodies to avoid duplicate and sensitive notifications.

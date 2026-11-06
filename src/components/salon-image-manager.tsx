@@ -1,8 +1,10 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Upload, X, Loader2, Star } from "lucide-react";
+import { Upload, Trash2, Loader2, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 interface Props {
   salonId: string;
@@ -21,8 +23,9 @@ export function SalonImageManager({ salonId }: Props) {
   const qc = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<SalonImage | null>(null);
 
-  const { data: images = [] } = useQuery({
+  const { data: images = [], isLoading, isError, refetch } = useQuery({
     queryKey: ["salon-images", salonId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -116,6 +119,9 @@ export function SalonImageManager({ salonId }: Props) {
 
   const remove = useMutation({
     mutationFn: async (img: SalonImage) => {
+      // Remove the listing first. A denied delete must never erase the stored photo.
+      const { data, error } = await supabase.from("salon_images").delete().eq("id", img.id).eq("salon_id", salonId).select("id");
+      if (error || data?.length !== 1) throw new Error("Could not remove this photo. Please try again.");
       // best-effort delete from storage; path lives after the bucket name in public URL
       const marker = "/salon-images/";
       const idx = img.image_url.indexOf(marker);
@@ -123,15 +129,16 @@ export function SalonImageManager({ salonId }: Props) {
         const path = img.image_url.slice(idx + marker.length);
         await supabase.storage.from("salon-images").remove([path]);
       }
-      const { error } = await supabase.from("salon_images").delete().eq("id", img.id);
-      if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["salon-images", salonId] });
       qc.invalidateQueries({ queryKey: ["salon-cover", salonId] });
+      qc.invalidateQueries({ queryKey: ["my-salon-settings"] });
+      qc.invalidateQueries({ queryKey: ["salon-dashboard"] });
+      setDeleteTarget(null);
       toast.success("Image removed");
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: () => toast.error("Could not remove this photo. Please try again."),
   });
 
   return (
@@ -140,15 +147,15 @@ export function SalonImageManager({ salonId }: Props) {
         <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">
           Gallery ({images.length}/{MAX_IMAGES})
         </p>
-        <button
+        <Button
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading || images.length >= MAX_IMAGES}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-[0.15em] disabled:opacity-50"
+          size="sm"
         >
           {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
           {uploading ? "Uploading" : "Add photos"}
-        </button>
+        </Button>
         <input
           ref={fileInputRef}
           type="file"
@@ -159,48 +166,52 @@ export function SalonImageManager({ salonId }: Props) {
         />
       </div>
 
-      {images.length === 0 ? (
-        <button
+      {isLoading ? <p className="text-sm text-muted-foreground py-6">Loading photos…</p> : isError ? <div className="py-4"><p className="text-sm text-muted-foreground mb-3">Photos couldn't load.</p><Button type="button" variant="outline" onClick={() => refetch()}>Try again</Button></div> : images.length === 0 ? (
+        <Button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="w-full border border-dashed border-foreground/15 rounded-xl py-10 text-sm text-foreground/50 hover:text-foreground hover:border-foreground/30 transition"
+          variant="outline"
+          className="w-full h-auto whitespace-normal border-dashed rounded-lg py-10 text-sm"
         >
           Tap to upload photos of your salon (up to {MAX_IMAGES}, 5MB each)
-        </button>
+        </Button>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {images.map((img) => {
             const isCover = coverUrl === img.image_url;
             return (
-              <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden bg-muted group">
-                <img src={img.image_url} alt="" className="w-full h-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => remove.mutate(img)}
-                  aria-label="Remove image"
-                  className="absolute top-1.5 right-1.5 bg-background/90 text-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition shadow"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
+              <div key={img.id} className="rounded-lg overflow-hidden border border-border bg-card">
+                <div className="relative aspect-square"><img src={img.image_url} alt={`Gallery photo ${images.indexOf(img) + 1}`} className="w-full h-full object-cover" />
                 {isCover ? (
                   <span className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 bg-primary text-primary-foreground rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] shadow">
                     <Star className="w-3 h-3 fill-current" /> Cover
                   </span>
                 ) : (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setCover.mutate(img)}
                     disabled={setCover.isPending}
-                    className="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 bg-background/90 text-foreground rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] shadow opacity-0 group-hover:opacity-100 focus:opacity-100 transition disabled:opacity-50"
+                    variant="outline"
+                    size="sm"
+                    className="absolute bottom-1.5 left-1.5 h-8 px-2 text-[10px]"
                   >
                     <Star className="w-3 h-3" /> Set as cover
-                  </button>
+                  </Button>
                 )}
+                </div>
+                <Button type="button" variant="ghost" className="w-full rounded-none text-destructive" disabled={remove.isPending || uploading} onClick={() => setDeleteTarget(img)}><Trash2 /> Delete photo</Button>
               </div>
             );
           })}
         </div>
       )}
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open && !remove.isPending) setDeleteTarget(null); }}>
+        <AlertDialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
+          <AlertDialogHeader><AlertDialogTitle>Delete this photo?</AlertDialogTitle><AlertDialogDescription>This permanently removes it from your public gallery. If it is your cover, the next gallery photo becomes the cover. To replace it, add your new photo first.</AlertDialogDescription></AlertDialogHeader>
+          {deleteTarget && <img src={deleteTarget.image_url} alt="Photo selected for deletion" className="h-40 w-full rounded-lg object-contain bg-muted" />}
+          <AlertDialogFooter><AlertDialogCancel disabled={remove.isPending}>Keep photo</AlertDialogCancel><Button type="button" variant="destructive" disabled={remove.isPending} onClick={() => { if (deleteTarget) remove.mutate(deleteTarget); }}>{remove.isPending ? <Loader2 className="animate-spin" /> : <Trash2 />} {remove.isPending ? "Deleting…" : "Delete photo"}</Button></AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -15,6 +15,13 @@
       "when": 1793604761292,
       "tag": "0001_seo_ai_access_state",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793946088650,
+      "tag": "0002_admin_new_support_ticket_sms",
+      "breakpoints": true
     }
   ]
 }
