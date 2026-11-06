@@ -6,6 +6,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { FeatureWalkthrough } from "@/components/feature-walkthroughs";
+import { Button } from "@/components/ui/button";
 
 const TITLE = "Features for customers and beauty businesses — Salonzee";
 const DESC = "See everything Salonzee does: book salons, barbers, nail techs and more in Ghana, and help beauty businesses fill chairs with SMS, calendar sync and reviews.";
@@ -85,8 +87,9 @@ function FeaturesPage() {
               <h2 id="customers-h" className="font-display text-3xl font-bold tracking-tight">For customers</h2>
               <p className="text-muted-foreground">Hair, nails, grooming and more, booked easily.</p>
             </div>
-            <Link to="/salons" className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-center">Find a shop</Link>
+            <Button asChild size="lg"><Link to="/salons">Find a shop</Link></Button>
           </div>
+          <FeatureWalkthrough audience="customer" />
           <Grid items={customer} />
         </section>
 
@@ -96,8 +99,9 @@ function FeaturesPage() {
               <h2 id="business-h" className="font-display text-3xl font-bold tracking-tight">For business owners</h2>
               <p className="text-muted-foreground">Salons, barbers, nail techs, makeup artists and spas.</p>
             </div>
-            <Link to="/register-salon" className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-center">List your business free</Link>
+            <Button asChild size="lg"><Link to="/register-salon">List your business free</Link></Button>
           </div>
+          <FeatureWalkthrough audience="business" />
           <Grid items={business} />
         </section>
       </main>
