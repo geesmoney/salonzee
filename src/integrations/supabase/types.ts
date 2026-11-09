@@ -482,12 +482,14 @@ export type Database = {
       }
       site_visits: {
         Row: {
+          country: string | null
           created_at: string
           device: string | null
           gclid: string | null
           id: string
           path: string
           referrer: string | null
+          region: string | null
           session_id: string
           source: string
           utm_campaign: string | null
@@ -495,12 +497,14 @@ export type Database = {
           utm_source: string | null
         }
         Insert: {
+          country?: string | null
           created_at?: string
           device?: string | null
           gclid?: string | null
           id?: string
           path: string
           referrer?: string | null
+          region?: string | null
           session_id: string
           source?: string
           utm_campaign?: string | null
@@ -508,12 +512,14 @@ export type Database = {
           utm_source?: string | null
         }
         Update: {
+          country?: string | null
           created_at?: string
           device?: string | null
           gclid?: string | null
           id?: string
           path?: string
           referrer?: string | null
+          region?: string | null
           session_id?: string
           source?: string
           utm_campaign?: string | null

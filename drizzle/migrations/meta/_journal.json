@@ -50,6 +50,13 @@
       "when": 1794255582267,
       "tag": "0006_app_install_events",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794258810451,
+      "tag": "0007_site_visits_location",
+      "breakpoints": true
     }
   ]
 }
