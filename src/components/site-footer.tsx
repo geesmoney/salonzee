@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { InstallAppButton } from "@/components/install-app";
 
 export function SiteFooter() {
   return (
@@ -7,6 +8,7 @@ export function SiteFooter() {
         <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-foreground/30">
           Salonzee © {new Date().getFullYear()} • Accra, Ghana
         </p>
+        <InstallAppButton />
         <div className="flex flex-wrap justify-center gap-5 text-xs text-foreground/50">
           <Link to="/blog" className="hover:text-foreground transition-colors">Beauty & business guides</Link>
           <Link to="/register-salon" className="hover:text-foreground transition-colors">

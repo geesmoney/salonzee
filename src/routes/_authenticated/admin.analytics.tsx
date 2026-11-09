@@ -63,6 +63,39 @@ function AnalyticsPage() {
     },
   });
 
+  const { data: installs = [] } = useQuery({
+    queryKey: ["admin-installs", range],
+    enabled: isPlatformAdmin,
+    refetchInterval: 60000,
+    queryFn: async () => {
+      const since = new Date();
+      if (range === "1") since.setHours(0, 0, 0, 0);
+      else since.setDate(since.getDate() - Number(range));
+      const all: { event: string; platform: string; session_id: string }[] = [];
+      for (let from = 0; from < 20000; from += 1000) {
+        const { data, error } = await (supabase as unknown as import("@supabase/supabase-js").SupabaseClient).from("app_install_events")
+          .select("event, platform, session_id").gte("created_at", since.toISOString()).range(from, from + 999);
+        if (error) throw error;
+        all.push(...(data as typeof all));
+        if (data.length < 1000) break;
+      }
+      return all;
+    },
+  });
+  const inst = useMemo(() => {
+    const n = (e: string) => installs.filter((r) => r.event === e).length;
+    const plat = new Map<string, number>();
+    installs.filter((r) => r.event === "installed").forEach((r) => plat.set(r.platform, (plat.get(r.platform) ?? 0) + 1));
+    const opens = new Map<string, number>();
+    installs.filter((r) => r.event === "home_screen_open").forEach((r) => opens.set(r.platform, (opens.get(r.platform) ?? 0) + 1));
+    return {
+      installed: n("installed"), clicks: n("prompt_shown"), accepted: n("prompt_accepted"),
+      dismissed: n("prompt_dismissed"), opens: n("home_screen_open"),
+      plat: [...plat.entries()].sort((a, b) => b[1] - a[1]),
+      openPlat: [...opens.entries()].sort((a, b) => b[1] - a[1]),
+    };
+  }, [installs]);
+
   const s = useMemo(() => {
     const sessions = new Map<string, Visit[]>();
     rows.forEach((r) => sessions.set(r.session_id, [...(sessions.get(r.session_id) ?? []), r]));
@@ -140,6 +173,20 @@ function AnalyticsPage() {
           <Card title="Campaigns (utm_campaign)"><Bars rows={s.campaigns.slice(0, 10)} /></Card>
           <Card title="Devices"><Bars rows={s.devices} /></Card>
         </div>
+        <h2 className="mt-8 font-serif text-2xl text-foreground">App installs</h2>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <Stat label="Installs" value={inst.installed} accent />
+          <Stat label="Install button clicks" value={inst.clicks} />
+          <Stat label="Accepted / dismissed" value={`${inst.accepted} / ${inst.dismissed}`} />
+          <Stat label="Opened from home screen" value={inst.opens} />
+        </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <Card title="Installs by device"><Bars rows={inst.plat} /></Card>
+          <Card title="Home-screen opens by device"><Bars rows={inst.openPlat} /></Card>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          iPhones don't report installs, so iPhone users only appear under "Opened from home screen" (counted once per visit).
+        </p>
         <p className="mt-6 text-xs text-muted-foreground">
           Tracking started today, so earlier visits aren't here. Admin and salon-dashboard pages are not counted.
           Google Ads clicks are detected automatically when auto-tagging is on in your Ads account.

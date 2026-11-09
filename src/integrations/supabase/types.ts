@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_install_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          platform: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          platform?: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          platform?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           booking_date: string

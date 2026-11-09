@@ -43,6 +43,13 @@
       "when": 1793946980080,
       "tag": "0005_fix_support_status_owner_phone_lookup",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794255582267,
+      "tag": "0006_app_install_events",
+      "breakpoints": true
     }
   ]
 }

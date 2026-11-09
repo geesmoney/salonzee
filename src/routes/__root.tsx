@@ -16,6 +16,7 @@ import { ThemeProvider } from "@/hooks/use-theme";
 import { SupportNotifier } from "@/components/support-notifier";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { VisitTracker } from "@/components/visit-tracker";
+import { InstallTracker } from "@/components/install-app";
 
 function NotFoundComponent() {
   return (
@@ -161,6 +162,7 @@ function RootComponent() {
         <AuthProvider>
           <SupportNotifier />
           <VisitTracker />
+          <InstallTracker />
           <main id="main" className="min-h-dvh pb-[calc(env(safe-area-inset-bottom)+4rem)] md:pb-0">
             <Outlet />
           </main>
