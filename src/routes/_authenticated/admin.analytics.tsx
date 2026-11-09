@@ -27,7 +27,23 @@ const LABELS: Record<string, string> = {
   social: "Social media", whatsapp: "WhatsApp", other_search: "Other search",
 };
 
-type Visit = { session_id: string; path: string; source: string; utm_campaign: string | null; gclid: string | null; device: string | null; created_at: string };
+type Visit = { session_id: string; path: string; source: string; utm_campaign: string | null; gclid: string | null; device: string | null; country: string | null; region: string | null; created_at: string };
+
+// Country codes are turned into plain names (GH -> Ghana) for reading. Older
+// visits have no location, so they are grouped as "Not reported".
+function countryName(code: string) {
+  if (code === "unknown") return "Not reported";
+  try {
+    return new Intl.DisplayNames(["en"], { type: "region" }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
+
+function regionName(key: string) {
+  const [code, area] = key.split(" · ");
+  return `${countryName(code)} — ${area}`;
+}
 
 function AnalyticsPage() {
   const { user, loading, isPlatformAdmin } = useAuth();
@@ -52,7 +68,7 @@ function AnalyticsPage() {
       const all: Visit[] = [];
       for (let from = 0; from < 20000; from += 1000) {
         const { data, error } = await (supabase as unknown as import("@supabase/supabase-js").SupabaseClient).from("site_visits")
-          .select("session_id, path, source, utm_campaign, gclid, device, created_at")
+          .select("session_id, path, source, utm_campaign, gclid, device, country, region, created_at")
           .gte("created_at", since.toISOString()).order("created_at", { ascending: false })
           .range(from, from + 999);
         if (error) throw error;
@@ -116,6 +132,8 @@ function AnalyticsPage() {
       ads: new Set(rows.filter((r) => r.source === "google_ads").map((r) => r.session_id)).size,
       bounce: sessions.size ? Math.round((bounced / sessions.size) * 100) : 0,
       sources: count((r) => r.source), pages: count((r) => r.path, false), devices: count((r) => r.device),
+      countries: count((r) => r.country ?? "unknown"),
+      regions: count((r) => (r.country ? `${r.country} · ${r.region ?? "Other areas"}` : null)),
       campaigns: count((r) => r.utm_campaign),
       adPages: count((r) => (r.source === "google_ads" ? r.path : null), false),
       daily: [...days.entries()].map(([d, v]) => [d, v.size] as const).sort((a, b) => a[0].localeCompare(b[0])),
@@ -173,6 +191,17 @@ function AnalyticsPage() {
           <Card title="Campaigns (utm_campaign)"><Bars rows={s.campaigns.slice(0, 10)} /></Card>
           <Card title="Devices"><Bars rows={s.devices} /></Card>
         </div>
+
+        <h2 className="mt-8 font-serif text-2xl text-foreground">Where visitors come from</h2>
+        <div className="mt-3 grid gap-4 md:grid-cols-2">
+          <Card title="Countries (unique visitors)"><Bars rows={s.countries} label={countryName} /></Card>
+          <Card title="Areas within those countries"><Bars rows={s.regions.slice(0, 12)} label={regionName} /></Card>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Location comes from the visitor's network address as reported by the network provider, so it is accurate to
+          country and usually to region — never to a person or a street. Visitors whose network does not report a
+          country appear under "Not reported".
+        </p>
         <h2 className="mt-8 font-serif text-2xl text-foreground">App installs</h2>
         <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
           <Stat label="Installs" value={inst.installed} accent />
@@ -188,7 +217,8 @@ function AnalyticsPage() {
           iPhones don't report installs, so iPhone users only appear under "Opened from home screen" (counted once per visit).
         </p>
         <p className="mt-6 text-xs text-muted-foreground">
-          Tracking started today, so earlier visits aren't here. Admin and salon-dashboard pages are not counted.
+          Tracking started today, so earlier visits aren't here, and visits recorded before location tracking was
+          switched on have no country. Admin and salon-dashboard pages are not counted.
           Google Ads clicks are detected automatically when auto-tagging is on in your Ads account.
         </p>
       </div>
