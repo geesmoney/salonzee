@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { submitBooking } from "@/lib/bookings.functions";
+import { EnableNotifications } from "@/components/enable-notifications";
 import {
   generateSlots,
   addMinutesToTime,
@@ -40,7 +41,7 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [honeypot, setHoneypot] = useState(""); // bots fill hidden field
-  const [confirmation, setConfirmation] = useState<null | { service: string; date: string; time: string }>(null);
+  const [confirmation, setConfirmation] = useState<null | { service: string; date: string; time: string; bookingId?: string | null }>(null);
   const mountedAt = useRef<number>(Date.now());
   const submitBookingFn = useServerFn(submitBooking);
 
@@ -74,7 +75,7 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
       if (!isValidGhanaPhone(phone)) throw new Error("Enter a valid Ghana phone (e.g. 024XXXXXXX)");
 
       const endTime = addMinutesToTime(time, selectedService.duration_minutes);
-      await submitBookingFn({
+      return await submitBookingFn({
         data: {
           salonId,
           serviceId: selectedService.id,
@@ -88,12 +89,13 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
         },
       });
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
       toast.success("Booking received! The salon will confirm shortly.");
       setConfirmation({
         service: selectedService?.name ?? "",
         date: date.toLocaleDateString("en-GH", { weekday: "long", month: "long", day: "numeric" }),
         time: formatTimeLabel(time),
+        bookingId: res?.bookingId ?? null,
       });
       setTime("");
       setName("");
@@ -130,6 +132,11 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
           <p className="text-xs text-foreground/50 mb-6">
             {salonName} will confirm shortly. You'll receive an SMS update.
           </p>
+          {confirmation.bookingId && (
+            <div className="mb-4 flex justify-center">
+              <EnableNotifications mode="customer" bookingId={confirmation.bookingId} />
+            </div>
+          )}
           {waLink && (
             <a
               href={waLink}

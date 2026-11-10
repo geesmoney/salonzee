@@ -57,6 +57,13 @@
       "when": 1794258810451,
       "tag": "0007_site_visits_location",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794319191115,
+      "tag": "0008_retention_reminders_and_push",
+      "breakpoints": true
     }
   ]
 }

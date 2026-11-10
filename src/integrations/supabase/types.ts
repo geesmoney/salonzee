@@ -134,6 +134,39 @@ export type Database = {
         }
         Relationships: []
       }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          customer_phone: string | null
+          endpoint: string
+          id: string
+          last_success_at: string | null
+          owner_user_id: string | null
+          p256dh: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          customer_phone?: string | null
+          endpoint: string
+          id?: string
+          last_success_at?: string | null
+          owner_user_id?: string | null
+          p256dh: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          customer_phone?: string | null
+          endpoint?: string
+          id?: string
+          last_success_at?: string | null
+          owner_user_id?: string | null
+          p256dh?: string
+        }
+        Relationships: []
+      }
       referral_codes: {
         Row: {
           active: boolean
@@ -216,6 +249,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      retention_settings: {
+        Row: {
+          customer_reminders_enabled: boolean
+          daily_sms_cap: number
+          id: boolean
+          owner_nudges_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          customer_reminders_enabled?: boolean
+          daily_sms_cap?: number
+          id?: boolean
+          owner_nudges_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          customer_reminders_enabled?: boolean
+          daily_sms_cap?: number
+          id?: boolean
+          owner_nudges_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: []
       }
       reviews: {
         Row: {

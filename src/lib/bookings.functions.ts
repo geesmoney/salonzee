@@ -124,7 +124,7 @@ export const submitBooking = createServerFn({ method: "POST" })
     }
 
 
-    const { error: insertErr } = await supabaseAdmin.from("bookings").insert({
+    const { data: inserted, error: insertErr } = await supabaseAdmin.from("bookings").insert({
       salon_id: data.salonId,
       service_id: data.serviceId,
       customer_name: data.customerName,
@@ -133,7 +133,7 @@ export const submitBooking = createServerFn({ method: "POST" })
       start_time: data.startTime,
       end_time: endTime,
       price_ghs_snapshot: Number(svc.price_ghs),
-    });
+    }).select("id").single();
     if (insertErr) {
       if (insertErr.code === "23505") {
         throw new Error("That time slot was just taken. Please pick another.");
@@ -142,5 +142,5 @@ export const submitBooking = createServerFn({ method: "POST" })
       throw new Error(GENERIC_ERR);
     }
 
-    return { ok: true };
+    return { ok: true, bookingId: inserted?.id ?? null };
   });

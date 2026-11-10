@@ -27,6 +27,7 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
+import { Route as AuthenticatedAdminRemindersRouteImport } from './routes/_authenticated/admin.reminders'
 import { Route as AuthenticatedAdminRevenueRouteImport } from './routes/_authenticated/admin.revenue'
 import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin.seo'
 import { Route as AuthenticatedAdminSmsRouteImport } from './routes/_authenticated/admin.sms'
@@ -131,6 +132,12 @@ const AuthenticatedAdminReferralsRoute =
     path: '/admin/referrals',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminRemindersRoute =
+  AuthenticatedAdminRemindersRouteImport.update({
+    id: '/admin/reminders',
+    path: '/admin/reminders',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminRevenueRoute =
   AuthenticatedAdminRevenueRouteImport.update({
     id: '/admin/revenue',
@@ -206,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
+  '/admin/reminders': typeof AuthenticatedAdminRemindersRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
@@ -235,6 +243,7 @@ export interface FileRoutesByTo {
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
+  '/admin/reminders': typeof AuthenticatedAdminRemindersRoute
   '/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/sms': typeof AuthenticatedAdminSmsRoute
@@ -266,6 +275,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/referrals': typeof AuthenticatedAdminReferralsRoute
+  '/_authenticated/admin/reminders': typeof AuthenticatedAdminRemindersRoute
   '/_authenticated/admin/revenue': typeof AuthenticatedAdminRevenueRoute
   '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/sms': typeof AuthenticatedAdminSmsRoute
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
     | '/admin/bookings'
     | '/admin/pending'
     | '/admin/referrals'
+    | '/admin/reminders'
     | '/admin/revenue'
     | '/admin/seo'
     | '/admin/sms'
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/bookings'
     | '/admin/pending'
     | '/admin/referrals'
+    | '/admin/reminders'
     | '/admin/revenue'
     | '/admin/seo'
     | '/admin/sms'
@@ -356,6 +368,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/bookings'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/referrals'
+    | '/_authenticated/admin/reminders'
     | '/_authenticated/admin/revenue'
     | '/_authenticated/admin/seo'
     | '/_authenticated/admin/sms'
@@ -515,6 +528,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReferralsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/reminders': {
+      id: '/_authenticated/admin/reminders'
+      path: '/admin/reminders'
+      fullPath: '/admin/reminders'
+      preLoaderRoute: typeof AuthenticatedAdminRemindersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/revenue': {
       id: '/_authenticated/admin/revenue'
       path: '/admin/revenue'
@@ -593,6 +613,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedAdminReferralsRoute: typeof AuthenticatedAdminReferralsRoute
+  AuthenticatedAdminRemindersRoute: typeof AuthenticatedAdminRemindersRoute
   AuthenticatedAdminRevenueRoute: typeof AuthenticatedAdminRevenueRoute
   AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminSmsRoute: typeof AuthenticatedAdminSmsRoute
@@ -607,6 +628,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedAdminReferralsRoute: AuthenticatedAdminReferralsRoute,
+  AuthenticatedAdminRemindersRoute: AuthenticatedAdminRemindersRoute,
   AuthenticatedAdminRevenueRoute: AuthenticatedAdminRevenueRoute,
   AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
   AuthenticatedAdminSmsRoute: AuthenticatedAdminSmsRoute,

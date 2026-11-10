@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { supabaseAdmin } from '@/integrations/supabase/client.server';
 
+import { REMINDER_TEMPLATES } from '@/lib/push-config';
+import { sendPushForRow } from '@/lib/push.server';
+
 const MNOTIFY_URL = 'https://api.mnotify.com/api/sms/quick';
 
 function normalizeGhanaPhone(raw: string): string {
@@ -43,12 +46,26 @@ export const Route = createFileRoute('/api/public/hooks/process-sms-queue')({
           );
         }
 
-        const { data: rows, error } = await supabaseAdmin
+        // Booking/transactional texts always go first; reminders only fill leftover capacity.
+        const reminderList = `(${REMINDER_TEMPLATES.join(',')})`;
+        const { data: urgent, error } = await supabaseAdmin
           .from('sms_log')
-          .select('id, to_phone, payload')
+          .select('id, to_phone, payload, template')
           .eq('status', 'stubbed')
+          .not('template', 'in', reminderList)
           .order('sent_at', { ascending: true })
           .limit(25);
+        let rows = urgent ?? [];
+        if (!error && rows.length < 25) {
+          const { data: extra } = await supabaseAdmin
+            .from('sms_log')
+            .select('id, to_phone, payload, template')
+            .eq('status', 'stubbed')
+            .in('template', [...REMINDER_TEMPLATES])
+            .order('sent_at', { ascending: true })
+            .limit(25 - rows.length);
+          rows = rows.concat(extra ?? []);
+        }
 
         if (error) {
           return new Response(JSON.stringify({ error: error.message }), {
@@ -65,6 +82,9 @@ export const Route = createFileRoute('/api/public/hooks/process-sms-queue')({
             }).eq('id', row.id);
             failed++;
             continue;
+          }
+          if ((REMINDER_TEMPLATES as readonly string[]).includes(row.template)) {
+            await sendPushForRow(supabaseAdmin, row.to_phone, row.payload);
           }
           try {
             const r = await sendOne(row.to_phone, message, apiKey, sender);

@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { EnableNotifications } from "@/components/enable-notifications";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -169,6 +170,8 @@ function SalonDashboard() {
             </a>
           </div>
         </div>
+
+        <div className="mb-6"><EnableNotifications mode="owner" /></div>
 
         <SetupChecklist
           status={salon.status}
