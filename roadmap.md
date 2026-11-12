@@ -20,3 +20,9 @@
 # Journal voice rewrite
 - [x] Rewrite all four guides in Godwin's conversational style with proper introductions and conclusions.
 - [x] Preserve factual limitations, URLs and search metadata; verify articles and phone layouts.
+
+# Analytics submission safeguards
+- [x] Validate visit/install submissions and preserve anonymous tracking and existing reports.
+- [x] Verify accepted events, rejected malformed events, Google Ads attribution and public pages.
+- [ ] After the new tracker is published and verified, revoke legacy browser inserts; blocked on publication to avoid undercounting the live site.
+- [ ] Repeated-submission throttling requires informed confirmation of an ad-hoc limit because the backend has no standard limiter.

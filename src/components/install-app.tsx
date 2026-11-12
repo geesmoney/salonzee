@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { recordAnalyticsEvent } from "@/lib/analytics-ingestion.functions";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -26,8 +26,7 @@ function log(event: InstallEvent) {
   try {
     let sid = sessionStorage.getItem("sz_sid");
     if (!sid) { sid = crypto.randomUUID(); sessionStorage.setItem("sz_sid", sid); }
-    void (supabase as unknown as import("@supabase/supabase-js").SupabaseClient)
-      .from("app_install_events").insert({ session_id: sid, event, platform: platform() }).then(() => undefined);
+    void recordAnalyticsEvent({ data: { kind: "install", session_id: sid, event, platform: platform() } }).catch(() => undefined);
   } catch { /* tracking must never break the app */ }
 }
 

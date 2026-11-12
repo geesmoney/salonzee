@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { recordAnalyticsEvent } from "@/lib/analytics-ingestion.functions";
 
 const SKIP = ["/admin", "/salon/"];
 
@@ -18,36 +18,6 @@ function classify(ref: string, utm: string | null, medium: string | null, gclid:
     return h.slice(0, 60);
   } catch {
     return "direct";
-  }
-}
-
-// Country / region are read once per visit from Cloudflare's own request
-// metadata via a tiny endpoint, then reused for the rest of the visit. A slow
-// or failing lookup must never hold up or break tracking, so it is capped and
-// falls back to "no location".
-async function visitorLocation(): Promise<{ country: string | null; region: string | null }> {
-  const none = { country: null, region: null };
-  try {
-    const cached = sessionStorage.getItem("sz_loc");
-    if (cached) return { country: null, region: null, ...JSON.parse(cached) };
-  } catch {
-    /* fall through to a fresh lookup */
-  }
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 1500);
-    const res = await fetch("/api/public/visit-location", { signal: ctrl.signal, cache: "no-store" });
-    clearTimeout(timer);
-    if (!res.ok) return none;
-    const json = (await res.json()) as { country?: unknown; region?: unknown };
-    const loc = {
-      country: typeof json.country === "string" ? json.country : null,
-      region: typeof json.region === "string" ? json.region : null,
-    };
-    sessionStorage.setItem("sz_loc", JSON.stringify(loc));
-    return loc;
-  } catch {
-    return none;
   }
 }
 
@@ -82,8 +52,7 @@ export function VisitTracker() {
           sessionStorage.setItem("sz_attr", attr);
         }
         const device = window.matchMedia("(max-width: 768px)").matches ? "mobile" : "desktop";
-        const loc = await visitorLocation();
-        void (supabase as unknown as import("@supabase/supabase-js").SupabaseClient).from("site_visits").insert({ session_id: sid, path: path.slice(0, 300), device, ...JSON.parse(attr), ...loc }).then(() => undefined);
+        await recordAnalyticsEvent({ data: { ...JSON.parse(attr), kind: "visit", session_id: sid, path: path.slice(0, 300), device } });
       } catch {
         /* tracking must never break the app */
       }

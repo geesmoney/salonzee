@@ -64,6 +64,13 @@
       "when": 1794319191115,
       "tag": "0008_retention_reminders_and_push",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794501630500,
+      "tag": "0009_validate_legacy_analytics_submissions",
+      "breakpoints": true
     }
   ]
 }
