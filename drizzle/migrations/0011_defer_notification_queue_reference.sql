@@ -1,0 +1,1 @@
+ALTER TABLE public.owner_notifications ALTER CONSTRAINT owner_notifications_sms_id_fkey DEFERRABLE INITIALLY DEFERRED;

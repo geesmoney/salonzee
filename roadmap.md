@@ -26,3 +26,9 @@
 - [x] Verify accepted events, rejected malformed events, Google Ads attribution and public pages.
 - [ ] After the new tracker is published and verified, revoke legacy browser inserts; blocked on publication to avoid undercounting the live site.
 - [ ] Repeated-submission throttling requires informed confirmation of an ad-hoc limit because the backend has no standard limiter.
+
+# Owner booking and update notifications
+- [x] Audit existing push subscriptions and booking wiring.
+- [x] Add private inbox, opt-in chimes, and push for owner booking/support/listing/profile alerts without extra SMS.
+- [x] Verify recipient-only policies, deduplication, signed-in inbox/read receipt, mobile sound controls and push key encryption; temporary alert removed and rolled-back queue tests passed.
+- [ ] Verify real phone delivery/sound after publication and owner permission; requires an opted-in owner device.

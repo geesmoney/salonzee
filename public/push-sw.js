@@ -10,6 +10,9 @@ self.addEventListener("push", (event) => {
       body: data.body || "",
       icon: "/icon-192.png",
       badge: "/icon-192.png",
+      silent: false,
+      vibrate: [200, 100, 200],
+      tag: data.tag,
       data: { url: data.url || "/" },
     }),
   );
@@ -17,7 +20,8 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = new URL(event.notification.data?.url || "/", self.location.origin).href;
+  const target = new URL(event.notification.data?.url || "/", self.location.origin);
+  const url = target.origin === self.location.origin ? target.href : self.location.origin;
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
       for (const c of list) if (c.url === url && "focus" in c) return c.focus();

@@ -110,6 +110,50 @@ export type Database = {
           },
         ]
       }
+      owner_notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          read_at: string | null
+          sms_id: string
+          title: string
+          url: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          kind: string
+          read_at?: string | null
+          sms_id: string
+          title: string
+          url: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          read_at?: string | null
+          sms_id?: string
+          title?: string
+          url?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_notifications_sms_id_fkey"
+            columns: ["sms_id"]
+            isOneToOne: true
+            referencedRelation: "sms_log"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import logo from "@/assets/salonzee-logo.png";
+import { OwnerNotifications } from "@/components/owner-notifications";
 
 export function SiteNav() {
   const { user, isPlatformAdmin, signOut } = useAuth();
@@ -40,6 +41,7 @@ export function SiteNav() {
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2">
+        {user && <OwnerNotifications key={user.id} />}
         <ThemeToggle />
         {/* Desktop sign-in/out / CTA */}
         <div className="hidden md:block">

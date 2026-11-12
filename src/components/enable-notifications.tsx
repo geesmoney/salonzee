@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Bell, BellRing } from "lucide-react";
 import { toast } from "sonner";
 import { VAPID_PUBLIC_KEY } from "@/lib/push-config";
-import { subscribeCustomerPush, subscribeOwnerPush } from "@/lib/push.functions";
+import { subscribeCustomerPush, subscribeOwnerPush, testOwnerPush } from "@/lib/push.functions";
+import { Button } from "@/components/ui/button";
 
 function toUint8(base64url: string) {
   const pad = "=".repeat((4 - (base64url.length % 4)) % 4);
@@ -21,8 +22,13 @@ export function EnableNotifications(props: Props) {
     setSupported(ok);
     if (ok && Notification.permission === "granted" && props.mode === "owner") {
       navigator.serviceWorker.getRegistration("/push-scope/").then(async (r) => {
-        if (r && (await r.pushManager.getSubscription())) setState("on");
-      });
+        const sub = await r?.pushManager.getSubscription();
+        const json = sub?.toJSON();
+        if (json?.endpoint && json.keys?.p256dh && json.keys?.auth) {
+          await subscribeOwnerPush({ data: { endpoint: json.endpoint, p256dh: json.keys.p256dh, auth: json.keys.auth } });
+          setState("on");
+        }
+      }).catch(() => setState("idle"));
     }
   }, [props.mode]);
 
@@ -64,13 +70,23 @@ export function EnableNotifications(props: Props) {
 
   if (state === "on") {
     return (
-      <p className="inline-flex items-center gap-2 text-xs text-foreground/60">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-foreground/60">
         <BellRing className="h-4 w-4 text-primary" /> Notifications are on for this device
-      </p>
+        {props.mode === "owner" && <Button size="sm" variant="outline" onClick={async () => {
+          try {
+            const reg = await navigator.serviceWorker.getRegistration("/push-scope/");
+            const sub = await reg?.pushManager.getSubscription();
+            if (!sub) throw new Error("No subscription");
+            const result = await testOwnerPush({ data: { endpoint: sub.endpoint } });
+            if (result.accepted) toast.success("Test accepted by your phone's notification service. Check your phone.");
+            else toast.error("Test wasn't accepted. Turn notifications on again.");
+          } catch { toast.error("Couldn't send a test. Wait a minute, or enable notifications again."); }
+        }}>Send test notification</Button>}
+      </div>
     );
   }
   return (
-    <button
+    <Button
       type="button"
       onClick={enable}
       disabled={state === "busy"}
@@ -78,6 +94,6 @@ export function EnableNotifications(props: Props) {
     >
       <Bell className="h-4 w-4" />
       {props.mode === "customer" ? "Get reminders on this phone" : "Turn on phone notifications"}
-    </button>
+    </Button>
   );
 }

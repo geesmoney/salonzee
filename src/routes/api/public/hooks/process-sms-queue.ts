@@ -74,6 +74,7 @@ export const Route = createFileRoute('/api/public/hooks/process-sms-queue')({
         }
 
         let sent = 0, failed = 0;
+        const pushTasks: Promise<unknown>[] = [];
         for (const row of rows ?? []) {
           const message = (row.payload as any)?.message;
           if (!message || !row.to_phone) {
@@ -83,9 +84,8 @@ export const Route = createFileRoute('/api/public/hooks/process-sms-queue')({
             failed++;
             continue;
           }
-          if ((REMINDER_TEMPLATES as readonly string[]).includes(row.template)) {
-            await sendPushForRow(supabaseAdmin, row.to_phone, row.payload);
-          }
+          // Push is best-effort; booking texts keep their existing priority and payload.
+          pushTasks.push(sendPushForRow(supabaseAdmin, row.to_phone, row.payload).catch(() => 0));
           try {
             const r = await sendOne(row.to_phone, message, apiKey, sender);
             if (r.ok) {
@@ -108,6 +108,7 @@ export const Route = createFileRoute('/api/public/hooks/process-sms-queue')({
           }
         }
 
+        await Promise.allSettled(pushTasks);
         return new Response(JSON.stringify({ ok: true, sent, failed, total: rows?.length ?? 0 }), {
           status: 200, headers: { 'Content-Type': 'application/json' },
         });
