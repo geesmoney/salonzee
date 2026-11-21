@@ -17,8 +17,10 @@ import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SalonsRouteImport } from './routes/salons'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as ApiSeoAdvisorRouteImport } from './routes/api/seo-advisor'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as ReviewTokenRouteImport } from './routes/review.$token'
@@ -78,6 +80,11 @@ const ReportIssueRoute = ReportIssueRouteImport.update({
   path: '/report-issue',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SalonsRoute = SalonsRouteImport.update({
   id: '/salons',
   path: '/salons',
@@ -87,6 +94,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiSeoAdvisorRoute = ApiSeoAdvisorRouteImport.update({
   id: '/api/seo-advisor',
@@ -203,8 +215,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -233,8 +247,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -265,8 +281,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/salons': typeof SalonsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/api/seo-advisor': typeof ApiSeoAdvisorRoute
   '/blog_/$slug': typeof BlogSlugRoute
   '/review/$token': typeof ReviewTokenRoute
@@ -297,8 +315,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/register-salon'
     | '/report-issue'
+    | '/reset-password'
     | '/salons'
     | '/sitemap.xml'
+    | '/account'
     | '/api/seo-advisor'
     | '/blog/$slug'
     | '/review/$token'
@@ -327,8 +347,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/register-salon'
     | '/report-issue'
+    | '/reset-password'
     | '/salons'
     | '/sitemap.xml'
+    | '/account'
     | '/api/seo-advisor'
     | '/blog/$slug'
     | '/review/$token'
@@ -358,8 +380,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/register-salon'
     | '/report-issue'
+    | '/reset-password'
     | '/salons'
     | '/sitemap.xml'
+    | '/_authenticated/account'
     | '/api/seo-advisor'
     | '/blog_/$slug'
     | '/review/$token'
@@ -390,6 +414,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterSalonRoute: typeof RegisterSalonRoute
   ReportIssueRoute: typeof ReportIssueRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SalonsRoute: typeof SalonsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiSeoAdvisorRoute: typeof ApiSeoAdvisorRoute
@@ -458,6 +483,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportIssueRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/salons': {
       id: '/salons'
       path: '/salons'
@@ -471,6 +503,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/seo-advisor': {
       id: '/api/seo-advisor'
@@ -609,6 +648,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
@@ -624,6 +664,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
@@ -662,6 +703,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RegisterSalonRoute: RegisterSalonRoute,
   ReportIssueRoute: ReportIssueRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SalonsRoute: SalonsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiSeoAdvisorRoute: ApiSeoAdvisorRoute,

@@ -1,5 +1,8 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { claimPendingBooking } from "@/lib/customer-account";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -13,6 +16,17 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
 
   const close = () => setOpen(false);
+  const ownsSalon = useQuery({
+    queryKey: ["owns-salon", user?.id],
+    enabled: !!user,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data } = await supabase.from("salons").select("id").eq("user_id", user!.id).limit(1);
+      return (data?.length ?? 0) > 0;
+    },
+  }).data === true;
+  const isOwner = ownsSalon || isPlatformAdmin;
+  useEffect(() => { if (user) void claimPendingBooking(); }, [user]);
 
   return (
     <nav className="flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-10 py-2 border-b border-border bg-background/90 backdrop-blur sticky top-0 z-40">
@@ -27,7 +41,8 @@ export function SiteNav() {
         <NavLink to="/blog">Journal</NavLink>
         <NavLink to="/register-salon">For business</NavLink>
         {!user && <NavLink to="/login">Sign in</NavLink>}
-        {user && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
+        {user && <NavLink to="/account">My bookings</NavLink>}
+        {user && isOwner && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
         {user && <NavLink to="/salon/support">Support</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/bookings">Bookings</NavLink>}
@@ -90,8 +105,9 @@ export function SiteNav() {
               <MobileLink to="/features" onSelect={close}>Features</MobileLink>
               <MobileLink to="/blog" onSelect={close}>Journal</MobileLink>
               <MobileLink to="/register-salon" onSelect={close}>For business</MobileLink>
-              {user && <MobileLink to="/salon/dashboard" onSelect={close}>Dashboard</MobileLink>}
-              {user && <MobileLink to="/salon/settings" onSelect={close}>Settings</MobileLink>}
+              {user && <MobileLink to="/account" onSelect={close}>My bookings</MobileLink>}
+              {user && isOwner && <MobileLink to="/salon/dashboard" onSelect={close}>Dashboard</MobileLink>}
+              {user && isOwner && <MobileLink to="/salon/settings" onSelect={close}>Settings</MobileLink>}
               {user && <MobileLink to="/salon/support" onSelect={close}>Support</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/pending" onSelect={close}>Admin · Pending</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/bookings" onSelect={close}>Admin · Bookings</MobileLink>}

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { submitBooking } from "@/lib/bookings.functions";
 import { EnableNotifications } from "@/components/enable-notifications";
+import { SaveBookingToAccount } from "@/components/save-booking-to-account";
 import {
   generateSlots,
   addMinutesToTime,
@@ -132,6 +133,7 @@ export function BookingWidget({ salonId, salonName, salonWhatsapp, services, ope
           <p className="text-xs text-foreground/50 mb-6">
             {salonName} will confirm shortly. You'll receive an SMS update.
           </p>
+          {confirmation.bookingId && <SaveBookingToAccount bookingId={confirmation.bookingId} />}
           {confirmation.bookingId && (
             <div className="mb-4 flex justify-center">
               <EnableNotifications mode="customer" bookingId={confirmation.bookingId} />

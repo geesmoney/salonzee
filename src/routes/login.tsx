@@ -1,5 +1,7 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { claimPendingBooking, homeFor } from "@/lib/customer-account";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteNav } from "@/components/site-nav";
@@ -9,47 +11,62 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Sign in — Salonzee" },
-      { name: "description", content: "Sign in to manage your Salonzee salon profile, services, and bookings — or create an owner account to join the directory." },
+      { name: "description", content: "Sign in to Salonzee to see your bookings and spending, or manage your business profile." },
       { property: "og:title", content: "Sign in — Salonzee" },
-      { property: "og:description", content: "Salon owner sign-in for Salonzee." },
+      { property: "og:description", content: "Sign in to Salonzee — for customers and business owners." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
         { property: "og:url", content: "https://salonzee.com/login" },
     ],
     links: [{ rel: "canonical", href: "https://salonzee.com/login" }],
   }),
+  validateSearch: (s: Record<string, unknown>): { mode?: "signin" | "signup" } =>
+    s["mode"] === "signup" ? { mode: "signup" } : {},
   component: LoginPage,
 });
 
 function LoginPage() {
   const { signIn, signUp, user, isPlatformAdmin } = useAuth();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">(search.mode ?? "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (user) {
-    // Already logged in
-    setTimeout(() => navigate({ to: isPlatformAdmin ? "/admin/pending" : "/salon/dashboard" }), 0);
-  }
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    (async () => {
+      await claimPendingBooking();
+      const to = await homeFor(user.id, isPlatformAdmin);
+      if (alive) navigate({ to, replace: true });
+    })();
+    return () => { alive = false; };
+  }, [user, isPlatformAdmin, navigate]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    if (mode === "forgot") {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      setLoading(false);
+      if (error) return toast.error("Could not send the reset email. Please try again.");
+      toast.success("If that email has an account, a reset link is on its way.");
+      setMode("signin");
+      return;
+    }
     const { error } =
       mode === "signin"
         ? await signIn(email, password)
         : await signUp(email, password, fullName);
     setLoading(false);
     if (error) return toast.error(error);
-    if (mode === "signup") {
-      toast.success("Check your email to confirm your account.");
-    } else {
-      toast.success("Welcome back.");
-      navigate({ to: "/salon/dashboard" });
-    }
+    toast.success(mode === "signup" ? "Account created." : "Welcome back.");
+    // Redirect happens once the session arrives (see effect above).
   }
 
   async function signInWithGoogle() {
@@ -63,17 +80,20 @@ function LoginPage() {
       return;
     }
     if (result.redirected) return;
-    // Session set
-    navigate({ to: isPlatformAdmin ? "/admin/pending" : "/salon/dashboard" });
+    setLoading(false);
   }
 
   return (
     <div className="min-h-dvh bg-background">
       <SiteNav />
       <div className="max-w-md mx-auto px-6 py-20">
-        <h1 className="font-serif text-5xl mb-2">{mode === "signin" ? "Welcome back" : "Create account"}</h1>
+        <h1 className="font-serif text-5xl mb-2">{mode === "signin" ? "Welcome back" : mode === "signup" ? "Create account" : "Reset password"}</h1>
         <p className="text-foreground/60 mb-10 text-sm">
-          {mode === "signin" ? "For salon owners and platform admins." : "Register a new salon owner account."}
+          {mode === "signin"
+            ? "See your bookings, or manage your business."
+            : mode === "signup"
+              ? "Free account to track your bookings and spending. Booking without one still works."
+              : "Enter your email and we'll send you a reset link."}
         </p>
         <form onSubmit={submit} className="space-y-4">
           {mode === "signup" && (
@@ -94,7 +114,7 @@ function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full bg-card border border-foreground/10 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-accent"
           />
-          <input
+          {mode !== "forgot" && <input
             type="password"
             required
             minLength={6}
@@ -102,12 +122,17 @@ function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-card border border-foreground/10 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-accent"
-          />
+          />}
+          {mode === "signin" && (
+            <button type="button" onClick={() => setMode("forgot")} className="text-xs text-foreground/60 underline">
+              Forgot password?
+            </button>
+          )}
           <button
             disabled={loading}
             className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold uppercase text-xs tracking-[0.2em] hover:bg-clay disabled:opacity-50"
           >
-            {loading ? "..." : mode === "signin" ? "Sign in" : "Create account"}
+            {loading ? "..." : mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
           </button>
         </form>
         <div className="my-6 flex items-center gap-3">
@@ -137,7 +162,7 @@ function LoginPage() {
           {mode === "signin" ? "Need an account? Sign up" : "Have an account? Sign in"}
         </button>
         <p className="mt-10 text-xs text-foreground/40">
-          Looking to list your salon?{" "}
+          Own a salon, barbershop or beauty business?{" "}
           <Link to="/register-salon" className="text-accent font-bold underline">Register here</Link>
         </p>
       </div>

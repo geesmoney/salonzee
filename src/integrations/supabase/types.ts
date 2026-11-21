@@ -44,6 +44,7 @@ export type Database = {
           created_at: string
           customer_name: string
           customer_phone: string
+          customer_user_id: string | null
           end_time: string
           id: string
           notes: string | null
@@ -62,6 +63,7 @@ export type Database = {
           created_at?: string
           customer_name: string
           customer_phone: string
+          customer_user_id?: string | null
           end_time: string
           id?: string
           notes?: string | null
@@ -80,6 +82,7 @@ export type Database = {
           created_at?: string
           customer_name?: string
           customer_phone?: string
+          customer_user_id?: string | null
           end_time?: string
           id?: string
           notes?: string | null
@@ -794,6 +797,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_my_booking: { Args: { _booking_id: string }; Returns: boolean }
       get_review_context: { Args: { _token: string }; Returns: Json }
       has_role: {
         Args: {

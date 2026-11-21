@@ -32,3 +32,7 @@
 - [x] Add private inbox, opt-in chimes, and push for owner booking/support/listing/profile alerts without extra SMS.
 - [x] Verify recipient-only policies, deduplication, signed-in inbox/read receipt, mobile sound controls and push key encryption; temporary alert removed and rolled-back queue tests passed.
 - [ ] Verify real phone delivery/sound after publication and owner permission; requires an opted-in owner device.
+# Customer accounts and ad conversions
+- [x] Customer sign-up/sign-in, My bookings page with spending, password reset, save-booking-to-account after guest booking.
+- [ ] Registration conversion for Google Ads; waits on the Registration event snippet label from Google Ads.
+- [ ] Booking-completed conversion for Search ads; waits on a new conversion action label from Google Ads.
