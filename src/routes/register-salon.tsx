@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { trackSignupPageView, trackSalonRegistration } from "@/lib/gtag";
@@ -260,6 +260,13 @@ function RegisterSalonPage() {
               By submitting you agree to a quick verification call from our team.
             </p>
           </form>
+          <div className="mt-4 rounded-2xl border border-border bg-secondary/60 p-5 text-center">
+            <p className="font-semibold text-sm mb-1">Not ready to create an account?</p>
+            <p className="text-xs text-muted-foreground mb-3">Leave your details and choose phone or WhatsApp for personal onboarding help.</p>
+            <Link to="/get-listed" className="inline-flex items-center justify-center rounded-full border border-foreground/20 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] hover:bg-background transition-colors">
+              Help me get listed
+            </Link>
+          </div>
         </div>
 
       </section>

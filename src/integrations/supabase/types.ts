@@ -456,6 +456,89 @@ export type Database = {
           },
         ]
       }
+      salon_leads: {
+        Row: {
+          admin_alert_sms_id: string | null
+          admin_notes: string | null
+          area: string | null
+          business_category: string
+          business_name: string
+          city: string
+          created_at: string
+          gclid: string | null
+          help_text: string | null
+          id: string
+          landing_path: string
+          owner_name: string
+          phone: string
+          preferred_contact: string
+          referrer: string | null
+          status: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          admin_alert_sms_id?: string | null
+          admin_notes?: string | null
+          area?: string | null
+          business_category: string
+          business_name: string
+          city: string
+          created_at?: string
+          gclid?: string | null
+          help_text?: string | null
+          id?: string
+          landing_path?: string
+          owner_name: string
+          phone: string
+          preferred_contact?: string
+          referrer?: string | null
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          admin_alert_sms_id?: string | null
+          admin_notes?: string | null
+          area?: string | null
+          business_category?: string
+          business_name?: string
+          city?: string
+          created_at?: string
+          gclid?: string | null
+          help_text?: string | null
+          id?: string
+          landing_path?: string
+          owner_name?: string
+          phone?: string
+          preferred_contact?: string
+          referrer?: string | null
+          status?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salon_leads_admin_alert_sms_id_fkey"
+            columns: ["admin_alert_sms_id"]
+            isOneToOne: false
+            referencedRelation: "sms_log"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       salons: {
         Row: {
           acquisition_source: string | null

@@ -36,3 +36,8 @@
 - [x] Customer sign-up/sign-in, My bookings page with spending, password reset, save-booking-to-account after guest booking.
 - [ ] Registration conversion for Google Ads; waits on the Registration event snippet label from Google Ads.
 - [ ] Booking-completed conversion for Search ads; waits on a new conversion action label from Google Ads.
+
+# Assisted salon onboarding leads
+- [x] Add a short public lead form with campaign attribution, validation and spam safeguards.
+- [x] Store leads privately, queue an admin SMS alert and add an admin follow-up page.
+- [x] Test a real submission and access rules, remove only the test lead, and verify registration, booking and mobile flows remain unchanged.

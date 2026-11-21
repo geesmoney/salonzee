@@ -45,6 +45,7 @@ export function SiteNav() {
         {user && isOwner && <NavLink to="/salon/dashboard">Dashboard</NavLink>}
         {user && <NavLink to="/salon/support">Support</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/pending">Admin</NavLink>}
+        {user && isPlatformAdmin && <NavLink to="/admin/leads">Leads</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/bookings">Bookings</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/support">Inbox</NavLink>}
         {user && isPlatformAdmin && <NavLink to="/admin/revenue">Revenue</NavLink>}
@@ -110,6 +111,7 @@ export function SiteNav() {
               {user && isOwner && <MobileLink to="/salon/settings" onSelect={close}>Settings</MobileLink>}
               {user && <MobileLink to="/salon/support" onSelect={close}>Support</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/pending" onSelect={close}>Admin · Pending</MobileLink>}
+              {user && isPlatformAdmin && <MobileLink to="/admin/leads" onSelect={close}>Admin · Leads</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/bookings" onSelect={close}>Admin · Bookings</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/support" onSelect={close}>Admin · Inbox</MobileLink>}
               {user && isPlatformAdmin && <MobileLink to="/admin/revenue" onSelect={close}>Admin · Revenue</MobileLink>}

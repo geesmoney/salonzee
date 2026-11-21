@@ -14,6 +14,7 @@ import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as GetListedRouteImport } from './routes/get-listed'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterSalonRouteImport } from './routes/register-salon'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
@@ -27,6 +28,7 @@ import { Route as ReviewTokenRouteImport } from './routes/review.$token'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
+import { Route as AuthenticatedAdminLeadsRouteImport } from './routes/_authenticated/admin.leads'
 import { Route as AuthenticatedAdminPendingRouteImport } from './routes/_authenticated/admin.pending'
 import { Route as AuthenticatedAdminReferralsRouteImport } from './routes/_authenticated/admin.referrals'
 import { Route as AuthenticatedAdminRemindersRouteImport } from './routes/_authenticated/admin.reminders'
@@ -63,6 +65,11 @@ const BlogRoute = BlogRouteImport.update({
 const FeaturesRoute = FeaturesRouteImport.update({
   id: '/features',
   path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetListedRoute = GetListedRouteImport.update({
+  id: '/get-listed',
+  path: '/get-listed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -132,6 +139,11 @@ const AuthenticatedAdminBookingsRoute =
     path: '/admin/bookings',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminLeadsRoute = AuthenticatedAdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminPendingRoute =
   AuthenticatedAdminPendingRouteImport.update({
     id: '/admin/pending',
@@ -212,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/$slug': typeof SlugRoute
   '/blog': typeof BlogRoute
   '/features': typeof FeaturesRoute
+  '/get-listed': typeof GetListedRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
@@ -225,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/reminders': typeof AuthenticatedAdminRemindersRoute
@@ -244,6 +258,7 @@ export interface FileRoutesByTo {
   '/$slug': typeof SlugRoute
   '/blog': typeof BlogRoute
   '/features': typeof FeaturesRoute
+  '/get-listed': typeof GetListedRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
@@ -257,6 +272,7 @@ export interface FileRoutesByTo {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/admin/reminders': typeof AuthenticatedAdminRemindersRoute
@@ -278,6 +294,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/blog': typeof BlogRoute
   '/features': typeof FeaturesRoute
+  '/get-listed': typeof GetListedRoute
   '/login': typeof LoginRoute
   '/register-salon': typeof RegisterSalonRoute
   '/report-issue': typeof ReportIssueRoute
@@ -291,6 +308,7 @@ export interface FileRoutesById {
   '/salons/$salonId': typeof SalonsSalonIdRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/_authenticated/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/_authenticated/admin/pending': typeof AuthenticatedAdminPendingRoute
   '/_authenticated/admin/referrals': typeof AuthenticatedAdminReferralsRoute
   '/_authenticated/admin/reminders': typeof AuthenticatedAdminRemindersRoute
@@ -312,6 +330,7 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/blog'
     | '/features'
+    | '/get-listed'
     | '/login'
     | '/register-salon'
     | '/report-issue'
@@ -325,6 +344,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/admin/analytics'
     | '/admin/bookings'
+    | '/admin/leads'
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/reminders'
@@ -344,6 +364,7 @@ export interface FileRouteTypes {
     | '/$slug'
     | '/blog'
     | '/features'
+    | '/get-listed'
     | '/login'
     | '/register-salon'
     | '/report-issue'
@@ -357,6 +378,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/admin/analytics'
     | '/admin/bookings'
+    | '/admin/leads'
     | '/admin/pending'
     | '/admin/referrals'
     | '/admin/reminders'
@@ -377,6 +399,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/blog'
     | '/features'
+    | '/get-listed'
     | '/login'
     | '/register-salon'
     | '/report-issue'
@@ -390,6 +413,7 @@ export interface FileRouteTypes {
     | '/salons/$salonId'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/bookings'
+    | '/_authenticated/admin/leads'
     | '/_authenticated/admin/pending'
     | '/_authenticated/admin/referrals'
     | '/_authenticated/admin/reminders'
@@ -411,6 +435,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   BlogRoute: typeof BlogRoute
   FeaturesRoute: typeof FeaturesRoute
+  GetListedRoute: typeof GetListedRoute
   LoginRoute: typeof LoginRoute
   RegisterSalonRoute: typeof RegisterSalonRoute
   ReportIssueRoute: typeof ReportIssueRoute
@@ -460,6 +485,13 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features'
       preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-listed': {
+      id: '/get-listed'
+      path: '/get-listed'
+      fullPath: '/get-listed'
+      preLoaderRoute: typeof GetListedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -551,6 +583,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/bookings'
       fullPath: '/admin/bookings'
       preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/leads': {
+      id: '/_authenticated/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AuthenticatedAdminLeadsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/pending': {
@@ -651,6 +690,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
+  AuthenticatedAdminLeadsRoute: typeof AuthenticatedAdminLeadsRoute
   AuthenticatedAdminPendingRoute: typeof AuthenticatedAdminPendingRoute
   AuthenticatedAdminReferralsRoute: typeof AuthenticatedAdminReferralsRoute
   AuthenticatedAdminRemindersRoute: typeof AuthenticatedAdminRemindersRoute
@@ -667,6 +707,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
+  AuthenticatedAdminLeadsRoute: AuthenticatedAdminLeadsRoute,
   AuthenticatedAdminPendingRoute: AuthenticatedAdminPendingRoute,
   AuthenticatedAdminReferralsRoute: AuthenticatedAdminReferralsRoute,
   AuthenticatedAdminRemindersRoute: AuthenticatedAdminRemindersRoute,
@@ -700,6 +741,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   BlogRoute: BlogRoute,
   FeaturesRoute: FeaturesRoute,
+  GetListedRoute: GetListedRoute,
   LoginRoute: LoginRoute,
   RegisterSalonRoute: RegisterSalonRoute,
   ReportIssueRoute: ReportIssueRoute,

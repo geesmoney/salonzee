@@ -92,6 +92,13 @@
       "when": 1795245092905,
       "tag": "0012_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1795245519389,
+      "tag": "0013_add_salon_onboarding_leads",
+      "breakpoints": true
     }
   ]
 }
