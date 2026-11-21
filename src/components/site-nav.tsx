@@ -60,7 +60,7 @@ export function SiteNav() {
         {user && <OwnerNotifications key={user.id} />}
         <ThemeToggle />
         {/* Desktop sign-in/out / CTA */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-2">
           {user ? (
             <button
               onClick={async () => {
@@ -72,12 +72,21 @@ export function SiteNav() {
               Sign out
             </button>
           ) : (
-            <Link
-              to="/salons"
-              className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
-            >
-              Book now
-            </Link>
+            <>
+              <Link
+                to="/login"
+                search={{ mode: "signup" }}
+                className="border border-border px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-muted transition-colors"
+              >
+                Create account
+              </Link>
+              <Link
+                to="/salons"
+                className="bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
+              >
+                Book now
+              </Link>
+            </>
           )}
         </div>
 
@@ -137,19 +146,29 @@ export function SiteNav() {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Link
-                    to="/salons"
+                    to="/login"
+                    search={{ mode: "signup" }}
                     onClick={close}
                     className="block text-center bg-primary text-primary-foreground py-3.5 rounded-full font-semibold text-sm shadow-sm"
                   >
-                    Find a salon
+                    Create free customer account
                   </Link>
-                  <Link
-                    to="/login"
-                    onClick={close}
-                    className="block text-center border border-border py-3.5 rounded-full font-semibold text-sm hover:bg-muted"
-                  >
-                    Sign in
-                  </Link>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      to="/salons"
+                      onClick={close}
+                      className="block text-center border border-border py-3.5 rounded-full font-semibold text-sm hover:bg-muted"
+                    >
+                      Find a salon
+                    </Link>
+                    <Link
+                      to="/login"
+                      onClick={close}
+                      className="block text-center border border-border py-3.5 rounded-full font-semibold text-sm hover:bg-muted"
+                    >
+                      Sign in
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>

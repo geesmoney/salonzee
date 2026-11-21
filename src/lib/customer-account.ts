@@ -22,9 +22,15 @@ export async function claimBooking(bookingId: string): Promise<boolean> {
   return !error && data === true;
 }
 
+/** Role-specific account area. Customers must never land on the salon-only dashboard. */
+export function accountAreaFor(isPlatformAdmin: boolean, ownsSalon: boolean): string {
+  if (isPlatformAdmin) return "/admin/pending";
+  return ownsSalon ? "/salon/dashboard" : "/account";
+}
+
 /** Where a signed-in person should land: admins → admin, salon owners → dashboard, customers → bookings. */
 export async function homeFor(userId: string, isPlatformAdmin: boolean): Promise<string> {
-  if (isPlatformAdmin) return "/admin/pending";
+  if (isPlatformAdmin) return accountAreaFor(true, false);
   const { data } = await supabase.from("salons").select("id").eq("user_id", userId).limit(1);
-  return data && data.length > 0 ? "/salon/dashboard" : "/account";
+  return accountAreaFor(false, (data?.length ?? 0) > 0);
 }

@@ -1,6 +1,9 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Search, LayoutDashboard, LifeBuoy, LogIn, Inbox, ShieldCheck } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Home, Search, LayoutDashboard, LifeBuoy, Inbox, ShieldCheck, UserRound, CalendarDays } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { accountAreaFor } from "@/lib/customer-account";
 
 type Item = {
   to: string;
@@ -12,6 +15,15 @@ type Item = {
 export function MobileTabBar() {
   const { user, isPlatformAdmin } = useAuth();
   const { pathname } = useLocation();
+  const ownsSalon = useQuery({
+    queryKey: ["owns-salon", user?.id],
+    enabled: !!user && !isPlatformAdmin,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data } = await supabase.from("salons").select("id").eq("user_id", user!.id).limit(1);
+      return (data?.length ?? 0) > 0;
+    },
+  }).data === true;
 
   const items: Item[] = isPlatformAdmin
     ? [
@@ -24,14 +36,16 @@ export function MobileTabBar() {
     ? [
         { to: "/", label: "Home", icon: Home, match: (p) => p === "/" },
         { to: "/salons", label: "Discover", icon: Search, match: (p) => p.startsWith("/salons") },
-        { to: "/salon/dashboard", label: "Dashboard", icon: LayoutDashboard, match: (p) => p.startsWith("/salon/dashboard") },
+        ownsSalon
+          ? { to: "/salon/dashboard", label: "Dashboard", icon: LayoutDashboard, match: (p: string) => p.startsWith("/salon/dashboard") }
+          : { to: "/account", label: "My bookings", icon: CalendarDays, match: (p: string) => p.startsWith("/account") },
         { to: "/salon/support", label: "Support", icon: LifeBuoy, match: (p) => p.startsWith("/salon/support") },
       ]
     : [
         { to: "/", label: "Home", icon: Home, match: (p) => p === "/" },
         { to: "/salons", label: "Discover", icon: Search, match: (p) => p.startsWith("/salons") },
         { to: "/register-salon", label: "For business", icon: LayoutDashboard, match: (p) => p.startsWith("/register-salon") },
-        { to: "/login", label: "Sign in", icon: LogIn, match: (p) => p.startsWith("/login") },
+        { to: "/login", label: "Account", icon: UserRound, match: (p) => p.startsWith("/login") || p.startsWith("/account") },
       ];
 
   // Hide on auth-only entry pages where focus matters
@@ -50,6 +64,8 @@ export function MobileTabBar() {
             <li key={it.to}>
               <Link
                 to={it.to}
+                search={!user && it.to === "/login" ? { mode: "signup" } : {}}
+                aria-label={!user && it.to === "/login" ? "Create customer account" : undefined}
                 className={`flex flex-col items-center justify-center gap-1 py-2.5 min-h-14 text-[11px] font-medium transition-colors ${
                   active ? "text-primary" : "text-foreground/60 hover:text-foreground"
                 }`}

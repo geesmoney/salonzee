@@ -107,6 +107,12 @@ function Index() {
                 List your salon
               </Link>
             </div>
+            <p className="mt-5 text-sm text-muted-foreground leading-relaxed max-w-xl">
+              Booking needs no account. Want your appointments and spending in one place?{" "}
+              <Link to="/login" search={{ mode: "signup" }} className="text-primary font-semibold underline underline-offset-4">
+                Create a free customer account
+              </Link>.
+            </p>
 
             <div className="mt-8 sm:mt-10 flex items-center gap-6 sm:gap-8 text-sm text-muted-foreground">
               <Stat n="Vetted" label="Salons" />

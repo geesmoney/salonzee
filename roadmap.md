@@ -45,3 +45,8 @@
 - [x] Add a short public lead form with campaign attribution, validation and spam safeguards.
 - [x] Store leads privately, queue an admin SMS alert and add an admin follow-up page.
 - [x] Test a real submission and access rules, remove only the test lead, and verify registration, booking and mobile flows remain unchanged.
+
+# Clear customer account setup
+- [ ] Make customer account creation visible before and after booking without making an account mandatory.
+- [ ] Separate customer setup guidance from business registration and give new customers clear next steps.
+- [ ] Send signed-in customers to My bookings on mobile while preserving owner/admin destinations; verify role routing, booking claim and phone layouts.

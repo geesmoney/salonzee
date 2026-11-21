@@ -27,9 +27,10 @@ export function SaveBookingToAccount({ bookingId }: { bookingId: string }) {
 
   return (
     <div className="mb-4 rounded-2xl border border-foreground/10 bg-secondary/30 p-4 text-left">
-      <p className="text-sm font-semibold mb-1">Keep track of your bookings</p>
-      <p className="text-xs text-foreground/60 mb-3">
-        Create a free account to see this booking, your history and what you've spent — all in one place.
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary mb-2">One optional last step</p>
+      <p className="text-sm font-semibold mb-1">Save this booking to a customer account</p>
+      <p className="text-xs text-foreground/60 mb-3 leading-relaxed">
+        Create a free account to see this booking, your history and what you've spent. This booking will be added automatically after you join or sign in.
       </p>
       <Link
         to="/login"
@@ -37,7 +38,7 @@ export function SaveBookingToAccount({ bookingId }: { bookingId: string }) {
         onClick={() => rememberBookingToClaim(bookingId)}
         className="block text-center bg-primary text-primary-foreground py-3 rounded-xl font-bold uppercase text-[11px] tracking-[0.2em]"
       >
-        Create free account
+        Create free customer account
       </Link>
       <Link
         to="/login"
