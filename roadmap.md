@@ -50,3 +50,7 @@
 - [x] Make customer account creation visible before and after booking without making an account mandatory.
 - [x] Separate customer setup guidance from business registration and give new customers clear next steps.
 - [x] Send signed-in customers to My bookings on mobile while preserving owner/admin destinations and the existing booking-claim code; verify role routing, recovery, guest browsing and phone layouts without creating live bookings or SMS.
+
+# Missing admin leads investigation
+- [x] Check saved lead counts, admin-only read policies, form submissions and direct salon registrations without exposing contact details.
+- [x] Clarify where assisted-onboarding leads appear versus direct salon registrations; verify the admin empty state and both links without adding fake leads.

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -129,7 +129,23 @@ function AdminLeadsPage() {
         </div>
 
         {isError && <p role="alert" className="rounded-xl bg-destructive/10 text-destructive p-4 text-sm">Leads could not be loaded. Please refresh and try again.</p>}
-        {!isError && visible.length === 0 && <p className="text-foreground/50 italic py-12 text-center">No {filter === "all" ? "" : filter} leads.</p>}
+        {!isError && leads.length === 0 && (
+          <div className="rounded-3xl border border-border bg-card px-6 py-12 text-center">
+            <h2 className="font-display text-2xl font-bold mb-3">No assisted-onboarding leads yet</h2>
+            <p className="max-w-2xl mx-auto text-sm text-muted-foreground leading-relaxed mb-7">
+              Requests submitted through the <strong className="text-foreground">Get Listed</strong> form will appear here. Businesses that registered themselves are not leads; find them under Pending salon registrations.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <Link to="/admin/pending" className="inline-flex justify-center bg-primary text-primary-foreground px-6 py-3 rounded-full text-sm font-semibold">
+                View pending salons
+              </Link>
+              <Link to="/get-listed" className="inline-flex justify-center border border-border px-6 py-3 rounded-full text-sm font-semibold hover:bg-muted">
+                Open the Get Listed form
+              </Link>
+            </div>
+          </div>
+        )}
+        {!isError && leads.length > 0 && visible.length === 0 && <p className="text-muted-foreground italic py-12 text-center">No {filter} leads. Choose “all” to see every saved lead.</p>}
 
         <div className="space-y-4">
           {visible.map((lead) => (
