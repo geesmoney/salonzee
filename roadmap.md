@@ -47,6 +47,6 @@
 - [x] Test a real submission and access rules, remove only the test lead, and verify registration, booking and mobile flows remain unchanged.
 
 # Clear customer account setup
-- [ ] Make customer account creation visible before and after booking without making an account mandatory.
-- [ ] Separate customer setup guidance from business registration and give new customers clear next steps.
-- [ ] Send signed-in customers to My bookings on mobile while preserving owner/admin destinations; verify role routing, booking claim and phone layouts.
+- [x] Make customer account creation visible before and after booking without making an account mandatory.
+- [x] Separate customer setup guidance from business registration and give new customers clear next steps.
+- [x] Send signed-in customers to My bookings on mobile while preserving owner/admin destinations and the existing booking-claim code; verify role routing, recovery, guest browsing and phone layouts without creating live bookings or SMS.

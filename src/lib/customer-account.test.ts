@@ -1,16 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { describe, test } from "node:test";
+import { strict as assert } from "node:assert";
 import { accountAreaFor } from "./customer-account";
 
 describe("accountAreaFor", () => {
-  it("sends a customer without a salon to My bookings", () => {
-    expect(accountAreaFor(false, false)).toBe("/account");
+  test("sends a customer without a salon to My bookings", () => {
+    assert.equal(accountAreaFor(false, false), "/account");
   });
 
-  it("keeps a salon owner on the salon dashboard", () => {
-    expect(accountAreaFor(false, true)).toBe("/salon/dashboard");
+  test("keeps a salon owner on the salon dashboard", () => {
+    assert.equal(accountAreaFor(false, true), "/salon/dashboard");
   });
 
-  it("keeps a platform administrator on the admin review page", () => {
-    expect(accountAreaFor(true, false)).toBe("/admin/pending");
+  test("keeps a platform administrator on the admin review page", () => {
+    assert.equal(accountAreaFor(true, false), "/admin/pending");
   });
 });
