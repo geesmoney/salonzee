@@ -53,17 +53,18 @@ export function InstallTracker() {
   return null;
 }
 
-/** Shows only when installing is possible: native prompt on Android/Chrome, instructions on iPhone. */
+/** Shows the native prompt when available, with manual steps for iPhone and shared install links. */
 export function InstallAppButton({ className = "" }: { className?: string }) {
   const [, force] = useState(0);
-  const [show, setShow] = useState<"none" | "prompt" | "ios">("none");
-  const [iosOpen, setIosOpen] = useState(false);
+  const [show, setShow] = useState<"none" | "prompt" | "ios" | "manual">("none");
+  const [helpOpen, setHelpOpen] = useState(false);
 
   useEffect(() => {
     const update = () => {
       if (isStandalone()) return setShow("none");
       if (deferred) return setShow("prompt");
-      setShow(platform() === "ios" ? "ios" : "none");
+      if (platform() === "ios") return setShow("ios");
+      setShow(window.location.hash === "#install-app" ? "manual" : "none");
     };
     const l = () => { force((n) => n + 1); update(); };
     listeners.add(l);
@@ -75,7 +76,7 @@ export function InstallAppButton({ className = "" }: { className?: string }) {
 
   const onClick = async () => {
     log("prompt_shown");
-    if (show === "ios") { setIosOpen(true); return; }
+    if (show === "ios" || show === "manual") { setHelpOpen(true); return; }
     const p = deferred;
     if (!p) return;
     await p.prompt();
@@ -90,12 +91,14 @@ export function InstallAppButton({ className = "" }: { className?: string }) {
       <Button type="button" variant="outline" size="sm" onClick={onClick} className={className}>
         <Download /> Install Salonzee app
       </Button>
-      <Dialog open={iosOpen} onOpenChange={setIosOpen}>
+      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Salonzee to your Home Screen</DialogTitle>
+            <DialogTitle>{show === "ios" ? "Add Salonzee to your Home Screen" : "Install Salonzee"}</DialogTitle>
             <DialogDescription>
-              In Safari, tap the Share button (the square with an arrow), then choose “Add to Home Screen” and tap Add.
+              {show === "ios"
+                ? "In Safari, tap the Share button (the square with an arrow), then choose “Add to Home Screen” and tap Add."
+                : "Open your browser menu and choose “Install app” or “Add to Home screen”. If you don’t see that option, open salonzee.com in Chrome, Edge or Safari and try again."}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

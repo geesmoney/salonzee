@@ -65,6 +65,15 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { data: salons = [] } = useSuspenseQuery(featuredSalonsQuery);
 
+  useEffect(() => {
+    if (window.location.hash !== "#install-app") return;
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById("install-app");
+      target?.scrollIntoView({ block: "center" });
+      target?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   return (
     <div className="min-h-dvh bg-background">

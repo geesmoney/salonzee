@@ -37,6 +37,10 @@
 - [ ] Registration conversion for Google Ads; waits on the Registration event snippet label from Google Ads.
 - [ ] Booking-completed conversion for Search ads; waits on a new conversion action label from Google Ads.
 
+# Shareable app install link
+- [x] Link https://salonzee.com/#install-app directly to a visible install control with manual fallback instructions.
+- [x] Verify phone-sized direct-link scrolling, instructions and unchanged ordinary homepage behavior.
+
 # Assisted salon onboarding leads
 - [x] Add a short public lead form with campaign attribution, validation and spam safeguards.
 - [x] Store leads privately, queue an admin SMS alert and add an admin follow-up page.
